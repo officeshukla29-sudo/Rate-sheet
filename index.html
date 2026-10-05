@@ -2,262 +2,218 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0f766e"><title>New Sales Rate Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rate List Calculator</title>
+<link rel="manifest" href="tracker-manifest.json">
+<meta name="theme-color" content="#0f766e">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
-:root{--ink:#0f172a;--mut:#475569;--line:#e2e8f0;--bg:#f8fafc;--teal:#0f766e;--tealL:#ccfbf1}
+:root{--ink:#0f172a;--mut:#475569;--line:#e2e8f0;--bg:#f8fafc;--teal:#0f766e}
 *{box-sizing:border-box}
-body{margin:0;font:14px Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
-header{background:linear-gradient(120deg,#0f172a,#0f766e 60%,#2563eb);color:#fff;padding:18px 20px}
-header h1{margin:0;font-size:20px}
-header p{margin:4px 0 0;font-size:12px;color:#94a3b8}
-nav{display:flex;gap:4px;padding:10px 20px 0;flex-wrap:wrap;border-bottom:2px solid var(--teal);background:#fff}
-nav button{border:0;background:#e2e8f0;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;border-radius:6px 6px 0 0;color:var(--mut)}
-nav button.on{background:var(--teal);color:#fff}
-main{padding:16px 20px;max-width:1200px;margin:auto}
-.tab{display:none}.tab.on{display:block}
-.sel{display:grid;grid-template-columns:150px 200px;gap:8px;align-items:center;margin-bottom:12px}
-select,input{font:inherit;padding:6px;border:1px solid #cbd5e1;border-radius:4px}
-.sel select{background:#ffff00;font-weight:700;color:#0000ff}
-.wrap{overflow-x:auto;background:#fff;border:1px solid var(--line)}
-table{border-collapse:collapse;width:100%}
-th,td{border:1px solid var(--line);padding:7px 10px;text-align:center;white-space:nowrap}
-td:first-child,th:first-child{text-align:left}
-th{color:#fff;background:var(--ink)}
-td.n{font-variant-numeric:tabular-nums}
-.tot td{background:var(--teal);color:#fff;font-weight:700;font-size:15px}
-.otc td{background:var(--tealL);font-weight:700}
-.dim td{color:#64748b;font-size:12px}
-td input{width:76px;text-align:center;color:#0000ff;border:1px solid transparent;background:transparent}
-td input:hover,td input:focus{border-color:#94a3b8;background:#fff}
-.ok{padding:4px 10px;border-radius:4px;font-weight:700}
-.ok.y{background:#bbf7d0;color:#166534}.ok.x{background:#fecaca;color:#991b1b}
-.quote{white-space:pre-wrap;background:#dcf8c6;border-radius:12px 12px 12px 2px;padding:12px 14px;margin:8px 0;line-height:1.6;max-width:430px;box-shadow:0 1px 3px #0003}
-.btn{background:var(--teal);color:#fff;border:0;padding:8px 14px;border-radius:4px;font:inherit;font-weight:700;cursor:pointer}
-.btn.g{background:#64748b}
-h3{margin:18px 0 8px;font-size:15px}
-.note{font-size:12px;color:var(--mut);line-height:1.6;margin:10px 0}
-.bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
-.g1{background:#0f172a}.g2{background:#2563eb}.g3{background:#0f766e}
-#chips{margin-bottom:10px}.gr{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:6px 0}.gr span{width:48px;font-weight:700;color:var(--mut);font-size:12px}
-.chip{border:2px solid var(--c);background:#fff;color:var(--c);padding:7px 14px;border-radius:12px;line-height:1.25;font:inherit;font-weight:700;cursor:pointer}
-.chip.on{background:var(--c);color:#fff;box-shadow:0 3px 8px #0003}.chip:disabled{opacity:.3;cursor:not-allowed}
-.info{font-size:13px;margin:8px 0 12px;color:var(--mut)}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:12px 0 6px}
-.card{position:relative;background:#fff;border:1px solid var(--line);border-top:5px solid var(--teal);border-radius:10px;padding:14px;box-shadow:0 2px 8px #0001;display:flex;flex-direction:column;gap:5px}
-.card b{font-size:26px;color:var(--ink)}.card em{font-style:normal;color:var(--teal);font-weight:700}.card small{color:var(--mut)}
-.card.best{border-color:#f59e0b;background:#fffbeb;border-top-color:#f59e0b}
-.card i{position:absolute;top:-11px;right:10px;background:#f59e0b;color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:10px;font-style:normal}
-.stk{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:4px 0}.stk s{background:#2563eb}.stk u{background:#0f766e}
-.lg{font-size:12px;color:var(--mut)}.lg s{color:#2563eb;text-decoration:none}.lg u{color:#0f766e;text-decoration:none}
-.hero{padding:14px 18px;border-radius:10px;color:#fff;margin-bottom:12px}.hero h2{margin:0;font-size:18px}.hero p{margin:4px 0 0;font-size:12px;opacity:.9}
-td input:disabled{color:#334155;background:#f1f5f9;cursor:not-allowed}
-.st{margin:14px 0 4px;font-weight:700}.st i{font-weight:400;color:var(--mut);font-size:12px;font-style:normal}.chip small{font-weight:400;font-size:11px}
-.sum{background:#ecfeff;border-left:5px solid var(--teal);padding:8px 12px;margin:12px 0;font-size:13px}
-html{-webkit-text-size-adjust:100%}button{touch-action:manipulation}
-@media(max-width:640px){
-body{font-size:15px}
-header{padding:12px 14px}header h1{font-size:17px}header p{font-size:11px}
-nav{flex-wrap:nowrap;overflow-x:auto;padding:8px 10px 0;position:sticky;top:0;z-index:5;-webkit-overflow-scrolling:touch}
-nav button{white-space:nowrap;padding:10px 14px}
-main{padding:10px}.panel{padding:10px}
-select,input{font-size:16px;padding:9px;min-height:42px}
-.chip{min-height:44px;padding:8px 14px;font-size:15px}
-.gr{gap:8px}.gr select,#qn,#sn{flex:1 1 140px}
-.cards{grid-template-columns:1fr 1fr;gap:8px}.card{padding:10px}.card b{font-size:20px}
-.quote{max-width:100%}
-.btn{padding:11px 14px;margin:3px 0}
-th,td{padding:6px 7px;font-size:13px}
-.wrap td:first-child{white-space:normal;min-width:110px}
-.hero{padding:10px 12px}.hero h2{font-size:16px}
-#ft td,#ft th{font-size:12px;padding:5px}
-#ft td:first-child,#ft th:first-child{position:sticky;left:0;z-index:2}
-}
-.card.low{opacity:.55;background:#f1f5f9;border-top-color:#94a3b8}.card.low b{font-size:18px}#ct td:nth-child(2),#ct th:nth-child(2){opacity:.5}
-.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 1px 4px #0000000d}details.panel summary{cursor:pointer;font-weight:700;color:var(--teal)}.sum{margin-top:0}
-input[type=checkbox]{min-height:0!important;width:20px;height:20px;padding:0!important;margin:0 6px 0 0;vertical-align:middle}label.note{display:inline-flex;align-items:center;margin:6px 14px 6px 0}
-@media(max-width:640px){.hm{display:none}#ft td:first-child{min-width:96px}}
-#cmp .gr{flex-wrap:nowrap}#cmp .gr select{flex:1 1 0;min-width:0;padding:9px 4px}
-@media print{nav,.bar,.btn{display:none}.tab{display:block!important}}
+body{margin:0;font:15px Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(120deg,#0f172a,#0f766e);color:#fff;padding:16px 18px}
+header h1{margin:0;font-size:18px}header p{margin:4px 0 0;font-size:12px;color:#cbd5e1}
+main{max-width:480px;margin:auto;padding:16px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px;box-shadow:0 1px 4px #0000000d}
+label{display:block;font-weight:700;margin:10px 0 4px;font-size:13px}
+input,select{width:100%;font-size:16px;padding:11px;border:1px solid #cbd5e1;border-radius:6px}
+.btn{width:100%;background:var(--teal);color:#fff;border:0;padding:13px;border-radius:7px;font:inherit;font-weight:700;font-size:16px;margin-top:12px}
+.btn.g{background:#64748b}.btn.danger{background:#dc2626}
+.status{padding:10px 12px;border-radius:8px;font-size:14px;margin-top:10px}
+.status.ok{background:#dcfce7;color:#166534}.status.wait{background:#fef9c3;color:#854d0e}.status.err{background:#fee2e2;color:#991b1b}
+.hide{display:none!important}
+small.note{color:var(--mut);display:block;margin-top:8px;line-height:1.5}
+#map{height:360px;border-radius:10px;overflow:hidden;margin-top:10px}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+th{background:var(--ink);color:#fff;position:sticky;top:0}
+.wrap{overflow:auto;max-height:420px;border:1px solid var(--line);border-radius:8px;margin-top:10px}
+.bar{display:flex;gap:8px;margin-top:10px}
+a.ln{color:var(--teal);font-weight:700;text-decoration:none}
+footer{text-align:center;padding:14px;font-size:12px;color:#94a3b8}
 </style>
 </head>
 <body>
-<header><h1>New Sales Rate Calculator</h1>
-<p>Final Amount = Package Charge + OTC (Device Rental + Drop-wire + Deposit). Amount in Rs.</p></header>
-<nav id="nav"></nav>
+<header><h1>📍 Rate List Calculator</h1><p>Worldlink package &amp; rental rate list</p></header>
 <main>
-<div id="lk" hidden></div>
-<section class="tab" id="t0">
- <div class="panel"><div id="chips"></div>
- <div hidden><select id="cp"></select><select id="co"></select><select id="cb"></select><span id="cs"></span><span id="cst"></span></div>
- <div class="st">4. Extra device <i>(optional - chahiyena bhane "None" nai rakhnus)</i></div>
- <div class="gr"><select id="at"><option value="">None</option><option>ATV</option><option>Beacon 1.1</option><option>Beacon 3.1</option></select> <span id="aqw" style="display:none">Kati ota: <select id="aq"><option>1</option><option>2</option><option>3</option></select></span></div></div>
- <div class="panel"><div id="sm"></div><div class="cards" id="cards"></div>
- <div class="lg"><s>&#9632;</s> Package &nbsp; <u>&#9632;</u> OTC (Rental + Drop-wire + Deposit)</div></div>
- <div class="panel"><h3 style="margin-top:0">💬 Customer Quote</h3>
- <div class="gr"><input id="qn" placeholder="Customer name (optional)"> <input id="sn" placeholder="Staff name"> <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select></div>
- <div class="gr"><label class="note"><input type="checkbox" id="qb" checked> Breakdown dekhaun</label> <label class="note"><input type="checkbox" id="qm"> 1 month pani rakhne</label></div>
- <div class="quote" id="cq"></div>
- <button class="btn" id="cc">Copy quote</button> <button class="btn g" id="wa">WhatsApp</button> <button class="btn g" id="vb">Open Viber (copies quote)</button> <button class="btn g" id="sh">Share...</button> <button class="btn g" id="img">🖼 Quote image</button></div>
- <details class="panel"><summary>📋 Full breakdown (rental, drop-wire, deposit)</summary><div class="wrap" style="margin-top:10px"><table id="ct"></table></div></details>
+
+<!-- SETUP -->
+<section id="setup" class="panel hide">
+  <h2 style="margin-top:0">Staff Login</h2>
+  <label>Your Name <span style="color:#dc2626">*</span></label>
+  <input id="inName" placeholder="e.g. Ram Thapa" autocomplete="name">
+  <label>Employee ID / EIN <span style="color:#dc2626">*</span></label>
+  <input id="inEin" placeholder="e.g. WL-104" autocomplete="off">
+  <button class="btn" id="btnSave">Continue</button>
+  <small class="note">Yo name ra EIN tapai ko phone ma save huncha, pheri sodhdaina. Continue thichepachi location permission magincha — allow garepachi matra tracking suru huncha.</small>
 </section>
-<section class="tab" id="t1">
- <div class="hero" style="background:linear-gradient(120deg,#2563eb,#0f766e)"><h2>📊 Final Amount</h2><p>Package + OTC for every plan. Darker green = higher amount. Filter by plan or ONT.</p></div>
- <div class="cards" id="fs"></div>
- <div class="bar"><b>Filter:</b><select id="fp"><option value="">All plans</option></select><select id="fo"><option value="">All ONT</option><option>5G</option><option>6G</option></select></div>
- <div class="wrap"><table id="ft"></table></div>
+
+<!-- STAFF TRACKING -->
+<section id="staff" class="panel hide">
+  <h2 style="margin-top:0">Hi, <span id="svName"></span> 👋</h2>
+  <div style="font-size:13px;color:var(--mut)">EIN: <b id="svEin"></b></div>
+  <div id="permBox">
+    <p style="font-size:14px">Location tracking suru garna "Start Tracking" thichnus. Phone le GPS permission sodhcha — <b>Allow</b> thichnu parcha.</p>
+    <button class="btn" id="btnStart">▶ Start Tracking</button>
+  </div>
+  <div id="liveBox" class="hide">
+    <div class="status ok">🟢 Tracking active — every ~1 hour location pathaudai</div>
+    <div style="font-size:13px;margin-top:10px" class="note">Last sent: <b id="lastSent">—</b></div>
+    <small class="note">⚠ Yo app chalu (foreground/open) rakhnu parcha best result ko lagi. Phone lock bhayo ya app band bhayo bhane browser le timer rok dincha; app feri kholda tyo bela ko location auto pathincha.</small>
+  </div>
+  <div id="stTxt" class="status wait hide" style="margin-top:10px"></div>
 </section>
-<section class="tab" id="t2">
- <div class="hero" style="background:linear-gradient(120deg,#9333ea,#2563eb)"><h2>📦 Package Rates</h2><p>Package charge only, per plan, ONT and bandwidth.<br>Read-only. Rates are updated from rates.json on GitHub.</p></div>
- <p class="note">Package charge only (New &amp; Renew). Rates are read-only (updated from rates.json).</p>
- <div class="wrap"><table id="pt"></table></div>
+
+<!-- ADMIN ENTRY -->
+<section id="adminGate" class="panel hide">
+  <h2 style="margin-top:0">⚙ Admin Mode</h2>
+  <label>Password</label>
+  <input id="adPass" type="password" placeholder="Password">
+  <button class="btn" id="btnAdLogin">Login</button>
+  <div id="adErr" class="status err hide">Galat password.</div>
 </section>
-<section class="tab" id="t3">
- <div class="hero" style="background:linear-gradient(120deg,#ea580c,#dc2626)"><h2>🔧 Device Rates</h2><p>ONT, STB rental, drop-wire and deposit. Read-only. Rates are updated from rates.json on GitHub.</p></div>
- <p class="note">Rental incl. VAT. Rates are read-only (updated from rates.json).</p>
- <div class="wrap"><table id="dt"></table></div>
- <h3>Plan setup (assumption)</h3>
- <div class="wrap" style="max-width:300px"><table id="st"></table></div>
- <p class="note">Assumptions: 5G ONT = Dual-Band rates, 6G ONT = Wi-Fi 6 rates. 1TV = 1 STB Primary; 2TV = Primary + 1 Secondary; 3TV = Primary + 2 Secondary. Drop-wire once (with ONT). Deposit per device (ONT + each STB). ATV and Beacon not included.</p>
- 
+
+<!-- ADMIN DASHBOARD -->
+<section id="admin" class="panel hide">
+  <h2 style="margin-top:0">⚙ Admin — Staff Locations</h2>
+  <div id="map"></div>
+  <div class="bar">
+    <select id="fStaff" style="flex:1"><option value="">All staff</option></select>
+    <button class="btn g" id="btnCsv" style="width:auto;padding:11px 16px">⬇ CSV</button>
+  </div>
+  <div class="wrap"><table id="tbl"></table></div>
+  <button class="btn g" id="btnLogout" style="margin-top:12px">Logout admin</button>
 </section>
-<section class="tab" id="t4"><div class="hero" style="background:linear-gradient(120deg,#0f766e,#2563eb)"><h2>⚖ Compare</h2><p>Two options side by side (package + OTC, no add-on).</p></div><div id="cmp"></div></section>
-<section class="tab" id="t5"><div class="hero" style="background:linear-gradient(120deg,#0f172a,#475569)"><h2>📒 Quote Log</h2><p>Quotes sent from this device (copy / WhatsApp / Viber / image).</p></div><div class="bar"><button class="btn" id="csv">Download CSV</button><button class="btn g" id="clr">Clear log</button></div><div class="wrap"><table id="lg"></table></div></section>
+
 </main>
+<footer>
+  <span id="modeLinks"></span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
-const D=["1M","3M","6M","12M"],M=[1,3,6,12];
-const PL={"Internet Only":["#2563eb","#dbeafe"],"Combo 1TV":["#9333ea","#f3e8fe"],"Combo 2TV":["#ea580c","#ffedd5"],"Combo 3TV":["#dc2626","#fee2e2"]};
-const P=Object.keys(PL);const AD={t:"",q:0};let Q;
-const A=[["5G",50,[1100,3200,6270,11200]],["5G",80,[1200,3500,6840,12240]],["5G",100,[1400,4100,7980,14280]],["5G",150,[1500,4400,8550,15300]],["5G",200,[1650,4800,9405,16830]],["6G",200,[1650,4800,9405,16830]],["6G",400,[1800,5250,10260,18360]],["6G",500,[1900,5500,10830,19400]],["6G",600,[2100,6100,11970,22600]]];
-const B=[["5G",50,[1350,3900,7470,13600]],["5G",80,[1450,4200,8040,14640]],["5G",100,[1650,4800,9180,16680]],["5G",150,[1750,5100,9750,17700]],["5G",200,[1900,5500,10605,19230]],["6G",200,[1900,5500,10605,19230]],["6G",400,[2050,5950,11460,20760]],["6G",500,[2150,6200,12030,21800]],["6G",600,[2350,6800,13170,25000]]];
-let DEF={
-pk:[...A.map(r=>["Internet Only",...r]),...B.map(r=>["Combo 1TV",...r]),
-["Combo 2TV","6G",400,[2300,6650,12660,23160]],["Combo 2TV","6G",500,[2400,6900,13230,24200]],["Combo 2TV","6G",600,[2600,7500,14370,27400]],
-["Combo 3TV","6G",500,[2650,7600,14430,26600]],["Combo 3TV","6G",600,[2850,8200,15570,29800]]],
-dev:[["Dual-Band Rental (incl. VAT)",[3390,2260,1695,1130]],["Dual-Band Deposit",[1000,1000,1000,1000]],["Dual-Band Drop-wire",[1130,1130,1130,1130]],
-["Wi-Fi 6 Rental (incl. VAT)",[3390,2260,1695,1130]],["Wi-Fi 6 Deposit",[1000,1000,1000,1000]],["Wi-Fi 6 Drop-wire",[1130,1130,1130,1130]],
-["STB Primary Rental (incl. VAT)",[3390,2260,1695,1130]],["STB Secondary Rental (incl. VAT)",[2260,2260,2260,2260]],["STB Deposit",[1000,1000,1000,1000]]],
-stb:{"Internet Only":0,"Combo 1TV":1,"Combo 2TV":2,"Combo 3TV":3},
-ad:{"ATV":[[3390,2825,2825,2260],[3390,3390,3390,3390],1000],"Beacon 1.1":[[2825,2825,2260,1695],[3390,3390,3390,3390],1500],"Beacon 3.1":[[3955,3390,2825,2260],[3955,3390,3390,3390],1500]}};
-let S=JSON.parse(JSON.stringify(DEF));
-try{localStorage.removeItem("nsrc")}catch(e){}
-if(!S.ad)S.ad=JSON.parse(JSON.stringify(DEF.ad));
-const save=()=>{try{localStorage.setItem("nsrc",JSON.stringify(S))}catch(e){}};
-const f=n=>Math.round(n).toLocaleString("en-US");
+const firebaseConfig={apiKey:"AIzaSyBPwEOdI8WwPKZVCJhvyANp5MPQKmAG79w",authDomain:"chess-dab2c.firebaseapp.com",projectId:"chess-dab2c",storageBucket:"chess-dab2c.firebasestorage.app",messagingSenderId:"639996000069",appId:"1:639996000069:web:7fa083ed4bd02f9310702c"};
+firebase.initializeApp(firebaseConfig);
+const db=firebase.firestore();
+const COL="wl_staff_locations";
+const ADMIN_PASS="pokharel123";
+const HOUR=3600000;
 const $=id=>document.getElementById(id);
-const dv=(o,i)=>{const k=o==="5G"?0:3,d=S.dev;return{rent:d[k][1][i],dep:d[k+1][1][i],drop:d[k+2][1][i]}};
-function calc(p,o,i,u){const v=dv(o,i),n=S.stb[p],d=S.dev;
- const r={ont:v.rent,sp:n>=1?d[6][1][i]:0,ss:Math.max(n-1,0)*d[7][1][i],drop:v.drop,dO:v.dep,dS:n*d[8][1][i]};
- r.ad=0;if(u&&AD.q>0&&S.ad[AD.t]){const a=S.ad[AD.t];r.ad=a[0][i]+(AD.q-1)*a[1][i]+AD.q*a[2]}
- r.otc=r.ont+r.sp+r.ss+r.drop+r.dO+r.dS+r.ad;return r}
-const pkg=(p,o,b,i)=>{const r=S.pk.find(x=>x[0]===p&&x[1]===o&&x[2]===+b);return r?r[3][i]:null};
-const opt=(a,sel)=>a.map(x=>`<option${x==sel?" selected":""}>${x}</option>`).join("");
-// nav
-const T=["🧮 Calculator","📊 Final Amount","📦 Package Rates","🔧 Device Rates","⚖ Compare","📒 Quote Log"];
-$("nav").innerHTML=T.map((t,i)=>`<button data-i="${i}">${t}</button>`).join("");
-function show(i){document.querySelectorAll(".tab").forEach((e,j)=>e.classList.toggle("on",i==j));document.querySelectorAll("nav button").forEach((e,j)=>e.classList.toggle("on",i==j))}
-$("nav").onclick=e=>{if(e.target.dataset.i)show(+e.target.dataset.i)};
-// calculator
-$("cp").innerHTML=opt(P,"Internet Only");$("co").innerHTML=opt(["5G","6G"],"5G");$("cb").innerHTML=opt([50,80,100,150,200,400,500,600],100);
-const PD={"Internet Only":"Internet matra","Combo 1TV":"Internet + 1 TV","Combo 2TV":"Internet + 2 TV","Combo 3TV":"Internet + 3 TV"},OD={"5G":"Dual-Band router","6G":"Wi-Fi 6 router"};
-const chip=(id,v,c,on,dis,sub)=>`<button class="chip${on?" on":""}" data-id="${id}" data-v="${v}" style="--c:${c}"${dis?" disabled":""}>${v}${sub?`<br><small>${sub}</small>`:""}</button>`;
-function rCalc(){
- const av=S.pk.filter(r=>r[0]===$("cp").value),on=[...new Set(av.map(r=>r[1]))];
- if(!on.includes($("co").value))$("co").value=on[0];
- const bw=av.filter(r=>r[1]===$("co").value).map(r=>r[2]);
- if(!bw.includes(+$("cb").value))$("cb").value=bw[0];
- const p=$("cp").value,o=$("co").value,b=$("cb").value,ok=pkg(p,o,b,0)!==null;
- $("cs").textContent=S.stb[p];$("cst").innerHTML=`<span class="ok ${ok?"y":"x"}">${ok?"OK":"Combination not available"}</span>`;
- const c=D.map((_,i)=>calc(p,o,i,1)),pk=D.map((_,i)=>ok?pkg(p,o,b,i):0);
- const row=(l,fn,cls="")=>`<tr class="${cls}"><td>${l}</td>${D.map((_,i)=>`<td class="n">${fn(i)}</td>`).join("")}</tr>`;
- const tot=i=>pk[i]+c[i].otc;
- Q={ok,p,o,b,tot:D.map((_,i)=>ok?tot(i):0),pk,otc:c.map(x=>x.otc)};
- $("ct").innerHTML=`<tr>${["Component",...D].map(h=>`<th>${h}</th>`).join("")}</tr>`+
- row("Package Charge",i=>f(pk[i]))+row("Device Rental - ONT",i=>f(c[i].ont))+row("STB Primary Rental",i=>f(c[i].sp))+row("STB Secondary Rental",i=>f(c[i].ss))+
- row("Drop-wire",i=>f(c[i].drop))+row("Deposit - ONT",i=>f(c[i].dO))+row("Deposit - STB",i=>f(c[i].dS))+row("Add-on: "+(AD.q?AD.q+"x "+AD.t:"none"),i=>f(c[i].ad))+
- row("OTC Total",i=>f(c[i].otc),"otc")+row("TOTAL PAYABLE (New Sales)",i=>ok?f(tot(i)):"N/A","tot")+row("Per Month (approx)",i=>ok?f(tot(i)/M[i]):"N/A")+row("Months",i=>M[i],"dim");
- const L=["1 Month","3 Months","6 Months","12 Months"];
- $("chips").innerHTML=`<div class="st">1. Package chhannus <i>(kun type ko connection?)</i></div><div class="gr">${P.map(x=>chip("cp",x,PL[x][0],x===p,0,PD[x])).join("")}</div><div class="st">2. ONT / Router <i>${on.length<2?`(${p} ma ${on[0]} matra available)`:"(5G = Dual-Band, 6G = Wi-Fi 6)"}</i></div><div class="gr">${["5G","6G"].map(x=>chip("co",x,"#0f766e",x===o,!on.includes(x),OD[x])).join("")}</div><div class="st">3. Speed <i>(Mbps)</i></div><div class="gr">${bw.map(x=>chip("cb",x,"#0f766e",x==b)).join("")}</div>`;
- $("sm").innerHTML=`<div class="sum">✔ Tapai ko choice: <b>${PD[p]}</b> | <b>${o}</b> ONT | <b>${b} Mbps</b>${S.stb[p]?` | TV box: <b>${S.stb[p]}</b>`:""}${AD.q?` | Extra: <b>${AD.q}x ${AD.t}</b>`:""}</div>`;
- $("aqw").style.display=AD.q?"":"none";
- const pm=D.map((_,i)=>tot(i)/M[i]),mn=Math.min(...pm);
- $("cards").innerHTML=ok?[1,2,3,0].map(i=>{const t=tot(i),w=Math.round(pk[i]/t*100);return `<div class="card${pm[i]===mn?" best":""}${i===0?" low":""}">${pm[i]===mn?"<i>Lowest / month</i>":""}<small>${L[i]}</small><b>Rs ${f(t)}</b><em>Rs ${f(pm[i])} / month</em><div class="stk"><s style="width:${w}%"></s><u style="width:${100-w}%"></u></div><small>Package ${f(pk[i])} &middot; OTC ${f(c[i].otc)}</small></div>`}).join(""):"";
- const nm=$("qn").value.trim(),ix=$("qm").checked?[1,2,3,0]:[1,2,3],dt=new Date().toLocaleDateString("en-CA"),bd=$("qb").checked,ne=$("ql").value==="ne",rn=i=>c[i].ont+c[i].sp+c[i].ss,dp=i=>c[i].dO+c[i].dS,NL=["१ महिना","३ महिना","६ महिना","१२ महिना"];
- const en=`📶 *New Connection Quote* (${dt})\n${nm?`Dear ${nm},\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+ix.map(i=>[L[i],i]).map(([l,i])=>`✅ *${l}: Rs ${f(tot(i))}* (≈ Rs ${f(tot(i)/M[i])}/month)`+(bd?`\n     Package ${f(pk[i])} + OTC ${f(c[i].otc)}`:"")).join("\n")+(bd?"\n\nOTC = Device Rental + Drop-wire + Deposit":"");
- const np=`📶 *नयाँ इन्टरनेट जडान - मूल्य विवरण* (${dt})\n${nm?`${nm} जी, नमस्कार!\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+ix.map(i=>[NL[i],i]).map(([l,i])=>`✅ *${l}*\n`+(bd?`Package रु ${f(pk[i])} + Rental रु ${f(rn(i))} + Drop-wire रु ${f(c[i].drop)} + Deposit रु ${f(dp(i))}\n`:"")+`👉 *जम्मा रु ${f(tot(i))} लाग्छ* (लगभग रु ${f(tot(i)/M[i])}/महिना)`).join("\n\n")+(bd?"\n\n(Rental मा VAT समावेश छ)":"");
- $("cq").textContent=ok?(ne?np:en):"Combination not available";
+
+// ---------- view switching ----------
+function show(view){["setup","staff","adminGate","admin"].forEach(v=>$(v).classList.toggle("hide",v!==view))}
+function footerLinks(){
+  const isAdmin=sessionStorage.getItem("wlAdmin")==="1";
+  $("modeLinks").innerHTML=isAdmin?"":`<a class="ln" id="goAdmin" href="#">⚙ Admin login</a>`;
+  if(!isAdmin){const a=$("goAdmin");if(a)a.onclick=e=>{e.preventDefault();show("adminGate")}}
 }
-$("chips").onclick=e=>{const d=(e.target.closest("button")||{}).dataset||{};if(d.id){$(d.id).value=d.v;rCalc()}};
-$("qb").onchange=$("ql").onchange=$("qm").onchange=rCalc;$("qn").oninput=rCalc;const cp2=t=>{try{navigator.clipboard.writeText(t).catch(()=>{})}catch(x){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}};
-$("vb").onclick=()=>{logQ();cp2($("cq").textContent);$("vb").textContent="Copied - paste in Viber";setTimeout(()=>$("vb").textContent="Open Viber (copies quote)",2500);location.href="viber://chats"};
-$("sh").onclick=()=>{logQ();const t=$("cq").textContent;navigator.share?navigator.share({text:t}).catch(()=>{}):cp2(t)};
-$("wa").onclick=()=>{logQ();window.open("https://wa.me/?text="+encodeURIComponent($("cq").textContent))};
-$("cc").onclick=()=>{logQ();const t=$("cq").textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("cc").textContent="Copied"},()=>{const r=document.createRange();r.selectNodeContents($("cq"));getSelection().removeAllRanges();getSelection().addRange(r);$("cc").textContent="Selected - press Copy"});setTimeout(()=>$("cc").textContent="Copy quote",1800)};
-// final
-$("fp").innerHTML+=P.map(p=>`<option>${p}</option>`).join("");
-function rFinal(){
- const fp=$("fp").value,fo=$("fo").value;
- let h=`<tr><th rowspan=2>Plan</th><th rowspan=2>ONT</th><th rowspan=2>BW (Mbps)</th><th rowspan=2 class="hm">STB</th><th colspan=4 class="g1">Final Amount (Package + OTC)</th><th colspan=4 class="g2">Package Charge</th><th colspan=4 class="g3">OTC</th></tr><tr>`+
- [1,2,3].map(g=>D.map(d=>`<th class="g${g}">${d}</th>`).join("")).join("")+"</tr>";
- const rs=S.pk.filter(r=>(!fp||r[0]===fp)&&(!fo||r[1]===fo)),all=rs.flatMap(r=>r[3].map((x,i)=>x+calc(r[0],r[1],i).otc)),mx=Math.max(...all),mn=Math.min(...all);let lo,hi;
- rs.forEach(r=>{
-  const [p,o,b,v]=r,[dk,lt]=PL[p],oc=D.map((_,i)=>calc(p,o,i).otc);
-  v.forEach((x,i)=>{const t=x+oc[i],l=`${p} | ${o} | ${b} Mbps | ${D[i]}`;if(!lo||t<lo.t)lo={t,l};if(!hi||t>hi.t)hi={t,l}});
-  h+=`<tr><td style="background:${lt};color:${dk};font-weight:700">${p}</td><td style="background:${lt};color:${dk};font-weight:700">${o}</td><td style="background:${lt};color:${dk};font-weight:700">${b}</td><td class="hm" style="background:${lt};color:${dk};font-weight:700">${S.stb[p]}</td>`+
-  v.map((x,i)=>`<td class="n" style="background:rgba(15,118,110,${(.08+.5*((x+oc[i]-mn)/((mx-mn)||1))).toFixed(2)});font-weight:700">${f(x+oc[i])}</td>`).join("")+v.map(x=>`<td class="n" style="color:#008000">${f(x)}</td>`).join("")+oc.map(x=>`<td class="n">${f(x)}</td>`).join("")+"</tr>"});
- $("ft").innerHTML=h;
- $("fs").innerHTML=rs.length?`<div class="card best" style="border-top-color:#16a34a;background:#f0fdf4"><small>Lowest amount</small><b>Rs ${f(lo.t)}</b><small>${lo.l}</small></div><div class="card" style="border-top-color:#dc2626"><small>Highest amount</small><b>Rs ${f(hi.t)}</b><small>${hi.l}</small></div><div class="card"><small>Plans shown</small><b>${rs.length}</b><small>rows x 4 durations</small></div>`:""}
-$("fp").onchange=$("fo").onchange=rFinal;
-// rate tables
-const inp=(k,v)=>`<td><input type="number" data-k="${k}" value="${v}"${lock?" disabled":""}></td>`;
-function rRates(){
- $("pt").innerHTML=`<tr>${["Plan","ONT Type","Bandwidth (Mbps)",...D].map(h=>`<th>${h}</th>`).join("")}</tr>`+
- S.pk.map((r,j)=>(j&&S.pk[j-1][0]===r[0]?"":`<tr><td colspan=7 style="background:${PL[r[0]][0]};color:#fff;font-weight:700">${r[0]}</td></tr>`)+`<tr><td style="background:${PL[r[0]][1]};color:${PL[r[0]][0]};font-weight:700">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td>${r[3].map((x,i)=>inp(`p.${j}.${i}`,x)).join("")}</tr>`).join("");
- $("dt").innerHTML=`<tr>${["Item",...D].map(h=>`<th>${h}</th>`).join("")}</tr>`+S.dev.map((r,j)=>(j%3?"":`<tr><td colspan=5 style="background:#e2e8f0;font-weight:700">${["📡 Dual-Band ONT (5G)","📶 Wi-Fi 6 ONT (6G)","📺 Set-Top Box (STB)"][j/3]}</td></tr>`)+`<tr><td>${r[0]}</td>${r[1].map((x,i)=>inp(`d.${j}.${i}`,x)).join("")}</tr>`).join("");
- $("st").innerHTML=`<tr><th>Plan</th><th>STB Qty</th></tr>`+P.map(p=>`<tr><td style="background:${PL[p][1]};color:${PL[p][0]};font-weight:700">${p} ${"📺".repeat(S.stb[p])}</td>${inp("s."+p,S.stb[p])}</tr>`).join("")}
-document.addEventListener("input",e=>{const k=e.target.dataset.k;if(!k)return;const [t,a,b]=k.split("."),v=+e.target.value||0;
- if(t==="p")S.pk[a][3][b]=v;else if(t==="d")S.dev[a][1][b]=v;else S.stb[k.slice(2)]=v;save();rCalc();rFinal();rLk()});
-let lock=true;
-const edited=()=>JSON.stringify(S)!==JSON.stringify(DEF);
-function rLk(){}
-const all=()=>{rRates();rCalc();rFinal();rLk()};
-const reset=()=>{S=JSON.parse(JSON.stringify(DEF));try{localStorage.removeItem("nsrc")}catch(e){}all()};
-$("lk").onclick=e=>{const id=e.target.id;
- if(id==="lb"){lock=!lock;rRates();rLk()}
- else if(id==="rs2")reset();
- else if(id==="ex"){const t=JSON.stringify(S);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert("Rates copied"),()=>prompt("Copy rates:",t))}
- else if(id==="im"){const t=prompt("Paste rates JSON");if(!t)return;try{const o=JSON.parse(t);if(!o.pk||!o.dev||!o.stb)throw 0;S=o;save();all()}catch(x){alert("Invalid rates JSON")}}};
-const dl=(b,n)=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=n;a.click()};
-$("at").onchange=$("aq").onchange=()=>{AD.t=$("at").value;AD.q=AD.t?+$("aq").value:0;rCalc()};
-// compare
-const CM={a:["Internet Only","5G",100],b:["Internet Only","5G",200]};
-function rCmp(){const sel=k=>{const av=S.pk.filter(r=>r[0]===CM[k][0]),on=[...new Set(av.map(r=>r[1]))];if(!on.includes(CM[k][1]))CM[k][1]=on[0];const bw=av.filter(r=>r[1]===CM[k][1]).map(r=>r[2]);if(!bw.includes(+CM[k][2]))CM[k][2]=bw[0];
- return `<div class="gr"><b>${k.toUpperCase()}</b><select data-c="${k}0">${opt(P,CM[k][0])}</select><select data-c="${k}1">${opt(on,CM[k][1])}</select><select data-c="${k}2">${opt(bw,CM[k][2])}</select></div>`};
- const h=sel("a")+sel("b"),t=k=>D.map((_,i)=>pkg(CM[k][0],CM[k][1],CM[k][2],i)+calc(CM[k][0],CM[k][1],i).otc),a=t("a"),b=t("b"),r=(l,v,c="")=>`<tr class="${c}"><td>${l}</td>${v.map(x=>`<td class="n">${x}</td>`).join("")}</tr>`;
- $("cmp").innerHTML=h+`<div class="wrap"><table><tr><th></th>${D.map(d=>`<th>${d}</th>`).join("")}</tr>${r("A",a.map(f))}${r("B",b.map(f))}${r("B - A",a.map((x,i)=>(b[i]-x>0?"+":"")+f(b[i]-x)),"otc")}</table></div>`}
-document.addEventListener("change",e=>{const c=e.target.dataset.c;if(c){CM[c[0]][+c[1]]=c[1]==="2"?+e.target.value:e.target.value;rCmp()}});
-// log
-const LG=()=>{try{return JSON.parse(localStorage.getItem("nsq")||"[]")}catch(e){return[]}};
-const LH=["Date","Staff","Customer","Plan","ONT","Mbps","Add-on","1M","3M","6M","12M"];
-function logQ(){if(!Q||!Q.ok)return;const l=LG();l.push([new Date().toLocaleString("en-CA"),$("sn").value,$("qn").value,Q.p,Q.o,Q.b,AD.q?AD.q+"x "+AD.t:"",...Q.tot]);try{localStorage.setItem("nsq",JSON.stringify(l))}catch(e){}rLog()}
-function rLog(){$("lg").innerHTML=`<tr>${LH.map(h=>`<th>${h}</th>`).join("")}</tr>`+LG().reverse().map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join("")}</tr>`).join("")}
-$("csv").onclick=()=>dl(new Blob([[LH,...LG()].map(r=>r.map(x=>`"${x}"`).join(",")).join("\n")],{type:"text/csv"}),"quote_log.csv");
-$("clr").onclick=()=>{if(confirm("Clear all logged quotes?")){try{localStorage.removeItem("nsq")}catch(e){}rLog()}};
-try{$("sn").value=localStorage.getItem("nssn")||""}catch(e){}$("sn").oninput=()=>{try{localStorage.setItem("nssn",$("sn").value)}catch(e){}};
-// quote image
-function mkImg(cb){const ix=$("qm").checked?[1,2,3,0]:[1,2,3],W=720,H=272+(ix.length-1)*98,cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d"),gr=g.createLinearGradient(0,0,W,0);
- g.fillStyle="#f8fafc";g.fillRect(0,0,W,H);gr.addColorStop(0,"#0f172a");gr.addColorStop(1,"#0f766e");g.fillStyle=gr;g.fillRect(0,0,W,130);
- const nm=$("qn").value.trim();g.fillStyle="#fff";g.font="bold 34px Arial";g.fillText("New Connection Quote",30,52);g.font="bold 22px Arial";g.fillText(`${Q.p} | ${Q.o} | ${Q.b} Mbps`+(AD.q?` + ${AD.q}x ${AD.t}`:""),30,90);
- g.font="16px Arial";g.fillStyle="#94a3b8";g.fillText(new Date().toLocaleDateString("en-CA")+(nm?"  |  "+nm:""),30,116);
- ix.forEach((i,k)=>{const l=["1 Month","3 Months","6 Months","12 Months"][i],y=150+k*98;g.fillStyle="#fff";g.fillRect(20,y,W-40,88);g.fillStyle=["#2563eb","#9333ea","#ea580c","#dc2626"][i];g.fillRect(20,y,8,88);
-  g.fillStyle="#0f172a";g.font="bold 24px Arial";g.fillText(l,44,y+38);g.textAlign="right";g.font="bold 34px Arial";g.fillText("Rs "+f(Q.tot[i]),W-40,y+40);
-  g.font="15px Arial";g.fillStyle="#475569";g.fillText(`Package ${f(Q.pk[i])} + OTC ${f(Q.otc[i])}  (~Rs ${f(Q.tot[i]/M[i])}/month)`,W-40,y+70);g.textAlign="left"});
- g.font="14px Arial";g.fillStyle="#64748b";g.fillText("OTC = Device Rental + Drop-wire + Deposit. Rental incl. VAT.",30,H-14);cv.toBlob(cb,"image/png")}
-$("img").onclick=()=>{if(!Q||!Q.ok)return;logQ();mkImg(b=>{const fl=new File([b],"quote.png",{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[fl]}))navigator.share({files:[fl]}).catch(()=>{});else dl(b,"quote.png")})};
-all();rCmp();rLog();show(0);
-// shared rates + PWA
-fetch("rates.json",{cache:"no-store"}).then(r=>r.ok?r.json():0).then(o=>{if(!o||!o.pk)return;DEF=o;let sv=0;try{sv=localStorage.getItem("nsrc")}catch(e){}if(!sv)S=JSON.parse(JSON.stringify(DEF));all();rCmp()}).catch(()=>{});
-if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+
+// ---------- staff setup ----------
+function initStaff(){
+  const name=localStorage.getItem("wlName"),ein=localStorage.getItem("wlEin");
+  if(!name||!ein){show("setup");return}
+  $("svName").textContent=name;$("svEin").textContent=ein;
+  show("staff");
+  const started=localStorage.getItem("wlTracking")==="1";
+  togglePermBox(started);
+  if(started)startTracking(true);
+}
+$("btnSave").onclick=()=>{
+  const n=$("inName").value.trim(),e=$("inEin").value.trim();
+  if(!n||!e){alert("Naam ra EIN dubai halnus");return}
+  localStorage.setItem("wlName",n);localStorage.setItem("wlEin",e);
+  initStaff();
+};
+function togglePermBox(on){$("permBox").classList.toggle("hide",on);$("liveBox").classList.toggle("hide",!on)}
+
+let timer=null;
+function setStatus(msg,cls){const t=$("stTxt");t.className="status "+cls;t.textContent=msg;t.classList.remove("hide")}
+function sendPing(cb){
+  if(!navigator.geolocation){setStatus("Yo browser le GPS support gardaina.","err");return}
+  setStatus("📡 Location pattainedai...","wait");
+  navigator.geolocation.getCurrentPosition(async pos=>{
+    const lat=pos.coords.latitude,lng=pos.coords.longitude;
+    let place="";
+    try{
+      const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=14`);
+      const j=await r.json(); place=j.display_name||"";
+    }catch(e){}
+    try{
+      await db.collection(COL).add({name:localStorage.getItem("wlName"),ein:localStorage.getItem("wlEin"),lat,lng,place,ts:firebase.firestore.FieldValue.serverTimestamp(),tsClient:new Date().toISOString()});
+      const now=new Date();localStorage.setItem("wlLastPing",now.toISOString());
+      $("lastSent").textContent=now.toLocaleString("en-CA",{hour12:false});
+      setStatus("✅ Location pathayo.","ok");
+      if(cb)cb(true);
+    }catch(e){setStatus("❌ Send failed: "+e.message,"err");if(cb)cb(false)}
+  },err=>{setStatus("❌ GPS permission block bhayo ya error: "+err.message,"err");if(cb)cb(false)},{enableHighAccuracy:true,timeout:20000});
+}
+function startTracking(silent){
+  localStorage.setItem("wlTracking","1");togglePermBox(true);
+  const lp=localStorage.getItem("wlLastPing");
+  if(lp)$("lastSent").textContent=new Date(lp).toLocaleString("en-CA",{hour12:false});
+  const elapsed=lp?Date.now()-new Date(lp).getTime():Infinity;
+  if(elapsed>=HOUR||!silent)sendPing();
+  if(timer)clearInterval(timer);
+  timer=setInterval(sendPing,HOUR);
+}
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible"&&localStorage.getItem("wlTracking")==="1"){
+    const lp=localStorage.getItem("wlLastPing");
+    if(!lp||Date.now()-new Date(lp).getTime()>=HOUR)sendPing();
+  }
+});
+$("btnStart").onclick=()=>startTracking(false);
+
+// ---------- admin ----------
+$("btnAdLogin").onclick=()=>{
+  if($("adPass").value===ADMIN_PASS){sessionStorage.setItem("wlAdmin","1");$("adErr").classList.add("hide");openAdmin()}
+  else $("adErr").classList.remove("hide")
+};
+$("btnLogout").onclick=()=>{sessionStorage.removeItem("wlAdmin");footerLinks();initStaff()};
+let map,markers={},rows=[];
+function openAdmin(){
+  show("admin");footerLinks();
+  if(!map){map=L.map("map").setView([28.2,84.0],8);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{attribution:"© OpenStreetMap"}).addTo(map)}
+  db.collection(COL).orderBy("ts","desc").limit(500).onSnapshot(snap=>{
+    rows=snap.docs.map(d=>({id:d.id,...d.data()}));
+    renderAdmin();
+  });
+}
+function renderAdmin(){
+  const staffNames=[...new Set(rows.map(r=>r.name))];
+  const sel=$("fStaff"),cur=sel.value;
+  sel.innerHTML='<option value="">All staff</option>'+staffNames.map(n=>`<option${n===cur?" selected":""}>${n}</option>`).join("");
+  const filt=sel.value?rows.filter(r=>r.name===sel.value):rows;
+  // table
+  $("tbl").innerHTML=`<tr><th>Name</th><th>EIN</th><th>Time</th><th>Place</th><th>Lat,Lng</th><th>Map</th></tr>`+
+    filt.map(r=>`<tr><td>${r.name||""}</td><td>${r.ein||""}</td><td>${r.tsClient?new Date(r.tsClient).toLocaleString("en-CA",{hour12:false}):""}</td><td>${(r.place||"").split(",").slice(0,3).join(",")}</td><td>${(r.lat||0).toFixed(5)},${(r.lng||0).toFixed(5)}</td><td><a class="ln" target="_blank" href="https://maps.google.com/?q=${r.lat},${r.lng}">Open</a></td></tr>`).join("");
+  // latest per staff for map
+  const latest={};
+  rows.forEach(r=>{if(!latest[r.name]||new Date(r.tsClient)>new Date(latest[r.name].tsClient))latest[r.name]=r});
+  Object.values(markers).forEach(m=>map.removeLayer(m));markers={};
+  Object.values(latest).forEach(r=>{
+    if(!(sel.value)||r.name===sel.value){
+      const m=L.marker([r.lat,r.lng]).addTo(map).bindPopup(`<b>${r.name}</b> (${r.ein})<br>${r.tsClient?new Date(r.tsClient).toLocaleString("en-CA",{hour12:false}):""}<br>${(r.place||"").split(",").slice(0,2).join(",")}`);
+      markers[r.name]=m;
+    }
+  });
+  const pts=Object.values(latest).filter(r=>!sel.value||r.name===sel.value).map(r=>[r.lat,r.lng]);
+  if(pts.length)map.fitBounds(pts,{padding:[30,30],maxZoom:14});
+}
+$("fStaff").onchange=renderAdmin;
+$("btnCsv").onclick=()=>{
+  const h=["Name","EIN","Time","Place","Lat","Lng"];
+  const body=rows.map(r=>[r.name,r.ein,r.tsClient,r.place,r.lat,r.lng].map(x=>`"${(x??"").toString().replace(/"/g,'""')}"`).join(","));
+  const blob=new Blob([[h.join(","),...body].join("\n")],{type:"text/csv"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="staff_locations.csv";a.click();
+};
+
+footerLinks();
+if(sessionStorage.getItem("wlAdmin")==="1")openAdmin();else initStaff();
+if("serviceWorker" in navigator)navigator.serviceWorker.register("tracker-sw.js").catch(()=>{});
 </script>
 </body>
 </html>
