@@ -317,23 +317,946 @@ if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(
  try{const o=JSON.parse(localStorage.getItem(PK)||"null");if(o){$("cp").value=o.p;$("co").value=o.o;$("cb").value=o.b;$("ql").value=o.l;$("qb").checked=o.bd;$("qm").checked=o.m;if(o.t){$("at").value=o.t;AD.t=o.t;AD.q=o.q;$("aq").value=o.q}}}catch(e){}
  rCalc();})();
 
-// welcome + daily morning quote
-(function(){const QT=["Every great day starts with a small smile - your customer will feel it too. 😊", "A clear quote today builds trust for years.", "Small steps every morning create big results by the evening.", "Be the reason a customer says, 'That was easy.'", "Listen first, quote second - people buy from those who understand them.", "Your energy is your first product. Share it generously.", "One honest answer is worth more than ten perfect pitches.", "Today is a fresh page. Write something you're proud of.", "Fast internet connects homes; good service connects hearts.", "Don't count the calls - make every call count.", "Confidence is quiet. Know your rates, trust your words.", "A patient 'no' today can become a happy 'yes' tomorrow.", "Treat every customer like family - they will remember.", "Progress, not perfection. Do one thing better than yesterday.", "Great sales start with great manners.", "Smile, breathe, and begin. The day is yours. 🌞", "Solve the problem, and the sale takes care of itself.", "Discipline in the morning gives freedom in the evening.", "Be kind, be clear, be quick - that's the winning formula.", "Your effort today is tomorrow's success story."],K="nsname",DK="nsnote",now=new Date(),hr=now.getHours(),day=Math.floor(Date.now()/864e5),q=QT[day%QT.length],
- gr=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening",ic=hr<12?"🌅":hr<17?"☀️":"🌙",NS="Notification" in window;
- let nm="";try{nm=localStorage.getItem(K)||""}catch(e){}
- const mq=document.createElement("div");mq.className="panel mq";$("lk").insertAdjacentElement("afterend",mq);
- const cachePrefs=()=>{try{caches.open("nsprefs").then(c=>c.put("/prefs.json",new Response(JSON.stringify({name:nm}))))}catch(e){}};
- const ps=async()=>{try{const r=await navigator.serviceWorker.ready;if(r.periodicSync)await r.periodicSync.register("morning-quote",{minInterval:864e5})}catch(e){}};
- const show=async(t,b)=>{try{const r=await navigator.serviceWorker.getRegistration();if(r)await r.showNotification(t,{body:b,tag:"morning"});else new Notification(t,{body:b,tag:"morning"})}catch(e){}};
- function draw(){mq.innerHTML=`${ic} <b>${gr}, ${esc(nm)}!</b><a id="cn">✎ change name</a><div>${esc(q)}</div>`+(NS&&Notification.permission!=="granted"&&Notification.permission!=="denied"?`<button class="btn" id="bn">🔔 Enable morning notification</button>`:"")+(NS&&Notification.permission==="denied"?`<div class="note">Notifications blocked - browser settings bata allow garnus.</div>`:"");
-  $("cn").onclick=ask;const b=$("bn");if(b)b.onclick=()=>Notification.requestPermission().then(p=>{if(p==="granted"){ps();cachePrefs();show("🔔 Morning notification on!","Hello "+nm+", you'll get a daily quote.")}draw()})}
- function ask(){let w=$("wl");if(!w){w=document.createElement("div");w.id="wl";w.className="mdl";w.innerHTML=`<div class="mbox"><h3>👋 Welcome!</h3><div class="sub">Tapai ko full name lekhnus</div><input id="wn" placeholder="Your full name" autocomplete="name"><button id="wb">Start</button></div>`;document.body.appendChild(w);
-  const go=()=>{const v=$("wn").value.trim();if(v.length<2){$("wn").focus();return}nm=v;try{localStorage.setItem(K,nm);localStorage.setItem("nssn",nm)}catch(e){}$("sn").value=nm;$("sn").dispatchEvent(new Event("input"));cachePrefs();w.classList.remove("on");draw();notify()};
-  $("wb").onclick=go;$("wn").onkeydown=e=>{if(e.key==="Enter")go()}}
-  $("wn").value=nm;w.classList.add("on");setTimeout(()=>$("wn").focus(),50)}
- function notify(){if(!nm||!NS||Notification.permission!=="granted"||hr<4||hr>=12)return;const t=now.toDateString();let d="";try{d=localStorage.getItem(DK)}catch(e){}if(d===t)return;try{localStorage.setItem(DK,t)}catch(e){}show(`🌅 Good morning, ${nm}!`,q)}
- if(!nm)ask();else{draw();cachePrefs();notify();if(NS&&Notification.permission==="granted")ps()}
+// WLink Sales Team — 30 Day Funny Sales Motivation
+(function () {
+
+  const NAME_KEY = "nsname";
+  const NOTE_KEY = "sales_last_notification";
+  const NS = "Notification" in window;
+
+  /* =====================================================
+     30 DAYS × 3 NOTIFICATIONS
+     ===================================================== */
+
+  const SALES = [
+
+    {
+      m: "🌞 हिजो कति आयो? 😏 आज चाहिँ कसिनुपर्छ है! Target आफैँ आएर ढोका ढकढक्याउँदैन 😂",
+      a: "🍛 खाजा खाइसकियो? अब खाजा पचाउन Field मा जाऔँ! 😂 Customer पनि खोजौँ, Sales पनि निकालौँ!",
+      e: "🔥 आजको Sales बिना घर जाने कि Sales निकालेर Hero बन्ने? अझै समय छ!"
+    },
+
+    {
+      m: "💰 New Sales नगरी Incentive खाने योजना हो कि क्या हो? 😂 Incentive ले पनि भनिरहेको छ—मलाई कमाउन त देऊ!",
+      a: "😴 २ बज्यो… काम गर्ने बेला हो, झ्यालबाट बाहिर हेर्ने बेला होइन! 😂 Field मा जाऔँ!",
+      e: "📞 एउटा Call ले एउटा Sales दिन सक्छ। आजको Final Push सुरु!"
+    },
+
+    {
+      m: "😎 हिजोको Sales राम्रो थियो भने आज अझै राम्रो बनाऔँ! हिजो इतिहास हो, आज Result बनाउने दिन हो!",
+      a: "🍵 चिया खाइसकियो? अब Customer भेट्न निस्कौँ! कुर्सीमा बसेर Sales आउँदैन है 😂",
+      e: "🎯 आजको Number हेर्दा Target खुसी छ कि रिसाएको छ? 😂 अब अलिकति कसौँ!"
+    },
+
+    {
+      m: "🌞 बिहानै एउटा प्रश्न—आज पहिलो Sales कसको? 👀 नाम Group मा चम्किनुपर्छ है!",
+      a: "😴 दिउँसोको निद्रा घरमा सुतौँ, Office मा Sales गरौँ! 😂",
+      e: "🔥 आज खाली हात नफर्किने Commitment चाहियो Team!"
+    },
+
+    {
+      m: "📞 Phone त सबैसँग छ… अब Customer लाई Phone गर्ने आँट पनि देखाऊँ! 😎",
+      a: "🍛 खाजा सकियो? अब Field ले बोलाइरहेको छ! 🏃‍♂️",
+      e: "💰 Incentive पनि कमाउन पर्खिरहेको छ नि! आज एउटा Sales अझै निकालौँ!"
+    },
+
+    {
+      m: "😂 Customer छैन भन्ने होइन, खोज्न अल्छी लागेको हो कि? आज Customer Hunt सुरु गरौँ!",
+      a: "☀️ २ बजेदेखि ५ बजेसम्मको समय Sales निकाल्ने Golden Hour हो! 🔥",
+      e: "🎯 आज कति New Sales? Number बोलौँ Team!"
+    },
+
+    {
+      m: "🔥 हिजोको Performance बिर्सौँ, आज नयाँ Record बनाऔँ!",
+      a: "😏 झ्यालमा बसेर Field हेरेर Sales आउँदैन है! बाहिर निस्कौँ 😂",
+      e: "🏆 आजको Sales Champion को नाम कसको? 👀"
+    },
+
+    {
+      m: "😜 Customer ले 'पछि गर्छु' भन्यो? ठीक छ… तर Follow-up अहिले गरौँ!",
+      a: "🍜 खाजा खाइसकेपछि Field मा जाऔँ—पेट पनि खुशी, Customer पनि खुशी! 😂",
+      e: "📢 Final Call! आज एउटा भए पनि New Sales चाहियो!"
+    },
+
+    {
+      m: "😎 Sales Team को मन्त्र: Call → Follow-up → Visit → Pitch → Close! 🔥",
+      a: "🥱 अल्छी लाग्यो? Customer लाई पनि Internet चाहिएको छ, उसलाई तपाईं चाहिएको छ!",
+      e: "🔥 आजको Target अझै बाँकी छ भने Game सकिएको छैन!"
+    },
+
+    {
+      m: "💰 Incentive चाहिन्छ? आज Sales निकाल्नैपर्छ! Simple हिसाब छ 😂",
+      a: "😂 २ बजेपछि शरीर Office मा, मन घरमा नराखौँ है! Field मा जाऔँ!",
+      e: "📊 आजको Number ले भोलिको Motivation बनाउँछ!"
+    },
+
+    {
+      m: "🌞 हिजो 1 आयो भने आज 2 बनाउने हो! Growth भनेको यही हो!",
+      a: "☕ चिया + खाजा भयो, अब Field + Sales पनि हुनुपर्‍यो!",
+      e: "🎯 'आज भएन' होइन—अझै समय छ!"
+    },
+
+    {
+      m: "📢 बिहानको सूचना: Target ले तपाईंलाई खोजिरहेको छ! 😂 तपाईं Customer खोज्न निस्कनुभयो?",
+      a: "😴 अल्छी मान्छेलाई काम गर्न गाह्रो हुन्छ… Sales Champion लाई मजा आउँछ! 😎",
+      e: "🔥 आज कसले दिन बचाउँछ? एउटा Sales अझै निकालौँ!"
+    },
+
+    {
+      m: "🚀 आज नयाँ Customer को खोजी अभियान सुरु! Phone उठाऊ, Follow-up गर!",
+      a: "🏃‍♂️ Field मा निस्कौँ, कुर्सीले मात्रै Sales दिँदैन! 😂",
+      e: "💪 थाकियो होला, तर एउटा Sales अझै निकाल्न सकिन्छ!"
+    },
+
+    {
+      m: "😏 हिजोको Number मन परेन? आज बदल्ने मौका छ!",
+      a: "🍛 खाजा खाइसकेपछि Offer र Confidence लिएर Field मा जाऔँ!",
+      e: "🏆 आजको Best Performer को नाम Group मा आउनुपर्छ!"
+    },
+
+    {
+      m: "🔥 Half Month भयो! अब Speed Double गर्ने बेला हो!",
+      a: "📞 Follow-up नगरेको Customer लाई सम्झाउने बेला भयो! 😂",
+      e: "🎯 आधा महिना गयो, Target चाहिँ पूरा हुनैपर्छ!"
+    },
+
+    {
+      m: "🌞 आजको लक्ष्य: कम्तीमा एउटा नयाँ Opportunity!",
+      a: "😴 दिउँसो २ बजेपछि Sleep Mode बन्द! Sales Mode ON! 😂",
+      e: "🔥 Sales आएको छ भने Celebrate, नआएको छ भने अझै मेहनत!"
+    },
+
+    {
+      m: "😎 Customer ले नबोलाए पनि Sales Team पुग्नुपर्छ! यही हो Field Power!",
+      a: "🏃 Field मा जानु नै Sales को पहिलो Step हो! चलौँ!",
+      e: "💪 आजको मेहनत = भोलिको Incentive!"
+    },
+
+    {
+      m: "💰 Incentive लाई माया गर्नुहुन्छ भने Sales लाई पनि माया गर्नुस् 😂",
+      a: "🍵 चिया सकियो? अब Excuse पनि सकियो! Field मा जाऔँ!",
+      e: "📞 Last Follow-up Round सुरु! आजको Customer Close गरौँ!"
+    },
+
+    {
+      m: "🌞 आज 'हेरौँला' होइन, 'गरौँला' होइन—'गरिहालौँ!' 🔥",
+      a: "😂 खाजा खाने Time सकियो, अब Sales खाने Time!",
+      e: "🎯 एउटा New Sales ले पूरा दिनको Mood बदल्न सक्छ!"
+    },
+
+    {
+      m: "🔥 20 दिन भइसक्यो! अब Target लाई Result देखाऔँ!",
+      a: "🥱 अल्छीलाई आज छुट्टी छैन है! 😂",
+      e: "💪 आजको Effort को हिसाब भोलि Number ले दिन्छ!"
+    },
+
+    {
+      m: "🌞 नयाँ दिन, नयाँ Customer, नयाँ Sales! Let's Go Team!",
+      a: "😎 AC को हावा मात्रै खाएर Sales हुँदैन! Field मा जाऔँ!",
+      e: "🏆 आजको Sales Hero को नाम कसको?"
+    },
+
+    {
+      m: "🚀 आज बिहानै 5 वटा Customer Follow-up गर्ने Challenge!",
+      a: "🍛 खाजा पछि 5 Follow-up! अनि Field Visit! 🔥",
+      e: "📞 Follow-up को Result निकाल्ने बेला! आज Close गरौँ!"
+    },
+
+    {
+      m: "😂 'Customer छैन' भन्नुभन्दा पहिले Customer खोज्यौ?",
+      a: "🏃‍♂️ Field मा दुई कदम चाल्दा Sales को Chance पनि बढ्छ!",
+      e: "📞 अन्तिम Call Round—Let's Close!"
+    },
+
+    {
+      m: "😎 आजको दिन Sales बिना जान दिनु हुँदैन!",
+      a: "☀️ २ बजेपछि Energy Down होइन—Sales Up!",
+      e: "🎯 आजको Target लाई आजै Tackle गरौँ!"
+    },
+
+    {
+      m: "💰 Incentive चाहिन्छ भने आजको Sales Number बढाऊ!",
+      a: "😂 खाजा खाएर कुर्सीमा टाँसिनु हुँदैन है! Field मा जाऔँ!",
+      e: "🔥 Final Push—एक Sales अझै सम्भव छ!"
+    },
+
+    {
+      m: "🌞 तपाईं Customer खोज्दै हुनुहुन्छ कि Customer तपाईंलाई? 😂",
+      a: "📢 Field Time! Phone + Offer + Confidence लिएर निस्कौँ!",
+      e: "💪 आजको मेहनतलाई Zero हुन नदिऔँ!"
+    },
+
+    {
+      m: "🚀 हिजोभन्दा आज राम्रो—यही हो Sales Growth!",
+      a: "😴 आलस्यलाई भनौँ—आज तिम्रो छुट्टी! 😂",
+      e: "🎯 आजको Number Close गरौँ!"
+    },
+
+    {
+      m: "😎 Sales Team, आज फेरि नयाँ Record को प्रयास!",
+      a: "🍜 खाजा सकियो? अब Customer को पालो! 😂",
+      e: "🔥 दिन सकिन लाग्यो, तर Sales को मौका अझै बाँकी छ!"
+    },
+
+    {
+      m: "📢 Month-End नजिकिँदैछ—अब Speed बढाउनैपर्छ!",
+      a: "🏃 Field मा आज Extra Effort चाहियो!",
+      e: "💰 Incentive को अन्तिम दौड—कसले जित्छ?"
+    },
+
+    {
+      m: "🏆 FINAL DAY! आजको Sales ले पूरा महिनाको Story लेख्छ!",
+      a: "🔥 खाजा छोटो, Field लामो 😂 आज FULL POWER!",
+      e: "🎉 Month Close! आज Maximum Push—TEAM, LET'S FINISH STRONG! 🔥"
+    }
+
+  ];
+
+
+  /* =====================================================
+     😂 RANDOM FUNNY NOTIFICATIONS
+     ===================================================== */
+
+  const FUNNY = [
+
+    "🚨 BREAKING NEWS: २ बजिसक्यो… अझै Field ननिस्केको Sales Staff भेटिएको छ! 😂",
+
+    "🍛 खाजा खाइसक्नुभयो? अब खाजा पचाउने सबैभन्दा राम्रो उपाय—Field Visit! 🏃‍♂️😂",
+
+    "😴 अल्छी मान्छेलाई काम गर्न गाह्रो छ… तर Sales नगरी Incentive खान झन् गाह्रो छ! 😂💰",
+
+    "📢 कुर्सीले Sales दिँदैन है साथीहरू! अलिकति Field पनि देखौँ 😂",
+
+    "📞 Customer लाई Call नगर्दा Sales चाहिँ पक्कै आउँदैन! 😂",
+
+    "🔥 आजको Rule: पहिले Sales, त्यसपछि आराम! 😎",
+
+    "😏 हिजो कति आयो भनेर हेरेर बस्ने होइन… आज कति ल्याउने भनेर सोच्ने हो!",
+
+    "😂 चिया खाइसकियो, खाजा खाइसकियो, गफ पनि भइसक्यो… अब अलिकति Sales पनि गरौँ कि?",
+
+    "💰 Incentive ले तपाईंलाई बोलाइरहेको छ: 'मलाई लिन कहिले आउँछौ?' 😂",
+
+    "🏃‍♂️ Customer आफैँ दौडेर Office आउँदैन है! हामी नै जानुपर्छ 😂",
+
+    "📱 Mobile मा Facebook चलाउन सक्ने हातले Customer लाई Call पनि गर्न सक्छ! 😂",
+
+    "😎 आजको Formula: Call + Follow-up + Visit = Sales 🔥",
+
+    "😂 AC को हावा खाएर बस्दा शरीर चिसो होला, Target चाहिँ झन् तातो हुँदैछ!",
+
+    "🚨 Target Emergency! Sales चाहिएको छ… धेरै चाहिएको छ! 😂",
+
+    "💪 अल्छीलाई हराउने उपाय—उठ, Phone समाऊ, Customer लाई Call गर!",
+
+    "😂 Customer ले 'सोचेर भन्छु' भन्यो भने सोच्न देऊ… Follow-up गर्न चाहिँ नबिर्सौँ!",
+
+    "🎯 आज एउटा Sales निकालेर आफूलाई नै Surprise गरौँ!",
+
+    "😜 आज Sales आएन भने भोलि Incentive लाई के मुख देखाउने?",
+
+    "🔥 Field मा गएको Staff = Sales को Chance बढेको Staff!",
+
+    "📢 कुर्सीमा धेरै समय बसेमा कुर्सीले तपाईंलाई आफ्नै कर्मचारी सम्झिन सक्छ! 😂 उठौँ!"
+  ];
+
+
+  /* =====================================================
+     GET USER NAME
+     ===================================================== */
+
+  let name = "";
+
+  try {
+    name = localStorage.getItem(NAME_KEY) || "";
+  } catch (e) {}
+
+
+  /* =====================================================
+     DAY NUMBER
+     ===================================================== */
+
+  function getDay() {
+
+    const now = new Date();
+
+    const start =
+      new Date(
+        now.getFullYear(),
+        0,
+        1
+      );
+
+    const diff =
+      Math.floor(
+        (now - start) /
+        86400000
+      );
+
+    return diff % 30;
+
+  }
+
+
+  /* =====================================================
+     SERVICE WORKER
+     ===================================================== */
+
+  async function getSW() {
+
+    try {
+
+      return await navigator.serviceWorker.ready;
+
+    } catch (e) {
+
+      return null;
+
+    }
+
+  }
+
+
+  /* =====================================================
+     SHOW NOTIFICATION
+     ===================================================== */
+
+  async function showNotification(title, body, tag) {
+
+    if (!NS) return;
+
+    if (
+      Notification.permission !== "granted"
+    ) return;
+
+    try {
+
+      const sw = await getSW();
+
+      if (sw) {
+
+        await sw.showNotification(
+          title,
+          {
+            body: body,
+            tag: tag,
+            icon: "./icon-192.png",
+            badge: "./icon-192.png",
+            data: {
+              url: "./"
+            }
+          }
+        );
+
+      } else {
+
+        new Notification(
+          title,
+          {
+            body: body,
+            tag: tag
+          }
+        );
+
+      }
+
+    } catch (e) {
+
+      console.log(
+        "Notification error:",
+        e
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     SAVE NAME TO SERVICE WORKER CACHE
+     ===================================================== */
+
+  async function saveName() {
+
+    try {
+
+      const cache =
+        await caches.open(
+          "nsprefs"
+        );
+
+      await cache.put(
+        "/prefs.json",
+        new Response(
+          JSON.stringify({
+            name: name
+          })
+        )
+      );
+
+    } catch (e) {}
+
+  }
+
+
+  /* =====================================================
+     REGISTER PERIODIC NOTIFICATIONS
+     ===================================================== */
+
+  async function registerNotifications() {
+
+    try {
+
+      const sw =
+        await navigator.serviceWorker.ready;
+
+      if (!sw.periodicSync) {
+
+        console.log(
+          "Periodic Sync not supported."
+        );
+
+        return;
+
+      }
+
+      await sw.periodicSync.register(
+        "morning-quote",
+        {
+          minInterval:
+            24 * 60 * 60 * 1000
+        }
+      );
+
+      await sw.periodicSync.register(
+        "afternoon-sales",
+        {
+          minInterval:
+            24 * 60 * 60 * 1000
+        }
+      );
+
+      await sw.periodicSync.register(
+        "evening-sales",
+        {
+          minInterval:
+            24 * 60 * 60 * 1000
+        }
+      );
+
+      await sw.periodicSync.register(
+        "funny-sales",
+        {
+          minInterval:
+            6 * 60 * 60 * 1000
+        }
+      );
+
+    } catch (e) {
+
+      console.log(
+        "Periodic notification registration failed:",
+        e
+      );
+
+    }
+
+  }
+
+
+  /* =====================================================
+     CURRENT DAY MESSAGE
+     ===================================================== */
+
+  function getCurrentMessage() {
+
+    const day =
+      SALES[getDay()];
+
+    const hour =
+      new Date().getHours();
+
+    if (hour < 12)
+      return day.m;
+
+    if (hour < 17)
+      return day.a;
+
+    return day.e;
+
+  }
+
+
+  /* =====================================================
+     DASHBOARD PANEL
+     ===================================================== */
+
+  const panel =
+    document.createElement("div");
+
+  panel.className =
+    "panel mq";
+
+  const link =
+    document.getElementById("lk");
+
+  if (link) {
+
+    link.insertAdjacentElement(
+      "afterend",
+      panel
+    );
+
+  } else {
+
+    document.body.prepend(panel);
+
+  }
+
+
+  function draw() {
+
+    const hour =
+      new Date().getHours();
+
+    let greeting =
+      "🌙 Good evening";
+
+    if (hour < 12)
+      greeting =
+        "🌅 Good morning";
+
+    else if (hour < 17)
+      greeting =
+        "☀️ Good afternoon";
+
+
+    panel.innerHTML = `
+
+      <div style="
+        font-size:18px;
+        font-weight:700;
+        margin-bottom:8px;
+      ">
+
+        ${greeting}
+        ${name ? ", " + name : ""}! 👋
+
+      </div>
+
+      <div style="
+        font-size:15px;
+        line-height:1.6;
+      ">
+
+        ${getCurrentMessage()}
+
+      </div>
+
+      <div style="
+        margin-top:12px;
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+      ">
+
+        ${
+          NS &&
+          Notification.permission !== "granted"
+          ? `
+            <button
+              class="btn"
+              id="enableSalesNotification"
+            >
+              🔔 Enable Sales Notifications
+            </button>
+          `
+          : `
+            <button
+              class="btn"
+              id="testMorning"
+            >
+              🌅 Test Morning
+            </button>
+
+            <button
+              class="btn"
+              id="testAfternoon"
+            >
+              ☀️ Test Afternoon
+            </button>
+
+            <button
+              class="btn"
+              id="testEvening"
+            >
+              🌆 Test Evening
+            </button>
+
+            <button
+              class="btn"
+              id="testFunny"
+            >
+              😂 Test Funny
+            </button>
+          `
+        }
+
+      </div>
+
+    `;
+
+
+    const enable =
+      document.getElementById(
+        "enableSalesNotification"
+      );
+
+    if (enable) {
+
+      enable.onclick =
+        async function () {
+
+          const permission =
+            await Notification.requestPermission();
+
+          if (
+            permission === "granted"
+          ) {
+
+            await saveName();
+
+            await registerNotifications();
+
+            await showNotification(
+              "🚀 Sales Notifications ON!",
+              "अबदेखि Sales Team motivation notification आउँदै जानेछ! 🔥",
+              "sales-enabled"
+            );
+
+            draw();
+
+          }
+
+        };
+
+    }
+
+
+    const morning =
+      document.getElementById(
+        "testMorning"
+      );
+
+    if (morning) {
+
+      morning.onclick =
+        async () => {
+
+          const msg =
+            SALES[getDay()].m;
+
+          await showNotification(
+            `🌅 Good Morning ${name || "Sales Team"}!`,
+            msg,
+            "test-morning"
+          );
+
+        };
+
+    }
+
+
+    const afternoon =
+      document.getElementById(
+        "testAfternoon"
+      );
+
+    if (afternoon) {
+
+      afternoon.onclick =
+        async () => {
+
+          const msg =
+            SALES[getDay()].a;
+
+          await showNotification(
+            "☀️ 2 बजे Sales Alert!",
+            msg,
+            "test-afternoon"
+          );
+
+        };
+
+    }
+
+
+    const evening =
+      document.getElementById(
+        "testEvening"
+      );
+
+    if (evening) {
+
+      evening.onclick =
+        async () => {
+
+          const msg =
+            SALES[getDay()].e;
+
+          await showNotification(
+            "🌆 Final Push!",
+            msg,
+            "test-evening"
+          );
+
+        };
+
+    }
+
+
+    const funny =
+      document.getElementById(
+        "testFunny"
+      );
+
+    if (funny) {
+
+      funny.onclick =
+        async () => {
+
+          const msg =
+            FUNNY[
+              Math.floor(
+                Math.random() *
+                FUNNY.length
+              )
+            ];
+
+          await showNotification(
+            "😂 Sales Department Alert!",
+            msg,
+            "test-funny"
+          );
+
+        };
+
+    }
+
+  }
+
+
+  /* =====================================================
+     CHANGE NAME
+     ===================================================== */
+
+  function askName() {
+
+    let modal =
+      document.getElementById(
+        "salesNameModal"
+      );
+
+    if (!modal) {
+
+      modal =
+        document.createElement(
+          "div"
+        );
+
+      modal.id =
+        "salesNameModal";
+
+      modal.className =
+        "mdl";
+
+      modal.innerHTML = `
+
+        <div class="mbox">
+
+          <h3>
+            👋 Welcome Sales Warrior!
+          </h3>
+
+          <div class="sub">
+            आफ्नो Full Name लेख्नुहोस्
+          </div>
+
+          <input
+            id="salesNameInput"
+            placeholder="Your full name"
+            autocomplete="name"
+          >
+
+          <button
+            id="salesNameButton"
+          >
+            Start Sales 🚀
+          </button>
+
+        </div>
+
+      `;
+
+      document.body.appendChild(
+        modal
+      );
+
+
+      const save =
+        () => {
+
+          const input =
+            document.getElementById(
+              "salesNameInput"
+            );
+
+          const value =
+            input.value.trim();
+
+          if (value.length < 2) {
+
+            input.focus();
+
+            return;
+
+          }
+
+          name = value;
+
+          try {
+
+            localStorage.setItem(
+              NAME_KEY,
+              name
+            );
+
+          } catch (e) {}
+
+          saveName();
+
+          modal.classList.remove(
+            "on"
+          );
+
+          draw();
+
+        };
+
+
+      document.getElementById(
+        "salesNameButton"
+      ).onclick = save;
+
+
+      document.getElementById(
+        "salesNameInput"
+      ).onkeydown =
+        e => {
+
+          if (
+            e.key === "Enter"
+          )
+            save();
+
+        };
+
+    }
+
+
+    const input =
+      document.getElementById(
+        "salesNameInput"
+      );
+
+    input.value =
+      name || "";
+
+    modal.classList.add(
+      "on"
+    );
+
+    setTimeout(
+      () => input.focus(),
+      100
+    );
+
+  }
+
+
+  /* =====================================================
+     CHANGE NAME LINK
+     ===================================================== */
+
+  panel.addEventListener(
+    "click",
+    function (e) {
+
+      if (
+        e.target.id ===
+        "changeSalesName"
+      ) {
+
+        askName();
+
+      }
+
+    }
+  );
+
+
+  /* =====================================================
+     FIRST LOAD
+     ===================================================== */
+
+  if (!name) {
+
+    askName();
+
+  } else {
+
+    draw();
+
+    saveName();
+
+  }
+
+
+  /* =====================================================
+     REQUEST NOTIFICATION
+     ===================================================== */
+
+  async function enableNotifications() {
+
+    if (!NS) return;
+
+    if (
+      Notification.permission ===
+      "default"
+    ) {
+
+      const permission =
+        await Notification.requestPermission();
+
+      if (
+        permission === "granted"
+      ) {
+
+        await saveName();
+
+        await registerNotifications();
+
+        await showNotification(
+          "🚀 Sales Notification ON!",
+          "अबदेखि daily Sales motivation आउँदै जानेछ!",
+          "sales-on"
+        );
+
+      }
+
+    }
+
+  }
+
+
 })();
-</script>
-</body>
-</html>
