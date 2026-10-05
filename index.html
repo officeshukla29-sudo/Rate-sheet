@@ -51,6 +51,7 @@ h3{margin:18px 0 8px;font-size:15px}
 .stk{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:4px 0}.stk s{background:#2563eb}.stk u{background:#0f766e}
 .lg{font-size:12px;color:var(--mut)}.lg s{color:#2563eb;text-decoration:none}.lg u{color:#0f766e;text-decoration:none}
 .hero{padding:14px 18px;border-radius:10px;color:#fff;margin-bottom:12px}.hero h2{margin:0;font-size:18px}.hero p{margin:4px 0 0;font-size:12px;opacity:.9}
+td input:disabled{color:#334155;background:#f1f5f9;cursor:not-allowed}
 @media print{nav,.bar,.btn{display:none}.tab{display:block!important}}
 </style>
 </head>
@@ -59,6 +60,7 @@ h3{margin:18px 0 8px;font-size:15px}
 <p>Final Amount = Package Charge + OTC (Device Rental + Drop-wire + Deposit). Amount in Rs.</p></header>
 <nav id="nav"></nav>
 <main>
+<div class="bar" id="lk"></div>
 <section class="tab" id="t0">
  <div id="chips"></div>
  <div hidden><select id="cp"></select><select id="co"></select><select id="cb"></select></div>
@@ -67,7 +69,7 @@ h3{margin:18px 0 8px;font-size:15px}
  <div class="lg"><s>&#9632;</s> Package &nbsp; <u>&#9632;</u> OTC (Rental + Drop-wire + Deposit)</div><br>
  <div class="wrap"><table id="ct"></table></div>
  <h3>💬 Customer Quote (copy for WhatsApp/Viber)</h3>
- <label class="note"><input type="checkbox" id="qb" checked> Include breakdown</label> &nbsp; <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select>
+ <label class="note"><input type="checkbox" id="qb" checked> Include breakdown</label> &nbsp; <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select> <input id="qn" placeholder="Customer name (optional)">
  <div class="quote" id="cq"></div>
  <button class="btn" id="cc">Copy quote</button> <button class="btn g" id="wa">Send on WhatsApp</button> <button class="btn g" id="vb">Send on Viber</button>
  <p class="note">Available: Internet Only / Combo 1TV = 5G (50-200) + 6G (200-600) | Combo 2TV = 6G 400/500/600 | Combo 3TV = 6G 500/600.<br>Rates edit karna parey: Package Rates / Device Rates tab ma matra edit garnu.</p>
@@ -144,13 +146,16 @@ function rCalc(){
  $("chips").innerHTML=`<div class="gr"><span>Plan</span>${P.map(x=>chip("cp",x,PL[x][0],x===p)).join("")}</div><div class="gr"><span>ONT</span>${["5G","6G"].map(x=>chip("co",x,"#0f766e",x===o,!on.includes(x))).join("")}</div><div class="gr"><span>Mbps</span>${bw.map(x=>chip("cb",x,"#0f766e",x==b)).join("")}</div>`;
  const pm=D.map((_,i)=>tot(i)/M[i]),mn=Math.min(...pm);
  $("cards").innerHTML=ok?D.map((_,i)=>{const t=tot(i),w=Math.round(pk[i]/t*100);return `<div class="card${pm[i]===mn?" best":""}">${pm[i]===mn?"<i>Lowest / month</i>":""}<small>${L[i]}</small><b>Rs ${f(t)}</b><em>Rs ${f(pm[i])} / month</em><div class="stk"><s style="width:${w}%"></s><u style="width:${100-w}%"></u></div><small>Package ${f(pk[i])} &middot; OTC ${f(c[i].otc)}</small></div>`}).join(""):"";
- const bd=$("qb").checked,ne=$("ql").value==="ne",rn=i=>c[i].ont+c[i].sp+c[i].ss,dp=i=>c[i].dO+c[i].dS,NL=["१ महिना","३ महिना","६ महिना","१२ महिना"];
- const en=`📶 *New Connection Quote*\n*${p}* | ${o} | ${b} Mbps\n\n`+L.map((l,i)=>`✅ *${l}: Rs ${f(tot(i))}* (≈ Rs ${f(tot(i)/M[i])}/month)`+(bd?`\n     Package ${f(pk[i])} + OTC ${f(c[i].otc)}`:"")).join("\n")+(bd?"\n\nOTC = Device Rental + Drop-wire + Deposit":"");
- const np=`📶 *नयाँ इन्टरनेट जडान - मूल्य विवरण*\n*${p}* | ${o} | ${b} Mbps\n\n`+NL.map((l,i)=>`✅ *${l}*\n`+(bd?`Package रु ${f(pk[i])} + Rental रु ${f(rn(i))} + Drop-wire रु ${f(c[i].drop)} + Deposit रु ${f(dp(i))}\n`:"")+`👉 *जम्मा रु ${f(tot(i))} लाग्छ* (लगभग रु ${f(tot(i)/M[i])}/महिना)`).join("\n\n")+(bd?"\n\n(Rental मा VAT समावेश छ)":"");
+ const nm=$("qn").value.trim(),dt=new Date().toLocaleDateString("en-CA"),bd=$("qb").checked,ne=$("ql").value==="ne",rn=i=>c[i].ont+c[i].sp+c[i].ss,dp=i=>c[i].dO+c[i].dS,NL=["१ महिना","३ महिना","६ महिना","१२ महिना"];
+ const en=`📶 *New Connection Quote* (${dt})\n${nm?`Dear ${nm},\n`:""}*${p}* | ${o} | ${b} Mbps\n\n`+L.map((l,i)=>`✅ *${l}: Rs ${f(tot(i))}* (≈ Rs ${f(tot(i)/M[i])}/month)`+(bd?`\n     Package ${f(pk[i])} + OTC ${f(c[i].otc)}`:"")).join("\n")+(bd?"\n\nOTC = Device Rental + Drop-wire + Deposit":"");
+ const np=`📶 *नयाँ इन्टरनेट जडान - मूल्य विवरण* (${dt})\n${nm?`${nm} जी, नमस्कार!\n`:""}*${p}* | ${o} | ${b} Mbps\n\n`+NL.map((l,i)=>`✅ *${l}*\n`+(bd?`Package रु ${f(pk[i])} + Rental रु ${f(rn(i))} + Drop-wire रु ${f(c[i].drop)} + Deposit रु ${f(dp(i))}\n`:"")+`👉 *जम्मा रु ${f(tot(i))} लाग्छ* (लगभग रु ${f(tot(i)/M[i])}/महिना)`).join("\n\n")+(bd?"\n\n(Rental मा VAT समावेश छ)":"");
  $("cq").textContent=ok?(ne?np:en):"Combination not available";
 }
 $("chips").onclick=e=>{const d=e.target.dataset;if(d.id){$(d.id).value=d.v;rCalc()}};
-$("qb").onchange=$("ql").onchange=rCalc;$("vb").onclick=()=>{location.href="viber://forward?text="+encodeURIComponent($("cq").textContent)};
+$("qb").onchange=$("ql").onchange=rCalc;$("qn").oninput=rCalc;$("vb").onclick=async()=>{const t=$("cq").textContent;
+ try{if(navigator.share){await navigator.share({text:t});return}}catch(e){if(e.name==="AbortError")return}
+ try{await navigator.clipboard.writeText(t)}catch(e){}
+ $("vb").textContent="Copied - paste in Viber";setTimeout(()=>$("vb").textContent="Send on Viber",2500);location.href="viber://chats"};
 $("wa").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent($("cq").textContent));
 $("cc").onclick=()=>{const t=$("cq").textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("cc").textContent="Copied"},()=>{const r=document.createRange();r.selectNodeContents($("cq"));getSelection().removeAllRanges();getSelection().addRange(r);$("cc").textContent="Selected - press Copy"});setTimeout(()=>$("cc").textContent="Copy quote",1800)};
 // final
@@ -169,16 +174,26 @@ function rFinal(){
  $("fs").innerHTML=rs.length?`<div class="card best" style="border-top-color:#16a34a;background:#f0fdf4"><small>Lowest amount</small><b>Rs ${f(lo.t)}</b><small>${lo.l}</small></div><div class="card" style="border-top-color:#dc2626"><small>Highest amount</small><b>Rs ${f(hi.t)}</b><small>${hi.l}</small></div><div class="card"><small>Plans shown</small><b>${rs.length}</b><small>rows x 4 durations</small></div>`:""}
 $("fp").onchange=$("fo").onchange=rFinal;
 // rate tables
-const inp=(k,v)=>`<td><input type="number" data-k="${k}" value="${v}"></td>`;
+const inp=(k,v)=>`<td><input type="number" data-k="${k}" value="${v}"${lock?" disabled":""}></td>`;
 function rRates(){
  $("pt").innerHTML=`<tr>${["Plan","ONT Type","Bandwidth (Mbps)",...D].map(h=>`<th>${h}</th>`).join("")}</tr>`+
  S.pk.map((r,j)=>(j&&S.pk[j-1][0]===r[0]?"":`<tr><td colspan=7 style="background:${PL[r[0]][0]};color:#fff;font-weight:700">${r[0]}</td></tr>`)+`<tr><td style="background:${PL[r[0]][1]};color:${PL[r[0]][0]};font-weight:700">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td>${r[3].map((x,i)=>inp(`p.${j}.${i}`,x)).join("")}</tr>`).join("");
  $("dt").innerHTML=`<tr>${["Item",...D].map(h=>`<th>${h}</th>`).join("")}</tr>`+S.dev.map((r,j)=>(j%3?"":`<tr><td colspan=5 style="background:#e2e8f0;font-weight:700">${["📡 Dual-Band ONT (5G)","📶 Wi-Fi 6 ONT (6G)","📺 Set-Top Box (STB)"][j/3]}</td></tr>`)+`<tr><td>${r[0]}</td>${r[1].map((x,i)=>inp(`d.${j}.${i}`,x)).join("")}</tr>`).join("");
  $("st").innerHTML=`<tr><th>Plan</th><th>STB Qty</th></tr>`+P.map(p=>`<tr><td style="background:${PL[p][1]};color:${PL[p][0]};font-weight:700">${p} ${"📺".repeat(S.stb[p])}</td>${inp("s."+p,S.stb[p])}</tr>`).join("")}
 document.addEventListener("input",e=>{const k=e.target.dataset.k;if(!k)return;const [t,a,b]=k.split("."),v=+e.target.value||0;
- if(t==="p")S.pk[a][3][b]=v;else if(t==="d")S.dev[a][1][b]=v;else S.stb[k.slice(2)]=v;save();rCalc();rFinal()});
-$("rs").onclick=()=>{S=JSON.parse(JSON.stringify(DEF));save();rRates();rCalc();rFinal()};
-rRates();rCalc();rFinal();show(0);
+ if(t==="p")S.pk[a][3][b]=v;else if(t==="d")S.dev[a][1][b]=v;else S.stb[k.slice(2)]=v;save();rCalc();rFinal();rLk()});
+let lock=true;
+const edited=()=>JSON.stringify(S)!==JSON.stringify(DEF);
+function rLk(){$("lk").innerHTML=`<button class="btn g" id="lb">${lock?"🔒 Rates locked - click to edit":"🔓 Editing - click to lock"}</button>`+(edited()?`<span class="ok x">⚠ Custom rates active on this device</span><button class="btn g" id="rs2">Reset to original</button>`:"")+`<button class="btn g" id="ex">Export rates</button><button class="btn g" id="im">Import rates</button>`}
+const all=()=>{rRates();rCalc();rFinal();rLk()};
+const reset=()=>{S=JSON.parse(JSON.stringify(DEF));save();all()};
+$("rs").onclick=reset;
+$("lk").onclick=e=>{const id=e.target.id;
+ if(id==="lb"){lock=!lock;rRates();rLk()}
+ else if(id==="rs2")reset();
+ else if(id==="ex"){const t=JSON.stringify(S);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert("Rates copied"),()=>prompt("Copy rates:",t))}
+ else if(id==="im"){const t=prompt("Paste rates JSON");if(!t)return;try{const o=JSON.parse(t);if(!o.pk||!o.dev||!o.stb)throw 0;S=o;save();all()}catch(x){alert("Invalid rates JSON")}}};
+all();show(0);
 </script>
 </body>
 </html>
