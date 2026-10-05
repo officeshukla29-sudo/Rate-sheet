@@ -92,6 +92,8 @@ input[type=checkbox]{min-height:0!important;width:20px;height:20px;padding:0!imp
 .panel,.card,.wrap,.mbox,nav,select,input,td,.chip:not(.on){background:#1e293b;color:var(--ink)}.chip:not(.on){color:var(--c)}
 th{background:#334155}.card.best{background:#422006}.card.low{background:#1e293b}.sum{background:#134e4a;color:#e2e8f0}
 .quote{color:#0f172a}.mbox tr.sec td{background:#0c4a6e}.mbox tr.pm td{background:#134e4a;color:#5eead4}.card .sv{color:#4ade80}.otc td{color:#e2e8f0}}
+.mq{background:linear-gradient(120deg,#fef3c7,#ccfbf1);color:#0f172a;border:0;line-height:1.5}.mq .btn{margin-top:8px}.mq a{color:#0f766e;font-size:12px;cursor:pointer;margin-left:8px}
+.mbox input#wn{width:100%;margin:10px 0 0}
 @media print{nav,.bar,.btn{display:none}.tab{display:block!important}}
 </style>
 </head>
@@ -110,7 +112,7 @@ th{background:#334155}.card.best{background:#422006}.card.low{background:#1e293b
  <div class="lg"><s>&#9632;</s> Renew charge &nbsp; <u>&#9632;</u> OTC (Rental + Drop-wire + Deposit) &nbsp; &middot; <i style="font-style:normal">Amount ma touch garera breakdown hernus</i></div></div>
  <div class="mdl" id="mdl" role="dialog" aria-modal="true"><div class="mbox" id="mbox"></div></div>
  <div class="panel"><h3 style="margin-top:0">💬 Customer Quote</h3>
- <div class="gr"><input id="qn" placeholder="Customer name (optional)"> <input id="sn" placeholder="Staff name"> <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select></div>
+ <div class="gr"><input id="qn" placeholder="Customer name (optional)"> <input id="sn" placeholder="Staff name"> <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select> <select id="qs"><option value="c">🔥 Offer style</option><option value="s">Simple style</option></select></div>
  <div class="gr"><label class="note"><input type="checkbox" id="qb" checked> Breakdown dekhaun</label> <label class="note"><input type="checkbox" id="qm"> 1 month pani rakhne</label></div>
  <div class="quote" id="cq"></div>
  <button class="btn" id="cc">Copy quote</button> <button class="btn g" id="wa">WhatsApp</button> <button class="btn g" id="vb">Open Viber (copies quote)</button> <button class="btn g" id="sh">Share...</button> <button class="btn g" id="img">🖼 Quote image</button> <button class="btn g" id="rs">↺ Reset</button></div>
@@ -201,7 +203,10 @@ function rCalc(){
  const nm=$("qn").value.trim(),ix=$("qm").checked?[1,2,3,0]:[1,2,3],dt=new Date().toLocaleDateString("en-CA"),bd=$("qb").checked,ne=$("ql").value==="ne",rn=i=>c[i].ont+c[i].sp+c[i].ss,dp=i=>c[i].dO+c[i].dS,NL=["१ महिना","३ महिना","६ महिना","१२ महिना"];
  const en=`📶 *New Connection Quote* (${dt})\n${nm?`Dear ${nm},\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+ix.map(i=>[L[i],i]).map(([l,i])=>`✅ *${l}: Rs ${f(tot(i))}* (≈ Rs ${f(pk[i]/M[i])}/month renew)`+(bd?`\n     Renew charge ${f(pk[i])} + OTC ${f(c[i].otc)}`:"")).join("\n")+(bd?"\n\nOTC = Device Rental + Drop-wire + Deposit":"");
  const np=`📶 *नयाँ इन्टरनेट जडान - मूल्य विवरण* (${dt})\n${nm?`${nm} जी, नमस्कार!\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+ix.map(i=>[NL[i],i]).map(([l,i])=>`✅ *${l}*\n`+(bd?`Renew charge रु ${f(pk[i])} + Rental रु ${f(rn(i))} + Drop-wire रु ${f(c[i].drop)} + Deposit रु ${f(dp(i))}\n`:"")+`👉 *जम्मा रु ${f(tot(i))} लाग्छ* (रिन्यु लगभग रु ${f(pk[i]/M[i])}/महिना)`).join("\n\n")+(bd?"\n\n(Rental मा VAT समावेश छ)":"");
- $("cq").textContent=ok?(ne?np:en):"Combination not available";
+ const sv=i=>i>0?Math.round(pk[i-1]*M[i]/M[i-1]-pk[i]):0,bi=ix.reduce((a,i)=>pm[i]<pm[a]?i:a,ix[0]),dy=i=>f(pk[i]/(M[i]*30)),hd=`📶 *${p}* | ${o} | ⚡${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}`,sp=i=>bd?`\n     (Renew ${f(pk[i])} + OTC ${f(c[i].otc)})`:"";
+ const crE=`🔥 *SPECIAL INTERNET OFFER* 🔥\n${nm?`Hi ${nm}! 👋`:"Hello! 👋"} Fast & reliable internet is ready for you 🚀\n\n${hd}\n\n`+ix.map(i=>`${i===bi?"🏆":"✨"} *${L[i].toUpperCase()}*${i===bi?" — BEST VALUE ⭐":""}\n💰 Pay just *Rs ${f(tot(i))}*\n📆 Renew only Rs ${f(pk[i]/M[i])}/month (≈ Rs ${dy(i)}/day)`+(sv(i)>0?`\n🎁 Save Rs ${f(sv(i))} vs the ${M[i-1]}-month rate`:"")+sp(i)).join("\n\n")+`\n\n👉 Book today & get online fast! Just reply *YES* 📞`+(bd?"\n\nOTC = one-time Device Rental + Drop-wire + Deposit":"");
+ const crN=`🔥 *विशेष इन्टरनेट अफर* 🔥\n${nm?`नमस्कार ${nm} जी! 👋`:"नमस्कार! 👋"} तीव्र र भरपर्दो इन्टरनेट तपाईंको लागि तयार छ 🚀\n\n${hd}\n\n`+ix.map(i=>`${i===bi?"🏆":"✨"} *${NL[i]}*${i===bi?" — सबैभन्दा किफायती ⭐":""}\n💰 जम्मा *रु ${f(tot(i))}*\n📆 रिन्यु महिनाको रु ${f(pk[i]/M[i])} मात्र (दिनको ≈ रु ${dy(i)})`+(sv(i)>0?`\n🎁 ${NL[i-1]}को दरभन्दा रु ${f(sv(i))} बचत`:"")+sp(i)).join("\n\n")+`\n\n👉 आजै बुक गर्नुहोस् – *YES* रिप्लाई गर्नुहोस् 📞`+(bd?"\n\nOTC = एकपटकको Rental + Drop-wire + Deposit (Rental मा VAT समावेश)":"");
+ const cs=$("qs").value==="c";$("cq").textContent=ok?(ne?(cs?crN:np):(cs?crE:en)):"Combination not available";
 }
 $("chips").onclick=e=>{const d=(e.target.closest("button")||{}).dataset||{};if(d.id){$(d.id).value=d.v;rCalc()}};
 $("qb").onchange=$("ql").onchange=$("qm").onchange=rCalc;$("qn").oninput=rCalc;const cp2=t=>{try{navigator.clipboard.writeText(t).catch(()=>{})}catch(x){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}};
@@ -308,9 +313,27 @@ if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(
  document.addEventListener("keydown",e=>{if(e.key==="Escape")mdl.classList.remove("on")});
  $("cc").addEventListener("click",()=>toast("Quote copied ✓"));$("img").addEventListener("click",()=>toast("Quote image ready ✓"));
  $("rs").onclick=()=>{$("cp").value="Internet Only";$("co").value="5G";$("cb").value=100;$("at").value="";AD.t="";AD.q=0;$("qn").value="";$("qm").checked=false;$("qb").checked=true;last="";rCalc();toast("Reset ✓")};
- $("lq").oninput=rLog;
+ $("lq").oninput=rLog;$("qs").onchange=()=>{last="";rCalc()};
  try{const o=JSON.parse(localStorage.getItem(PK)||"null");if(o){$("cp").value=o.p;$("co").value=o.o;$("cb").value=o.b;$("ql").value=o.l;$("qb").checked=o.bd;$("qm").checked=o.m;if(o.t){$("at").value=o.t;AD.t=o.t;AD.q=o.q;$("aq").value=o.q}}}catch(e){}
  rCalc();})();
+
+// welcome + daily morning quote
+(function(){const QT=["Every great day starts with a small smile - your customer will feel it too. 😊", "A clear quote today builds trust for years.", "Small steps every morning create big results by the evening.", "Be the reason a customer says, 'That was easy.'", "Listen first, quote second - people buy from those who understand them.", "Your energy is your first product. Share it generously.", "One honest answer is worth more than ten perfect pitches.", "Today is a fresh page. Write something you're proud of.", "Fast internet connects homes; good service connects hearts.", "Don't count the calls - make every call count.", "Confidence is quiet. Know your rates, trust your words.", "A patient 'no' today can become a happy 'yes' tomorrow.", "Treat every customer like family - they will remember.", "Progress, not perfection. Do one thing better than yesterday.", "Great sales start with great manners.", "Smile, breathe, and begin. The day is yours. 🌞", "Solve the problem, and the sale takes care of itself.", "Discipline in the morning gives freedom in the evening.", "Be kind, be clear, be quick - that's the winning formula.", "Your effort today is tomorrow's success story."],K="nsname",DK="nsnote",now=new Date(),hr=now.getHours(),day=Math.floor(Date.now()/864e5),q=QT[day%QT.length],
+ gr=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening",ic=hr<12?"🌅":hr<17?"☀️":"🌙",NS="Notification" in window;
+ let nm="";try{nm=localStorage.getItem(K)||""}catch(e){}
+ const mq=document.createElement("div");mq.className="panel mq";$("lk").insertAdjacentElement("afterend",mq);
+ const cachePrefs=()=>{try{caches.open("nsprefs").then(c=>c.put("/prefs.json",new Response(JSON.stringify({name:nm}))))}catch(e){}};
+ const ps=async()=>{try{const r=await navigator.serviceWorker.ready;if(r.periodicSync)await r.periodicSync.register("morning-quote",{minInterval:864e5})}catch(e){}};
+ const show=async(t,b)=>{try{const r=await navigator.serviceWorker.getRegistration();if(r)await r.showNotification(t,{body:b,tag:"morning"});else new Notification(t,{body:b,tag:"morning"})}catch(e){}};
+ function draw(){mq.innerHTML=`${ic} <b>${gr}, ${esc(nm)}!</b><a id="cn">✎ change name</a><div>${esc(q)}</div>`+(NS&&Notification.permission!=="granted"&&Notification.permission!=="denied"?`<button class="btn" id="bn">🔔 Enable morning notification</button>`:"")+(NS&&Notification.permission==="denied"?`<div class="note">Notifications blocked - browser settings bata allow garnus.</div>`:"");
+  $("cn").onclick=ask;const b=$("bn");if(b)b.onclick=()=>Notification.requestPermission().then(p=>{if(p==="granted"){ps();cachePrefs();show("🔔 Morning notification on!","Hello "+nm+", you'll get a daily quote.")}draw()})}
+ function ask(){let w=$("wl");if(!w){w=document.createElement("div");w.id="wl";w.className="mdl";w.innerHTML=`<div class="mbox"><h3>👋 Welcome!</h3><div class="sub">Tapai ko full name lekhnus</div><input id="wn" placeholder="Your full name" autocomplete="name"><button id="wb">Start</button></div>`;document.body.appendChild(w);
+  const go=()=>{const v=$("wn").value.trim();if(v.length<2){$("wn").focus();return}nm=v;try{localStorage.setItem(K,nm);localStorage.setItem("nssn",nm)}catch(e){}$("sn").value=nm;$("sn").dispatchEvent(new Event("input"));cachePrefs();w.classList.remove("on");draw();notify()};
+  $("wb").onclick=go;$("wn").onkeydown=e=>{if(e.key==="Enter")go()}}
+  $("wn").value=nm;w.classList.add("on");setTimeout(()=>$("wn").focus(),50)}
+ function notify(){if(!nm||!NS||Notification.permission!=="granted"||hr<4||hr>=12)return;const t=now.toDateString();let d="";try{d=localStorage.getItem(DK)}catch(e){}if(d===t)return;try{localStorage.setItem(DK,t)}catch(e){}show(`🌅 Good morning, ${nm}!`,q)}
+ if(!nm)ask();else{draw();cachePrefs();notify();if(NS&&Notification.permission==="granted")ps()}
+})();
 </script>
 </body>
 </html>
