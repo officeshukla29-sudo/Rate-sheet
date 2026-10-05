@@ -40,7 +40,7 @@ h3{margin:18px 0 8px;font-size:15px}
 .bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
 .g1{background:#0f172a}.g2{background:#2563eb}.g3{background:#0f766e}
 #chips{margin-bottom:10px}.gr{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:6px 0}.gr span{width:48px;font-weight:700;color:var(--mut);font-size:12px}
-.chip{border:2px solid var(--c);background:#fff;color:var(--c);padding:7px 14px;border-radius:20px;font:inherit;font-weight:700;cursor:pointer}
+.chip{border:2px solid var(--c);background:#fff;color:var(--c);padding:7px 14px;border-radius:12px;line-height:1.25;font:inherit;font-weight:700;cursor:pointer}
 .chip.on{background:var(--c);color:#fff;box-shadow:0 3px 8px #0003}.chip:disabled{opacity:.3;cursor:not-allowed}
 .info{font-size:13px;margin:8px 0 12px;color:var(--mut)}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:12px 0 6px}
@@ -52,6 +52,32 @@ h3{margin:18px 0 8px;font-size:15px}
 .lg{font-size:12px;color:var(--mut)}.lg s{color:#2563eb;text-decoration:none}.lg u{color:#0f766e;text-decoration:none}
 .hero{padding:14px 18px;border-radius:10px;color:#fff;margin-bottom:12px}.hero h2{margin:0;font-size:18px}.hero p{margin:4px 0 0;font-size:12px;opacity:.9}
 td input:disabled{color:#334155;background:#f1f5f9;cursor:not-allowed}
+.st{margin:14px 0 4px;font-weight:700}.st i{font-weight:400;color:var(--mut);font-size:12px;font-style:normal}.chip small{font-weight:400;font-size:11px}
+.sum{background:#ecfeff;border-left:5px solid var(--teal);padding:8px 12px;margin:12px 0;font-size:13px}
+html{-webkit-text-size-adjust:100%}button{touch-action:manipulation}
+@media(max-width:640px){
+body{font-size:15px}
+header{padding:12px 14px}header h1{font-size:17px}header p{font-size:11px}
+nav{flex-wrap:nowrap;overflow-x:auto;padding:8px 10px 0;position:sticky;top:0;z-index:5;-webkit-overflow-scrolling:touch}
+nav button{white-space:nowrap;padding:10px 14px}
+main{padding:10px}.panel{padding:10px}
+select,input{font-size:16px;padding:9px;min-height:42px}
+.chip{min-height:44px;padding:8px 14px;font-size:15px}
+.gr{gap:8px}.gr select,#qn,#sn{flex:1 1 140px}
+.cards{grid-template-columns:1fr 1fr;gap:8px}.card{padding:10px}.card b{font-size:20px}
+.quote{max-width:100%}
+.btn{padding:11px 14px;margin:3px 0}
+th,td{padding:6px 7px;font-size:13px}
+.wrap td:first-child{white-space:normal;min-width:110px}
+.hero{padding:10px 12px}.hero h2{font-size:16px}
+#ft td,#ft th{font-size:12px;padding:5px}
+#ft td:first-child,#ft th:first-child{position:sticky;left:0;z-index:2}
+}
+.card.low{opacity:.55;background:#f1f5f9;border-top-color:#94a3b8}.card.low b{font-size:18px}#ct td:nth-child(2),#ct th:nth-child(2){opacity:.5}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 1px 4px #0000000d}details.panel summary{cursor:pointer;font-weight:700;color:var(--teal)}.sum{margin-top:0}
+input[type=checkbox]{min-height:0!important;width:20px;height:20px;padding:0!important;margin:0 6px 0 0;vertical-align:middle}label.note{display:inline-flex;align-items:center;margin:6px 14px 6px 0}
+@media(max-width:640px){.hm{display:none}#ft td:first-child{min-width:96px}}
+#cmp .gr{flex-wrap:nowrap}#cmp .gr select{flex:1 1 0;min-width:0;padding:9px 4px}
 @media print{nav,.bar,.btn{display:none}.tab{display:block!important}}
 </style>
 </head>
@@ -60,19 +86,20 @@ td input:disabled{color:#334155;background:#f1f5f9;cursor:not-allowed}
 <p>Final Amount = Package Charge + OTC (Device Rental + Drop-wire + Deposit). Amount in Rs.</p></header>
 <nav id="nav"></nav>
 <main>
-<div class="bar" id="lk"></div>
+<div id="lk" hidden></div>
 <section class="tab" id="t0">
- <div id="chips"></div>
- <div hidden><select id="cp"></select><select id="co"></select><select id="cb"></select></div>
- <div class="info">STB Qty: <b id="cs"></b> &nbsp;|&nbsp; Status: <span id="cst"></span> &nbsp;|&nbsp; Add-on: <select id="at"><option value="">None</option><option>ATV</option><option>Beacon 1.1</option><option>Beacon 3.1</option></select> Qty <select id="aq"><option>1</option><option>2</option><option>3</option></select></div>
- <div class="cards" id="cards"></div>
- <div class="lg"><s>&#9632;</s> Package &nbsp; <u>&#9632;</u> OTC (Rental + Drop-wire + Deposit)</div><br>
- <div class="wrap"><table id="ct"></table></div>
- <h3>💬 Customer Quote (copy for WhatsApp/Viber)</h3>
- <label class="note"><input type="checkbox" id="qb" checked> Include breakdown</label> &nbsp; <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select> <input id="qn" placeholder="Customer name (optional)"> <input id="sn" placeholder="Staff name">
+ <div class="panel"><div id="chips"></div>
+ <div hidden><select id="cp"></select><select id="co"></select><select id="cb"></select><span id="cs"></span><span id="cst"></span></div>
+ <div class="st">4. Extra device <i>(optional - chahiyena bhane "None" nai rakhnus)</i></div>
+ <div class="gr"><select id="at"><option value="">None</option><option>ATV</option><option>Beacon 1.1</option><option>Beacon 3.1</option></select> <span id="aqw" style="display:none">Kati ota: <select id="aq"><option>1</option><option>2</option><option>3</option></select></span></div></div>
+ <div class="panel"><div id="sm"></div><div class="cards" id="cards"></div>
+ <div class="lg"><s>&#9632;</s> Package &nbsp; <u>&#9632;</u> OTC (Rental + Drop-wire + Deposit)</div></div>
+ <div class="panel"><h3 style="margin-top:0">💬 Customer Quote</h3>
+ <div class="gr"><input id="qn" placeholder="Customer name (optional)"> <input id="sn" placeholder="Staff name"> <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select></div>
+ <div class="gr"><label class="note"><input type="checkbox" id="qb" checked> Breakdown dekhaun</label> <label class="note"><input type="checkbox" id="qm"> 1 month pani rakhne</label></div>
  <div class="quote" id="cq"></div>
- <button class="btn" id="cc">Copy quote</button> <button class="btn g" id="wa">Send on WhatsApp</button> <button class="btn g" id="vb">Open Viber (copies quote)</button> <button class="btn g" id="sh">Share...</button> <button class="btn g" id="img">🖼 Quote image</button>
- <p class="note">Available: Internet Only / Combo 1TV = 5G (50-200) + 6G (200-600) | Combo 2TV = 6G 400/500/600 | Combo 3TV = 6G 500/600.<br>Rates edit karna parey: Package Rates / Device Rates tab ma matra edit garnu.</p>
+ <button class="btn" id="cc">Copy quote</button> <button class="btn g" id="wa">WhatsApp</button> <button class="btn g" id="vb">Open Viber (copies quote)</button> <button class="btn g" id="sh">Share...</button> <button class="btn g" id="img">🖼 Quote image</button></div>
+ <details class="panel"><summary>📋 Full breakdown (rental, drop-wire, deposit)</summary><div class="wrap" style="margin-top:10px"><table id="ct"></table></div></details>
 </section>
 <section class="tab" id="t1">
  <div class="hero" style="background:linear-gradient(120deg,#2563eb,#0f766e)"><h2>📊 Final Amount</h2><p>Package + OTC for every plan. Darker green = higher amount. Filter by plan or ONT.</p></div>
@@ -81,18 +108,18 @@ td input:disabled{color:#334155;background:#f1f5f9;cursor:not-allowed}
  <div class="wrap"><table id="ft"></table></div>
 </section>
 <section class="tab" id="t2">
- <div class="hero" style="background:linear-gradient(120deg,#9333ea,#2563eb)"><h2>📦 Package Rates</h2><p>Package charge only, per plan, ONT and bandwidth.<br>Edit blue cells to update every tab.</p></div>
- <p class="note">Package charge only (New &amp; Renew). Blue cells are editable; all tabs update.</p>
+ <div class="hero" style="background:linear-gradient(120deg,#9333ea,#2563eb)"><h2>📦 Package Rates</h2><p>Package charge only, per plan, ONT and bandwidth.<br>Read-only. Rates are updated from rates.json on GitHub.</p></div>
+ <p class="note">Package charge only (New &amp; Renew). Rates are read-only (updated from rates.json).</p>
  <div class="wrap"><table id="pt"></table></div>
 </section>
 <section class="tab" id="t3">
- <div class="hero" style="background:linear-gradient(120deg,#ea580c,#dc2626)"><h2>🔧 Device Rates</h2><p>ONT, STB rental, drop-wire and deposit. Edit blue cells to update every tab.</p></div>
- <p class="note">Blue cells are editable. Rental incl. VAT.</p>
+ <div class="hero" style="background:linear-gradient(120deg,#ea580c,#dc2626)"><h2>🔧 Device Rates</h2><p>ONT, STB rental, drop-wire and deposit. Read-only. Rates are updated from rates.json on GitHub.</p></div>
+ <p class="note">Rental incl. VAT. Rates are read-only (updated from rates.json).</p>
  <div class="wrap"><table id="dt"></table></div>
  <h3>Plan setup (assumption)</h3>
  <div class="wrap" style="max-width:300px"><table id="st"></table></div>
  <p class="note">Assumptions: 5G ONT = Dual-Band rates, 6G ONT = Wi-Fi 6 rates. 1TV = 1 STB Primary; 2TV = Primary + 1 Secondary; 3TV = Primary + 2 Secondary. Drop-wire once (with ONT). Deposit per device (ONT + each STB). ATV and Beacon not included.</p>
- <button class="btn g" id="rs">Reset all rates</button>
+ 
 </section>
 <section class="tab" id="t4"><div class="hero" style="background:linear-gradient(120deg,#0f766e,#2563eb)"><h2>⚖ Compare</h2><p>Two options side by side (package + OTC, no add-on).</p></div><div id="cmp"></div></section>
 <section class="tab" id="t5"><div class="hero" style="background:linear-gradient(120deg,#0f172a,#475569)"><h2>📒 Quote Log</h2><p>Quotes sent from this device (copy / WhatsApp / Viber / image).</p></div><div class="bar"><button class="btn" id="csv">Download CSV</button><button class="btn g" id="clr">Clear log</button></div><div class="wrap"><table id="lg"></table></div></section>
@@ -113,7 +140,7 @@ dev:[["Dual-Band Rental (incl. VAT)",[3390,2260,1695,1130]],["Dual-Band Deposit"
 stb:{"Internet Only":0,"Combo 1TV":1,"Combo 2TV":2,"Combo 3TV":3},
 ad:{"ATV":[[3390,2825,2825,2260],[3390,3390,3390,3390],1000],"Beacon 1.1":[[2825,2825,2260,1695],[3390,3390,3390,3390],1500],"Beacon 3.1":[[3955,3390,2825,2260],[3955,3390,3390,3390],1500]}};
 let S=JSON.parse(JSON.stringify(DEF));
-try{const x=localStorage.getItem("nsrc");if(x)S=JSON.parse(x)}catch(e){}
+try{localStorage.removeItem("nsrc")}catch(e){}
 if(!S.ad)S.ad=JSON.parse(JSON.stringify(DEF.ad));
 const save=()=>{try{localStorage.setItem("nsrc",JSON.stringify(S))}catch(e){}};
 const f=n=>Math.round(n).toLocaleString("en-US");
@@ -132,7 +159,8 @@ function show(i){document.querySelectorAll(".tab").forEach((e,j)=>e.classList.to
 $("nav").onclick=e=>{if(e.target.dataset.i)show(+e.target.dataset.i)};
 // calculator
 $("cp").innerHTML=opt(P,"Internet Only");$("co").innerHTML=opt(["5G","6G"],"5G");$("cb").innerHTML=opt([50,80,100,150,200,400,500,600],100);
-const chip=(id,v,c,on,dis)=>`<button class="chip${on?" on":""}" data-id="${id}" data-v="${v}" style="--c:${c}"${dis?" disabled":""}>${v}</button>`;
+const PD={"Internet Only":"Internet matra","Combo 1TV":"Internet + 1 TV","Combo 2TV":"Internet + 2 TV","Combo 3TV":"Internet + 3 TV"},OD={"5G":"Dual-Band router","6G":"Wi-Fi 6 router"};
+const chip=(id,v,c,on,dis,sub)=>`<button class="chip${on?" on":""}" data-id="${id}" data-v="${v}" style="--c:${c}"${dis?" disabled":""}>${v}${sub?`<br><small>${sub}</small>`:""}</button>`;
 function rCalc(){
  const av=S.pk.filter(r=>r[0]===$("cp").value),on=[...new Set(av.map(r=>r[1]))];
  if(!on.includes($("co").value))$("co").value=on[0];
@@ -149,16 +177,18 @@ function rCalc(){
  row("Drop-wire",i=>f(c[i].drop))+row("Deposit - ONT",i=>f(c[i].dO))+row("Deposit - STB",i=>f(c[i].dS))+row("Add-on: "+(AD.q?AD.q+"x "+AD.t:"none"),i=>f(c[i].ad))+
  row("OTC Total",i=>f(c[i].otc),"otc")+row("TOTAL PAYABLE (New Sales)",i=>ok?f(tot(i)):"N/A","tot")+row("Per Month (approx)",i=>ok?f(tot(i)/M[i]):"N/A")+row("Months",i=>M[i],"dim");
  const L=["1 Month","3 Months","6 Months","12 Months"];
- $("chips").innerHTML=`<div class="gr"><span>Plan</span>${P.map(x=>chip("cp",x,PL[x][0],x===p)).join("")}</div><div class="gr"><span>ONT</span>${["5G","6G"].map(x=>chip("co",x,"#0f766e",x===o,!on.includes(x))).join("")}</div><div class="gr"><span>Mbps</span>${bw.map(x=>chip("cb",x,"#0f766e",x==b)).join("")}</div>`;
+ $("chips").innerHTML=`<div class="st">1. Package chhannus <i>(kun type ko connection?)</i></div><div class="gr">${P.map(x=>chip("cp",x,PL[x][0],x===p,0,PD[x])).join("")}</div><div class="st">2. ONT / Router <i>${on.length<2?`(${p} ma ${on[0]} matra available)`:"(5G = Dual-Band, 6G = Wi-Fi 6)"}</i></div><div class="gr">${["5G","6G"].map(x=>chip("co",x,"#0f766e",x===o,!on.includes(x),OD[x])).join("")}</div><div class="st">3. Speed <i>(Mbps)</i></div><div class="gr">${bw.map(x=>chip("cb",x,"#0f766e",x==b)).join("")}</div>`;
+ $("sm").innerHTML=`<div class="sum">✔ Tapai ko choice: <b>${PD[p]}</b> | <b>${o}</b> ONT | <b>${b} Mbps</b>${S.stb[p]?` | TV box: <b>${S.stb[p]}</b>`:""}${AD.q?` | Extra: <b>${AD.q}x ${AD.t}</b>`:""}</div>`;
+ $("aqw").style.display=AD.q?"":"none";
  const pm=D.map((_,i)=>tot(i)/M[i]),mn=Math.min(...pm);
- $("cards").innerHTML=ok?D.map((_,i)=>{const t=tot(i),w=Math.round(pk[i]/t*100);return `<div class="card${pm[i]===mn?" best":""}">${pm[i]===mn?"<i>Lowest / month</i>":""}<small>${L[i]}</small><b>Rs ${f(t)}</b><em>Rs ${f(pm[i])} / month</em><div class="stk"><s style="width:${w}%"></s><u style="width:${100-w}%"></u></div><small>Package ${f(pk[i])} &middot; OTC ${f(c[i].otc)}</small></div>`}).join(""):"";
- const nm=$("qn").value.trim(),dt=new Date().toLocaleDateString("en-CA"),bd=$("qb").checked,ne=$("ql").value==="ne",rn=i=>c[i].ont+c[i].sp+c[i].ss,dp=i=>c[i].dO+c[i].dS,NL=["१ महिना","३ महिना","६ महिना","१२ महिना"];
- const en=`📶 *New Connection Quote* (${dt})\n${nm?`Dear ${nm},\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+L.map((l,i)=>`✅ *${l}: Rs ${f(tot(i))}* (≈ Rs ${f(tot(i)/M[i])}/month)`+(bd?`\n     Package ${f(pk[i])} + OTC ${f(c[i].otc)}`:"")).join("\n")+(bd?"\n\nOTC = Device Rental + Drop-wire + Deposit":"");
- const np=`📶 *नयाँ इन्टरनेट जडान - मूल्य विवरण* (${dt})\n${nm?`${nm} जी, नमस्कार!\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+NL.map((l,i)=>`✅ *${l}*\n`+(bd?`Package रु ${f(pk[i])} + Rental रु ${f(rn(i))} + Drop-wire रु ${f(c[i].drop)} + Deposit रु ${f(dp(i))}\n`:"")+`👉 *जम्मा रु ${f(tot(i))} लाग्छ* (लगभग रु ${f(tot(i)/M[i])}/महिना)`).join("\n\n")+(bd?"\n\n(Rental मा VAT समावेश छ)":"");
+ $("cards").innerHTML=ok?[1,2,3,0].map(i=>{const t=tot(i),w=Math.round(pk[i]/t*100);return `<div class="card${pm[i]===mn?" best":""}${i===0?" low":""}">${pm[i]===mn?"<i>Lowest / month</i>":""}<small>${L[i]}</small><b>Rs ${f(t)}</b><em>Rs ${f(pm[i])} / month</em><div class="stk"><s style="width:${w}%"></s><u style="width:${100-w}%"></u></div><small>Package ${f(pk[i])} &middot; OTC ${f(c[i].otc)}</small></div>`}).join(""):"";
+ const nm=$("qn").value.trim(),ix=$("qm").checked?[1,2,3,0]:[1,2,3],dt=new Date().toLocaleDateString("en-CA"),bd=$("qb").checked,ne=$("ql").value==="ne",rn=i=>c[i].ont+c[i].sp+c[i].ss,dp=i=>c[i].dO+c[i].dS,NL=["१ महिना","३ महिना","६ महिना","१२ महिना"];
+ const en=`📶 *New Connection Quote* (${dt})\n${nm?`Dear ${nm},\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+ix.map(i=>[L[i],i]).map(([l,i])=>`✅ *${l}: Rs ${f(tot(i))}* (≈ Rs ${f(tot(i)/M[i])}/month)`+(bd?`\n     Package ${f(pk[i])} + OTC ${f(c[i].otc)}`:"")).join("\n")+(bd?"\n\nOTC = Device Rental + Drop-wire + Deposit":"");
+ const np=`📶 *नयाँ इन्टरनेट जडान - मूल्य विवरण* (${dt})\n${nm?`${nm} जी, नमस्कार!\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+ix.map(i=>[NL[i],i]).map(([l,i])=>`✅ *${l}*\n`+(bd?`Package रु ${f(pk[i])} + Rental रु ${f(rn(i))} + Drop-wire रु ${f(c[i].drop)} + Deposit रु ${f(dp(i))}\n`:"")+`👉 *जम्मा रु ${f(tot(i))} लाग्छ* (लगभग रु ${f(tot(i)/M[i])}/महिना)`).join("\n\n")+(bd?"\n\n(Rental मा VAT समावेश छ)":"");
  $("cq").textContent=ok?(ne?np:en):"Combination not available";
 }
-$("chips").onclick=e=>{const d=e.target.dataset;if(d.id){$(d.id).value=d.v;rCalc()}};
-$("qb").onchange=$("ql").onchange=rCalc;$("qn").oninput=rCalc;const cp2=t=>{try{navigator.clipboard.writeText(t).catch(()=>{})}catch(x){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}};
+$("chips").onclick=e=>{const d=(e.target.closest("button")||{}).dataset||{};if(d.id){$(d.id).value=d.v;rCalc()}};
+$("qb").onchange=$("ql").onchange=$("qm").onchange=rCalc;$("qn").oninput=rCalc;const cp2=t=>{try{navigator.clipboard.writeText(t).catch(()=>{})}catch(x){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}};
 $("vb").onclick=()=>{logQ();cp2($("cq").textContent);$("vb").textContent="Copied - paste in Viber";setTimeout(()=>$("vb").textContent="Open Viber (copies quote)",2500);location.href="viber://chats"};
 $("sh").onclick=()=>{logQ();const t=$("cq").textContent;navigator.share?navigator.share({text:t}).catch(()=>{}):cp2(t)};
 $("wa").onclick=()=>{logQ();window.open("https://wa.me/?text="+encodeURIComponent($("cq").textContent))};
@@ -167,13 +197,13 @@ $("cc").onclick=()=>{logQ();const t=$("cq").textContent;(navigator.clipboard?nav
 $("fp").innerHTML+=P.map(p=>`<option>${p}</option>`).join("");
 function rFinal(){
  const fp=$("fp").value,fo=$("fo").value;
- let h=`<tr><th rowspan=2>Plan</th><th rowspan=2>ONT</th><th rowspan=2>BW (Mbps)</th><th rowspan=2>STB</th><th colspan=4 class="g1">Final Amount (Package + OTC)</th><th colspan=4 class="g2">Package Charge</th><th colspan=4 class="g3">OTC</th></tr><tr>`+
+ let h=`<tr><th rowspan=2>Plan</th><th rowspan=2>ONT</th><th rowspan=2>BW (Mbps)</th><th rowspan=2 class="hm">STB</th><th colspan=4 class="g1">Final Amount (Package + OTC)</th><th colspan=4 class="g2">Package Charge</th><th colspan=4 class="g3">OTC</th></tr><tr>`+
  [1,2,3].map(g=>D.map(d=>`<th class="g${g}">${d}</th>`).join("")).join("")+"</tr>";
  const rs=S.pk.filter(r=>(!fp||r[0]===fp)&&(!fo||r[1]===fo)),all=rs.flatMap(r=>r[3].map((x,i)=>x+calc(r[0],r[1],i).otc)),mx=Math.max(...all),mn=Math.min(...all);let lo,hi;
  rs.forEach(r=>{
   const [p,o,b,v]=r,[dk,lt]=PL[p],oc=D.map((_,i)=>calc(p,o,i).otc);
   v.forEach((x,i)=>{const t=x+oc[i],l=`${p} | ${o} | ${b} Mbps | ${D[i]}`;if(!lo||t<lo.t)lo={t,l};if(!hi||t>hi.t)hi={t,l}});
-  h+=`<tr><td style="background:${lt};color:${dk};font-weight:700">${p}</td><td style="background:${lt};color:${dk};font-weight:700">${o}</td><td style="background:${lt};color:${dk};font-weight:700">${b}</td><td style="background:${lt};color:${dk};font-weight:700">${S.stb[p]}</td>`+
+  h+=`<tr><td style="background:${lt};color:${dk};font-weight:700">${p}</td><td style="background:${lt};color:${dk};font-weight:700">${o}</td><td style="background:${lt};color:${dk};font-weight:700">${b}</td><td class="hm" style="background:${lt};color:${dk};font-weight:700">${S.stb[p]}</td>`+
   v.map((x,i)=>`<td class="n" style="background:rgba(15,118,110,${(.08+.5*((x+oc[i]-mn)/((mx-mn)||1))).toFixed(2)});font-weight:700">${f(x+oc[i])}</td>`).join("")+v.map(x=>`<td class="n" style="color:#008000">${f(x)}</td>`).join("")+oc.map(x=>`<td class="n">${f(x)}</td>`).join("")+"</tr>"});
  $("ft").innerHTML=h;
  $("fs").innerHTML=rs.length?`<div class="card best" style="border-top-color:#16a34a;background:#f0fdf4"><small>Lowest amount</small><b>Rs ${f(lo.t)}</b><small>${lo.l}</small></div><div class="card" style="border-top-color:#dc2626"><small>Highest amount</small><b>Rs ${f(hi.t)}</b><small>${hi.l}</small></div><div class="card"><small>Plans shown</small><b>${rs.length}</b><small>rows x 4 durations</small></div>`:""}
@@ -189,10 +219,9 @@ document.addEventListener("input",e=>{const k=e.target.dataset.k;if(!k)return;co
  if(t==="p")S.pk[a][3][b]=v;else if(t==="d")S.dev[a][1][b]=v;else S.stb[k.slice(2)]=v;save();rCalc();rFinal();rLk()});
 let lock=true;
 const edited=()=>JSON.stringify(S)!==JSON.stringify(DEF);
-function rLk(){$("lk").innerHTML=`<button class="btn g" id="lb">${lock?"🔒 Rates locked - click to edit":"🔓 Editing - click to lock"}</button>`+(edited()?`<span class="ok x">⚠ Custom rates active on this device</span><button class="btn g" id="rs2">Reset to original</button>`:"")+`<button class="btn g" id="ex">Export rates</button><button class="btn g" id="im">Import rates</button>`}
+function rLk(){}
 const all=()=>{rRates();rCalc();rFinal();rLk()};
 const reset=()=>{S=JSON.parse(JSON.stringify(DEF));try{localStorage.removeItem("nsrc")}catch(e){}all()};
-$("rs").onclick=reset;
 $("lk").onclick=e=>{const id=e.target.id;
  if(id==="lb"){lock=!lock;rRates();rLk()}
  else if(id==="rs2")reset();
@@ -216,11 +245,11 @@ $("csv").onclick=()=>dl(new Blob([[LH,...LG()].map(r=>r.map(x=>`"${x}"`).join(",
 $("clr").onclick=()=>{if(confirm("Clear all logged quotes?")){try{localStorage.removeItem("nsq")}catch(e){}rLog()}};
 try{$("sn").value=localStorage.getItem("nssn")||""}catch(e){}$("sn").oninput=()=>{try{localStorage.setItem("nssn",$("sn").value)}catch(e){}};
 // quote image
-function mkImg(cb){const W=720,H=566,cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d"),gr=g.createLinearGradient(0,0,W,0);
+function mkImg(cb){const ix=$("qm").checked?[1,2,3,0]:[1,2,3],W=720,H=272+(ix.length-1)*98,cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d"),gr=g.createLinearGradient(0,0,W,0);
  g.fillStyle="#f8fafc";g.fillRect(0,0,W,H);gr.addColorStop(0,"#0f172a");gr.addColorStop(1,"#0f766e");g.fillStyle=gr;g.fillRect(0,0,W,130);
  const nm=$("qn").value.trim();g.fillStyle="#fff";g.font="bold 34px Arial";g.fillText("New Connection Quote",30,52);g.font="bold 22px Arial";g.fillText(`${Q.p} | ${Q.o} | ${Q.b} Mbps`+(AD.q?` + ${AD.q}x ${AD.t}`:""),30,90);
  g.font="16px Arial";g.fillStyle="#94a3b8";g.fillText(new Date().toLocaleDateString("en-CA")+(nm?"  |  "+nm:""),30,116);
- ["1 Month","3 Months","6 Months","12 Months"].forEach((l,i)=>{const y=150+i*98;g.fillStyle="#fff";g.fillRect(20,y,W-40,88);g.fillStyle=["#2563eb","#9333ea","#ea580c","#dc2626"][i];g.fillRect(20,y,8,88);
+ ix.forEach((i,k)=>{const l=["1 Month","3 Months","6 Months","12 Months"][i],y=150+k*98;g.fillStyle="#fff";g.fillRect(20,y,W-40,88);g.fillStyle=["#2563eb","#9333ea","#ea580c","#dc2626"][i];g.fillRect(20,y,8,88);
   g.fillStyle="#0f172a";g.font="bold 24px Arial";g.fillText(l,44,y+38);g.textAlign="right";g.font="bold 34px Arial";g.fillText("Rs "+f(Q.tot[i]),W-40,y+40);
   g.font="15px Arial";g.fillStyle="#475569";g.fillText(`Package ${f(Q.pk[i])} + OTC ${f(Q.otc[i])}  (~Rs ${f(Q.tot[i]/M[i])}/month)`,W-40,y+70);g.textAlign="left"});
  g.font="14px Arial";g.fillStyle="#64748b";g.fillText("OTC = Device Rental + Drop-wire + Deposit. Rental incl. VAT.",30,H-14);cv.toBlob(cb,"image/png")}
