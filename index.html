@@ -48,6 +48,13 @@ h3{margin:18px 0 8px;font-size:15px}
 .card b{font-size:26px;color:var(--ink)}.card em{font-style:normal;color:var(--teal);font-weight:700}.card small{color:var(--mut)}
 .card.best{border-color:#f59e0b;background:#fffbeb;border-top-color:#f59e0b}
 .card i{position:absolute;top:-11px;right:10px;background:#f59e0b;color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:10px;font-style:normal}
+.card b{cursor:pointer;text-decoration:underline dotted #94a3b8;text-underline-offset:4px}
+.mdl{position:fixed;inset:0;background:#0007;display:none;align-items:center;justify-content:center;z-index:99;padding:14px}.mdl.on{display:flex}
+.mbox{background:#fff;border-radius:14px;max-width:380px;width:100%;max-height:90vh;overflow:auto;padding:16px;box-shadow:0 10px 30px #0004}
+.mbox h3{margin:0 0 2px}.mbox .sub{color:var(--mut);font-size:12px;margin-bottom:8px}
+.mbox table{width:100%;border-collapse:collapse;font-size:14px}.mbox td{padding:6px 4px;border-bottom:1px solid var(--line)}.mbox td:last-child{text-align:right;font-weight:600}
+.mbox tr.sec td{background:#e0f2fe;font-weight:700}.mbox tr.tt td{background:#0f766e;color:#fff;font-weight:700;font-size:15px}.mbox tr.pm td{background:#ecfdf5;color:#0f766e;font-weight:700}
+.mbox button{margin-top:12px;width:100%;padding:10px;border:0;border-radius:8px;background:#0f766e;color:#fff;font-weight:700;font-size:14px}
 .stk{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:4px 0}.stk s{background:#2563eb}.stk u{background:#0f766e}
 .lg{font-size:12px;color:var(--mut)}.lg s{color:#2563eb;text-decoration:none}.lg u{color:#0f766e;text-decoration:none}
 .hero{padding:14px 18px;border-radius:10px;color:#fff;margin-bottom:12px}.hero h2{margin:0;font-size:18px}.hero p{margin:4px 0 0;font-size:12px;opacity:.9}
@@ -83,7 +90,7 @@ input[type=checkbox]{min-height:0!important;width:20px;height:20px;padding:0!imp
 </head>
 <body>
 <header><h1>New Sales Rate Calculator</h1>
-<p>Final Amount = Package Charge + OTC (Device Rental + Drop-wire + Deposit). Amount in Rs.</p></header>
+<p>Final Amount = Renew Charge + OTC (Device Rental + Drop-wire + Deposit). Amount in Rs.</p></header>
 <nav id="nav"></nav>
 <main>
 <div id="lk" hidden></div>
@@ -93,7 +100,8 @@ input[type=checkbox]{min-height:0!important;width:20px;height:20px;padding:0!imp
  <div class="st">4. Extra device <i>(optional - chahiyena bhane "None" nai rakhnus)</i></div>
  <div class="gr"><select id="at"><option value="">None</option><option>ATV</option><option>Beacon 1.1</option><option>Beacon 3.1</option></select> <span id="aqw" style="display:none">Kati ota: <select id="aq"><option>1</option><option>2</option><option>3</option></select></span></div></div>
  <div class="panel"><div id="sm"></div><div class="cards" id="cards"></div>
- <div class="lg"><s>&#9632;</s> Package &nbsp; <u>&#9632;</u> OTC (Rental + Drop-wire + Deposit)</div></div>
+ <div class="lg"><s>&#9632;</s> Renew charge &nbsp; <u>&#9632;</u> OTC (Rental + Drop-wire + Deposit) &nbsp; &middot; <i style="font-style:normal">Amount ma touch garera breakdown hernus</i></div></div>
+ <div class="mdl" id="mdl"><div class="mbox" id="mbox"></div></div>
  <div class="panel"><h3 style="margin-top:0">💬 Customer Quote</h3>
  <div class="gr"><input id="qn" placeholder="Customer name (optional)"> <input id="sn" placeholder="Staff name"> <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select></div>
  <div class="gr"><label class="note"><input type="checkbox" id="qb" checked> Breakdown dekhaun</label> <label class="note"><input type="checkbox" id="qm"> 1 month pani rakhne</label></div>
@@ -173,7 +181,7 @@ function rCalc(){
  const tot=i=>pk[i]+c[i].otc;
  Q={ok,p,o,b,tot:D.map((_,i)=>ok?tot(i):0),pk,otc:c.map(x=>x.otc)};
  $("ct").innerHTML=`<tr>${["Component",...D].map(h=>`<th>${h}</th>`).join("")}</tr>`+
- row("Package Charge",i=>f(pk[i]))+row("Device Rental - ONT",i=>f(c[i].ont))+row("STB Primary Rental",i=>f(c[i].sp))+row("STB Secondary Rental",i=>f(c[i].ss))+
+ row("Renew Charge",i=>f(pk[i]))+row("Device Rental - ONT",i=>f(c[i].ont))+row("STB Primary Rental",i=>f(c[i].sp))+row("STB Secondary Rental",i=>f(c[i].ss))+
  row("Drop-wire",i=>f(c[i].drop))+row("Deposit - ONT",i=>f(c[i].dO))+row("Deposit - STB",i=>f(c[i].dS))+row("Add-on: "+(AD.q?AD.q+"x "+AD.t:"none"),i=>f(c[i].ad))+
  row("OTC Total",i=>f(c[i].otc),"otc")+row("TOTAL PAYABLE (New Sales)",i=>ok?f(tot(i)):"N/A","tot")+row("Per Month (approx)",i=>ok?f(tot(i)/M[i]):"N/A")+row("Months",i=>M[i],"dim");
  const L=["1 Month","3 Months","6 Months","12 Months"];
@@ -181,10 +189,11 @@ function rCalc(){
  $("sm").innerHTML=`<div class="sum">✔ Tapai ko choice: <b>${PD[p]}</b> | <b>${o}</b> ONT | <b>${b} Mbps</b>${S.stb[p]?` | TV box: <b>${S.stb[p]}</b>`:""}${AD.q?` | Extra: <b>${AD.q}x ${AD.t}</b>`:""}</div>`;
  $("aqw").style.display=AD.q?"":"none";
  const pm=D.map((_,i)=>tot(i)/M[i]),mn=Math.min(...pm);
- $("cards").innerHTML=ok?[1,2,3,0].map(i=>{const t=tot(i),w=Math.round(pk[i]/t*100);return `<div class="card${pm[i]===mn?" best":""}${i===0?" low":""}">${pm[i]===mn?"<i>Lowest / month</i>":""}<small>${L[i]}</small><b>Rs ${f(t)}</b><em>Rs ${f(pm[i])} / month</em><div class="stk"><s style="width:${w}%"></s><u style="width:${100-w}%"></u></div><small>Package ${f(pk[i])} &middot; OTC ${f(c[i].otc)}</small></div>`}).join(""):"";
+ window.QX={c,pk,L};
+ $("cards").innerHTML=ok?[1,2,3,0].map(i=>{const t=tot(i),w=Math.round(pk[i]/t*100);return `<div class="card${pm[i]===mn?" best":""}${i===0?" low":""}" data-i="${i}">${pm[i]===mn?"<i>Lowest / month</i>":""}<small>${L[i]}</small><b title="Breakdown herna touch garnus">Rs ${f(t)}</b><em>Rs ${f(pk[i]/M[i])} / month renew</em><div class="stk"><s style="width:${w}%"></s><u style="width:${100-w}%"></u></div><small>Renew charge ${f(pk[i])} &middot; OTC ${f(c[i].otc)}</small></div>`}).join(""):"";
  const nm=$("qn").value.trim(),ix=$("qm").checked?[1,2,3,0]:[1,2,3],dt=new Date().toLocaleDateString("en-CA"),bd=$("qb").checked,ne=$("ql").value==="ne",rn=i=>c[i].ont+c[i].sp+c[i].ss,dp=i=>c[i].dO+c[i].dS,NL=["१ महिना","३ महिना","६ महिना","१२ महिना"];
- const en=`📶 *New Connection Quote* (${dt})\n${nm?`Dear ${nm},\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+ix.map(i=>[L[i],i]).map(([l,i])=>`✅ *${l}: Rs ${f(tot(i))}* (≈ Rs ${f(tot(i)/M[i])}/month)`+(bd?`\n     Package ${f(pk[i])} + OTC ${f(c[i].otc)}`:"")).join("\n")+(bd?"\n\nOTC = Device Rental + Drop-wire + Deposit":"");
- const np=`📶 *नयाँ इन्टरनेट जडान - मूल्य विवरण* (${dt})\n${nm?`${nm} जी, नमस्कार!\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+ix.map(i=>[NL[i],i]).map(([l,i])=>`✅ *${l}*\n`+(bd?`Package रु ${f(pk[i])} + Rental रु ${f(rn(i))} + Drop-wire रु ${f(c[i].drop)} + Deposit रु ${f(dp(i))}\n`:"")+`👉 *जम्मा रु ${f(tot(i))} लाग्छ* (लगभग रु ${f(tot(i)/M[i])}/महिना)`).join("\n\n")+(bd?"\n\n(Rental मा VAT समावेश छ)":"");
+ const en=`📶 *New Connection Quote* (${dt})\n${nm?`Dear ${nm},\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+ix.map(i=>[L[i],i]).map(([l,i])=>`✅ *${l}: Rs ${f(tot(i))}* (≈ Rs ${f(pk[i]/M[i])}/month renew)`+(bd?`\n     Renew charge ${f(pk[i])} + OTC ${f(c[i].otc)}`:"")).join("\n")+(bd?"\n\nOTC = Device Rental + Drop-wire + Deposit":"");
+ const np=`📶 *नयाँ इन्टरनेट जडान - मूल्य विवरण* (${dt})\n${nm?`${nm} जी, नमस्कार!\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+ix.map(i=>[NL[i],i]).map(([l,i])=>`✅ *${l}*\n`+(bd?`Renew charge रु ${f(pk[i])} + Rental रु ${f(rn(i))} + Drop-wire रु ${f(c[i].drop)} + Deposit रु ${f(dp(i))}\n`:"")+`👉 *जम्मा रु ${f(tot(i))} लाग्छ* (रिन्यु लगभग रु ${f(pk[i]/M[i])}/महिना)`).join("\n\n")+(bd?"\n\n(Rental मा VAT समावेश छ)":"");
  $("cq").textContent=ok?(ne?np:en):"Combination not available";
 }
 $("chips").onclick=e=>{const d=(e.target.closest("button")||{}).dataset||{};if(d.id){$(d.id).value=d.v;rCalc()}};
@@ -251,13 +260,25 @@ function mkImg(cb){const ix=$("qm").checked?[1,2,3,0]:[1,2,3],W=720,H=272+(ix.le
  g.font="16px Arial";g.fillStyle="#94a3b8";g.fillText(new Date().toLocaleDateString("en-CA")+(nm?"  |  "+nm:""),30,116);
  ix.forEach((i,k)=>{const l=["1 Month","3 Months","6 Months","12 Months"][i],y=150+k*98;g.fillStyle="#fff";g.fillRect(20,y,W-40,88);g.fillStyle=["#2563eb","#9333ea","#ea580c","#dc2626"][i];g.fillRect(20,y,8,88);
   g.fillStyle="#0f172a";g.font="bold 24px Arial";g.fillText(l,44,y+38);g.textAlign="right";g.font="bold 34px Arial";g.fillText("Rs "+f(Q.tot[i]),W-40,y+40);
-  g.font="15px Arial";g.fillStyle="#475569";g.fillText(`Package ${f(Q.pk[i])} + OTC ${f(Q.otc[i])}  (~Rs ${f(Q.tot[i]/M[i])}/month)`,W-40,y+70);g.textAlign="left"});
+  g.font="15px Arial";g.fillStyle="#475569";g.fillText(`Renew charge ${f(Q.pk[i])} + OTC ${f(Q.otc[i])}  (~Rs ${f(Q.pk[i]/M[i])}/month renew)`,W-40,y+70);g.textAlign="left"});
  g.font="14px Arial";g.fillStyle="#64748b";g.fillText("OTC = Device Rental + Drop-wire + Deposit. Rental incl. VAT.",30,H-14);cv.toBlob(cb,"image/png")}
 $("img").onclick=()=>{if(!Q||!Q.ok)return;logQ();mkImg(b=>{const fl=new File([b],"quote.png",{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[fl]}))navigator.share({files:[fl]}).catch(()=>{});else dl(b,"quote.png")})};
 all();rCmp();rLog();show(0);
 // shared rates + PWA
 fetch("rates.json",{cache:"no-store"}).then(r=>r.ok?r.json():0).then(o=>{if(!o||!o.pk)return;DEF=o;let sv=0;try{sv=localStorage.getItem("nsrc")}catch(e){}if(!sv)S=JSON.parse(JSON.stringify(DEF));all();rCmp()}).catch(()=>{});
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+
+// breakdown popup
+(function(){const m=$("mdl"),bx=$("mbox");
+ $("cards").addEventListener("click",e=>{const b=e.target.closest(".card b");if(!b)return;const i=+b.closest(".card").dataset.i,{c,pk,L}=window.QX,x=c[i];
+  const r=(l,v,cl="")=>v?`<tr class="${cl}"><td>${l}</td><td>Rs ${f(v)}</td></tr>`:"";
+  bx.innerHTML=`<h3>${L[i]} - Amount Breakdown</h3><div class="sub">Rental ma VAT included. Renew charge VAT bahek.</div><table>`+
+   r("Renew charge",pk[i],"sec")+
+   `<tr class="pm"><td>Renew charge / month (without VAT)</td><td>Rs ${f(pk[i]/M[i])}</td></tr>`+
+   r("Device Rental - ONT",x.ont)+r("STB Primary Rental",x.sp)+r("STB Secondary Rental",x.ss)+r("Drop-wire",x.drop)+r("Deposit - ONT",x.dO)+r("Deposit - STB",x.dS)+r("Add-on",x.ad)+
+   r("OTC Total",x.otc,"sec")+r("TOTAL PAYABLE",pk[i]+x.otc,"tt")+`</table><button id="mcl">Close</button>`;
+  m.classList.add("on");$("mcl").onclick=()=>m.classList.remove("on")});
+ m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("on")});})();
 </script>
 </body>
 </html>
