@@ -8,7 +8,7 @@
 :root{--ink:#0f172a;--mut:#475569;--line:#e2e8f0;--bg:#f8fafc;--teal:#0f766e;--tealL:#ccfbf1}
 *{box-sizing:border-box}
 body{margin:0;font:14px Arial,Helvetica,sans-serif;background:var(--bg);color:var(--ink)}
-header{background:var(--ink);color:#fff;padding:14px 20px}
+header{background:linear-gradient(120deg,#0f172a,#0f766e 60%,#2563eb);color:#fff;padding:18px 20px}
 header h1{margin:0;font-size:20px}
 header p{margin:4px 0 0;font-size:12px;color:#94a3b8}
 nav{display:flex;gap:4px;padding:10px 20px 0;flex-wrap:wrap;border-bottom:2px solid var(--teal);background:#fff}
@@ -32,13 +32,25 @@ td input{width:76px;text-align:center;color:#0000ff;border:1px solid transparent
 td input:hover,td input:focus{border-color:#94a3b8;background:#fff}
 .ok{padding:4px 10px;border-radius:4px;font-weight:700}
 .ok.y{background:#bbf7d0;color:#166534}.ok.x{background:#fecaca;color:#991b1b}
-.quote{white-space:pre-wrap;background:#f0fdfa;border:1px solid var(--line);padding:12px;margin:8px 0;line-height:1.5}
+.quote{white-space:pre-wrap;background:#dcf8c6;border-radius:12px 12px 12px 2px;padding:12px 14px;margin:8px 0;line-height:1.6;max-width:430px;box-shadow:0 1px 3px #0003}
 .btn{background:var(--teal);color:#fff;border:0;padding:8px 14px;border-radius:4px;font:inherit;font-weight:700;cursor:pointer}
 .btn.g{background:#64748b}
 h3{margin:18px 0 8px;font-size:15px}
 .note{font-size:12px;color:var(--mut);line-height:1.6;margin:10px 0}
 .bar{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
 .g1{background:#0f172a}.g2{background:#2563eb}.g3{background:#0f766e}
+#chips{margin-bottom:10px}.gr{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:6px 0}.gr span{width:48px;font-weight:700;color:var(--mut);font-size:12px}
+.chip{border:2px solid var(--c);background:#fff;color:var(--c);padding:7px 14px;border-radius:20px;font:inherit;font-weight:700;cursor:pointer}
+.chip.on{background:var(--c);color:#fff;box-shadow:0 3px 8px #0003}.chip:disabled{opacity:.3;cursor:not-allowed}
+.info{font-size:13px;margin:8px 0 12px;color:var(--mut)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:12px 0 6px}
+.card{position:relative;background:#fff;border:1px solid var(--line);border-top:5px solid var(--teal);border-radius:10px;padding:14px;box-shadow:0 2px 8px #0001;display:flex;flex-direction:column;gap:5px}
+.card b{font-size:26px;color:var(--ink)}.card em{font-style:normal;color:var(--teal);font-weight:700}.card small{color:var(--mut)}
+.card.best{border-color:#f59e0b;background:#fffbeb;border-top-color:#f59e0b}
+.card i{position:absolute;top:-11px;right:10px;background:#f59e0b;color:#fff;font-size:11px;font-weight:700;padding:3px 9px;border-radius:10px;font-style:normal}
+.stk{display:flex;height:10px;border-radius:5px;overflow:hidden;margin:4px 0}.stk s{background:#2563eb}.stk u{background:#0f766e}
+.lg{font-size:12px;color:var(--mut)}.lg s{color:#2563eb;text-decoration:none}.lg u{color:#0f766e;text-decoration:none}
+.hero{padding:14px 18px;border-radius:10px;color:#fff;margin-bottom:12px}.hero h2{margin:0;font-size:18px}.hero p{margin:4px 0 0;font-size:12px;opacity:.9}
 @media print{nav,.bar,.btn{display:none}.tab{display:block!important}}
 </style>
 </head>
@@ -48,22 +60,31 @@ h3{margin:18px 0 8px;font-size:15px}
 <nav id="nav"></nav>
 <main>
 <section class="tab" id="t0">
- <div class="sel"><b>Plan</b><select id="cp"></select><b>ONT Type</b><select id="co"></select><b>Bandwidth (Mbps)</b><select id="cb"></select><b>STB Qty (auto)</b><span id="cs"></span><b>Status</b><span id="cst"></span></div>
+ <div id="chips"></div>
+ <div hidden><select id="cp"></select><select id="co"></select><select id="cb"></select></div>
+ <div class="info">STB Qty: <b id="cs"></b> &nbsp;|&nbsp; Status: <span id="cst"></span></div>
+ <div class="cards" id="cards"></div>
+ <div class="lg"><s>&#9632;</s> Package &nbsp; <u>&#9632;</u> OTC (Rental + Drop-wire + Deposit)</div><br>
  <div class="wrap"><table id="ct"></table></div>
- <h3>Customer Quote (copy for WhatsApp/Viber)</h3>
+ <h3>💬 Customer Quote (copy for WhatsApp/Viber)</h3>
+ <label class="note"><input type="checkbox" id="qb" checked> Include breakdown</label> &nbsp; <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select>
  <div class="quote" id="cq"></div>
- <button class="btn" id="cc">Copy quote</button>
+ <button class="btn" id="cc">Copy quote</button> <button class="btn g" id="wa">Send on WhatsApp</button> <button class="btn g" id="vb">Send on Viber</button>
  <p class="note">Available: Internet Only / Combo 1TV = 5G (50-200) + 6G (200-600) | Combo 2TV = 6G 400/500/600 | Combo 3TV = 6G 500/600.<br>Rates edit karna parey: Package Rates / Device Rates tab ma matra edit garnu.</p>
 </section>
 <section class="tab" id="t1">
+ <div class="hero" style="background:linear-gradient(120deg,#2563eb,#0f766e)"><h2>📊 Final Amount</h2><p>Package + OTC for every plan. Darker green = higher amount. Filter by plan or ONT.</p></div>
+ <div class="cards" id="fs"></div>
  <div class="bar"><b>Filter:</b><select id="fp"><option value="">All plans</option></select><select id="fo"><option value="">All ONT</option><option>5G</option><option>6G</option></select></div>
  <div class="wrap"><table id="ft"></table></div>
 </section>
 <section class="tab" id="t2">
+ <div class="hero" style="background:linear-gradient(120deg,#9333ea,#2563eb)"><h2>📦 Package Rates</h2><p>Package charge only, per plan, ONT and bandwidth.<br>Edit blue cells to update every tab.</p></div>
  <p class="note">Package charge only (New &amp; Renew). Blue cells are editable; all tabs update.</p>
  <div class="wrap"><table id="pt"></table></div>
 </section>
 <section class="tab" id="t3">
+ <div class="hero" style="background:linear-gradient(120deg,#ea580c,#dc2626)"><h2>🔧 Device Rates</h2><p>ONT, STB rental, drop-wire and deposit. Edit blue cells to update every tab.</p></div>
  <p class="note">Blue cells are editable. Rental incl. VAT.</p>
  <div class="wrap"><table id="dt"></table></div>
  <h3>Plan setup (assumption)</h3>
@@ -98,13 +119,18 @@ function calc(p,o,i){const v=dv(o,i),n=S.stb[p],d=S.dev;
 const pkg=(p,o,b,i)=>{const r=S.pk.find(x=>x[0]===p&&x[1]===o&&x[2]===+b);return r?r[3][i]:null};
 const opt=(a,sel)=>a.map(x=>`<option${x==sel?" selected":""}>${x}</option>`).join("");
 // nav
-const T=["Calculator","Final Amount","Package Rates","Device Rates"];
+const T=["🧮 Calculator","📊 Final Amount","📦 Package Rates","🔧 Device Rates"];
 $("nav").innerHTML=T.map((t,i)=>`<button data-i="${i}">${t}</button>`).join("");
 function show(i){document.querySelectorAll(".tab").forEach((e,j)=>e.classList.toggle("on",i==j));document.querySelectorAll("nav button").forEach((e,j)=>e.classList.toggle("on",i==j))}
 $("nav").onclick=e=>{if(e.target.dataset.i)show(+e.target.dataset.i)};
 // calculator
 $("cp").innerHTML=opt(P,"Internet Only");$("co").innerHTML=opt(["5G","6G"],"5G");$("cb").innerHTML=opt([50,80,100,150,200,400,500,600],100);
+const chip=(id,v,c,on,dis)=>`<button class="chip${on?" on":""}" data-id="${id}" data-v="${v}" style="--c:${c}"${dis?" disabled":""}>${v}</button>`;
 function rCalc(){
+ const av=S.pk.filter(r=>r[0]===$("cp").value),on=[...new Set(av.map(r=>r[1]))];
+ if(!on.includes($("co").value))$("co").value=on[0];
+ const bw=av.filter(r=>r[1]===$("co").value).map(r=>r[2]);
+ if(!bw.includes(+$("cb").value))$("cb").value=bw[0];
  const p=$("cp").value,o=$("co").value,b=$("cb").value,ok=pkg(p,o,b,0)!==null;
  $("cs").textContent=S.stb[p];$("cst").innerHTML=`<span class="ok ${ok?"y":"x"}">${ok?"OK":"Combination not available"}</span>`;
  const c=D.map((_,i)=>calc(p,o,i)),pk=D.map((_,i)=>ok?pkg(p,o,b,i):0);
@@ -115,9 +141,17 @@ function rCalc(){
  row("Drop-wire",i=>f(c[i].drop))+row("Deposit - ONT",i=>f(c[i].dO))+row("Deposit - STB",i=>f(c[i].dS))+
  row("OTC Total",i=>f(c[i].otc),"otc")+row("TOTAL PAYABLE (New Sales)",i=>ok?f(tot(i)):"N/A","tot")+row("Per Month (approx)",i=>ok?f(tot(i)/M[i]):"N/A")+row("Months",i=>M[i],"dim");
  const L=["1 Month","3 Months","6 Months","12 Months"];
- $("cq").textContent=ok?`${p} | ${o} ONT | ${b} Mbps (New Connection)\n`+L.map((l,i)=>`${l}: Rs ${f(tot(i))} (Package ${f(pk[i])} + OTC ${f(c[i].otc)})`).join("\n")+"\nOTC = Device Rental + Drop-wire + Deposit":"Combination not available";
+ $("chips").innerHTML=`<div class="gr"><span>Plan</span>${P.map(x=>chip("cp",x,PL[x][0],x===p)).join("")}</div><div class="gr"><span>ONT</span>${["5G","6G"].map(x=>chip("co",x,"#0f766e",x===o,!on.includes(x))).join("")}</div><div class="gr"><span>Mbps</span>${bw.map(x=>chip("cb",x,"#0f766e",x==b)).join("")}</div>`;
+ const pm=D.map((_,i)=>tot(i)/M[i]),mn=Math.min(...pm);
+ $("cards").innerHTML=ok?D.map((_,i)=>{const t=tot(i),w=Math.round(pk[i]/t*100);return `<div class="card${pm[i]===mn?" best":""}">${pm[i]===mn?"<i>Lowest / month</i>":""}<small>${L[i]}</small><b>Rs ${f(t)}</b><em>Rs ${f(pm[i])} / month</em><div class="stk"><s style="width:${w}%"></s><u style="width:${100-w}%"></u></div><small>Package ${f(pk[i])} &middot; OTC ${f(c[i].otc)}</small></div>`}).join(""):"";
+ const bd=$("qb").checked,ne=$("ql").value==="ne",rn=i=>c[i].ont+c[i].sp+c[i].ss,dp=i=>c[i].dO+c[i].dS,NL=["१ महिना","३ महिना","६ महिना","१२ महिना"];
+ const en=`📶 *New Connection Quote*\n*${p}* | ${o} | ${b} Mbps\n\n`+L.map((l,i)=>`✅ *${l}: Rs ${f(tot(i))}* (≈ Rs ${f(tot(i)/M[i])}/month)`+(bd?`\n     Package ${f(pk[i])} + OTC ${f(c[i].otc)}`:"")).join("\n")+(bd?"\n\nOTC = Device Rental + Drop-wire + Deposit":"");
+ const np=`📶 *नयाँ इन्टरनेट जडान - मूल्य विवरण*\n*${p}* | ${o} | ${b} Mbps\n\n`+NL.map((l,i)=>`✅ *${l}*\n`+(bd?`Package रु ${f(pk[i])} + Rental रु ${f(rn(i))} + Drop-wire रु ${f(c[i].drop)} + Deposit रु ${f(dp(i))}\n`:"")+`👉 *जम्मा रु ${f(tot(i))} लाग्छ* (लगभग रु ${f(tot(i)/M[i])}/महिना)`).join("\n\n")+(bd?"\n\n(Rental मा VAT समावेश छ)":"");
+ $("cq").textContent=ok?(ne?np:en):"Combination not available";
 }
-["cp","co","cb"].forEach(id=>$(id).onchange=rCalc);
+$("chips").onclick=e=>{const d=e.target.dataset;if(d.id){$(d.id).value=d.v;rCalc()}};
+$("qb").onchange=$("ql").onchange=rCalc;$("vb").onclick=()=>{location.href="viber://forward?text="+encodeURIComponent($("cq").textContent)};
+$("wa").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent($("cq").textContent));
 $("cc").onclick=()=>{const t=$("cq").textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("cc").textContent="Copied"},()=>{const r=document.createRange();r.selectNodeContents($("cq"));getSelection().removeAllRanges();getSelection().addRange(r);$("cc").textContent="Selected - press Copy"});setTimeout(()=>$("cc").textContent="Copy quote",1800)};
 // final
 $("fp").innerHTML+=P.map(p=>`<option>${p}</option>`).join("");
@@ -125,19 +159,22 @@ function rFinal(){
  const fp=$("fp").value,fo=$("fo").value;
  let h=`<tr><th rowspan=2>Plan</th><th rowspan=2>ONT</th><th rowspan=2>BW (Mbps)</th><th rowspan=2>STB</th><th colspan=4 class="g1">Final Amount (Package + OTC)</th><th colspan=4 class="g2">Package Charge</th><th colspan=4 class="g3">OTC</th></tr><tr>`+
  [1,2,3].map(g=>D.map(d=>`<th class="g${g}">${d}</th>`).join("")).join("")+"</tr>";
- S.pk.filter(r=>(!fp||r[0]===fp)&&(!fo||r[1]===fo)).forEach(r=>{
+ const rs=S.pk.filter(r=>(!fp||r[0]===fp)&&(!fo||r[1]===fo)),all=rs.flatMap(r=>r[3].map((x,i)=>x+calc(r[0],r[1],i).otc)),mx=Math.max(...all),mn=Math.min(...all);let lo,hi;
+ rs.forEach(r=>{
   const [p,o,b,v]=r,[dk,lt]=PL[p],oc=D.map((_,i)=>calc(p,o,i).otc);
+  v.forEach((x,i)=>{const t=x+oc[i],l=`${p} | ${o} | ${b} Mbps | ${D[i]}`;if(!lo||t<lo.t)lo={t,l};if(!hi||t>hi.t)hi={t,l}});
   h+=`<tr><td style="background:${lt};color:${dk};font-weight:700">${p}</td><td style="background:${lt};color:${dk};font-weight:700">${o}</td><td style="background:${lt};color:${dk};font-weight:700">${b}</td><td style="background:${lt};color:${dk};font-weight:700">${S.stb[p]}</td>`+
-  v.map((x,i)=>`<td class="n" style="background:#f1f5f9;font-weight:700">${f(x+oc[i])}</td>`).join("")+v.map(x=>`<td class="n" style="color:#008000">${f(x)}</td>`).join("")+oc.map(x=>`<td class="n">${f(x)}</td>`).join("")+"</tr>"});
- $("ft").innerHTML=h}
+  v.map((x,i)=>`<td class="n" style="background:rgba(15,118,110,${(.08+.5*((x+oc[i]-mn)/((mx-mn)||1))).toFixed(2)});font-weight:700">${f(x+oc[i])}</td>`).join("")+v.map(x=>`<td class="n" style="color:#008000">${f(x)}</td>`).join("")+oc.map(x=>`<td class="n">${f(x)}</td>`).join("")+"</tr>"});
+ $("ft").innerHTML=h;
+ $("fs").innerHTML=rs.length?`<div class="card best" style="border-top-color:#16a34a;background:#f0fdf4"><small>Lowest amount</small><b>Rs ${f(lo.t)}</b><small>${lo.l}</small></div><div class="card" style="border-top-color:#dc2626"><small>Highest amount</small><b>Rs ${f(hi.t)}</b><small>${hi.l}</small></div><div class="card"><small>Plans shown</small><b>${rs.length}</b><small>rows x 4 durations</small></div>`:""}
 $("fp").onchange=$("fo").onchange=rFinal;
 // rate tables
 const inp=(k,v)=>`<td><input type="number" data-k="${k}" value="${v}"></td>`;
 function rRates(){
  $("pt").innerHTML=`<tr>${["Plan","ONT Type","Bandwidth (Mbps)",...D].map(h=>`<th>${h}</th>`).join("")}</tr>`+
- S.pk.map((r,j)=>`<tr><td style="background:${PL[r[0]][1]};color:${PL[r[0]][0]};font-weight:700">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td>${r[3].map((x,i)=>inp(`p.${j}.${i}`,x)).join("")}</tr>`).join("");
- $("dt").innerHTML=`<tr>${["Item",...D].map(h=>`<th>${h}</th>`).join("")}</tr>`+S.dev.map((r,j)=>`<tr><td>${r[0]}</td>${r[1].map((x,i)=>inp(`d.${j}.${i}`,x)).join("")}</tr>`).join("");
- $("st").innerHTML=`<tr><th>Plan</th><th>STB Qty</th></tr>`+P.map(p=>`<tr><td style="background:${PL[p][1]};color:${PL[p][0]};font-weight:700">${p}</td>${inp("s."+p,S.stb[p])}</tr>`).join("")}
+ S.pk.map((r,j)=>(j&&S.pk[j-1][0]===r[0]?"":`<tr><td colspan=7 style="background:${PL[r[0]][0]};color:#fff;font-weight:700">${r[0]}</td></tr>`)+`<tr><td style="background:${PL[r[0]][1]};color:${PL[r[0]][0]};font-weight:700">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td>${r[3].map((x,i)=>inp(`p.${j}.${i}`,x)).join("")}</tr>`).join("");
+ $("dt").innerHTML=`<tr>${["Item",...D].map(h=>`<th>${h}</th>`).join("")}</tr>`+S.dev.map((r,j)=>(j%3?"":`<tr><td colspan=5 style="background:#e2e8f0;font-weight:700">${["📡 Dual-Band ONT (5G)","📶 Wi-Fi 6 ONT (6G)","📺 Set-Top Box (STB)"][j/3]}</td></tr>`)+`<tr><td>${r[0]}</td>${r[1].map((x,i)=>inp(`d.${j}.${i}`,x)).join("")}</tr>`).join("");
+ $("st").innerHTML=`<tr><th>Plan</th><th>STB Qty</th></tr>`+P.map(p=>`<tr><td style="background:${PL[p][1]};color:${PL[p][0]};font-weight:700">${p} ${"📺".repeat(S.stb[p])}</td>${inp("s."+p,S.stb[p])}</tr>`).join("")}
 document.addEventListener("input",e=>{const k=e.target.dataset.k;if(!k)return;const [t,a,b]=k.split("."),v=+e.target.value||0;
  if(t==="p")S.pk[a][3][b]=v;else if(t==="d")S.dev[a][1][b]=v;else S.stb[k.slice(2)]=v;save();rCalc();rFinal()});
 $("rs").onclick=()=>{S=JSON.parse(JSON.stringify(DEF));save();rRates();rCalc();rFinal()};
