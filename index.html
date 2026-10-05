@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>New Sales Rate Calculator</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0f766e"><title>New Sales Rate Calculator</title>
 <style>
 :root{--ink:#0f172a;--mut:#475569;--line:#e2e8f0;--bg:#f8fafc;--teal:#0f766e;--tealL:#ccfbf1}
 *{box-sizing:border-box}
@@ -64,14 +64,14 @@ td input:disabled{color:#334155;background:#f1f5f9;cursor:not-allowed}
 <section class="tab" id="t0">
  <div id="chips"></div>
  <div hidden><select id="cp"></select><select id="co"></select><select id="cb"></select></div>
- <div class="info">STB Qty: <b id="cs"></b> &nbsp;|&nbsp; Status: <span id="cst"></span></div>
+ <div class="info">STB Qty: <b id="cs"></b> &nbsp;|&nbsp; Status: <span id="cst"></span> &nbsp;|&nbsp; Add-on: <select id="at"><option value="">None</option><option>ATV</option><option>Beacon 1.1</option><option>Beacon 3.1</option></select> Qty <select id="aq"><option>1</option><option>2</option><option>3</option></select></div>
  <div class="cards" id="cards"></div>
  <div class="lg"><s>&#9632;</s> Package &nbsp; <u>&#9632;</u> OTC (Rental + Drop-wire + Deposit)</div><br>
  <div class="wrap"><table id="ct"></table></div>
  <h3>💬 Customer Quote (copy for WhatsApp/Viber)</h3>
- <label class="note"><input type="checkbox" id="qb" checked> Include breakdown</label> &nbsp; <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select> <input id="qn" placeholder="Customer name (optional)">
+ <label class="note"><input type="checkbox" id="qb" checked> Include breakdown</label> &nbsp; <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select> <input id="qn" placeholder="Customer name (optional)"> <input id="sn" placeholder="Staff name">
  <div class="quote" id="cq"></div>
- <button class="btn" id="cc">Copy quote</button> <button class="btn g" id="wa">Send on WhatsApp</button> <button class="btn g" id="vb">Open Viber (copies quote)</button> <button class="btn g" id="sh">Share...</button>
+ <button class="btn" id="cc">Copy quote</button> <button class="btn g" id="wa">Send on WhatsApp</button> <button class="btn g" id="vb">Open Viber (copies quote)</button> <button class="btn g" id="sh">Share...</button> <button class="btn g" id="img">🖼 Quote image</button>
  <p class="note">Available: Internet Only / Combo 1TV = 5G (50-200) + 6G (200-600) | Combo 2TV = 6G 400/500/600 | Combo 3TV = 6G 500/600.<br>Rates edit karna parey: Package Rates / Device Rates tab ma matra edit garnu.</p>
 </section>
 <section class="tab" id="t1">
@@ -94,34 +94,39 @@ td input:disabled{color:#334155;background:#f1f5f9;cursor:not-allowed}
  <p class="note">Assumptions: 5G ONT = Dual-Band rates, 6G ONT = Wi-Fi 6 rates. 1TV = 1 STB Primary; 2TV = Primary + 1 Secondary; 3TV = Primary + 2 Secondary. Drop-wire once (with ONT). Deposit per device (ONT + each STB). ATV and Beacon not included.</p>
  <button class="btn g" id="rs">Reset all rates</button>
 </section>
+<section class="tab" id="t4"><div class="hero" style="background:linear-gradient(120deg,#0f766e,#2563eb)"><h2>⚖ Compare</h2><p>Two options side by side (package + OTC, no add-on).</p></div><div id="cmp"></div></section>
+<section class="tab" id="t5"><div class="hero" style="background:linear-gradient(120deg,#0f172a,#475569)"><h2>📒 Quote Log</h2><p>Quotes sent from this device (copy / WhatsApp / Viber / image).</p></div><div class="bar"><button class="btn" id="csv">Download CSV</button><button class="btn g" id="clr">Clear log</button></div><div class="wrap"><table id="lg"></table></div></section>
 </main>
 <script>
 const D=["1M","3M","6M","12M"],M=[1,3,6,12];
 const PL={"Internet Only":["#2563eb","#dbeafe"],"Combo 1TV":["#9333ea","#f3e8fe"],"Combo 2TV":["#ea580c","#ffedd5"],"Combo 3TV":["#dc2626","#fee2e2"]};
-const P=Object.keys(PL);
+const P=Object.keys(PL);const AD={t:"",q:0};let Q;
 const A=[["5G",50,[1100,3200,6270,11200]],["5G",80,[1200,3500,6840,12240]],["5G",100,[1400,4100,7980,14280]],["5G",150,[1500,4400,8550,15300]],["5G",200,[1650,4800,9405,16830]],["6G",200,[1650,4800,9405,16830]],["6G",400,[1800,5250,10260,18360]],["6G",500,[1900,5500,10830,19400]],["6G",600,[2100,6100,11970,22600]]];
 const B=[["5G",50,[1350,3900,7470,13600]],["5G",80,[1450,4200,8040,14640]],["5G",100,[1650,4800,9180,16680]],["5G",150,[1750,5100,9750,17700]],["5G",200,[1900,5500,10605,19230]],["6G",200,[1900,5500,10605,19230]],["6G",400,[2050,5950,11460,20760]],["6G",500,[2150,6200,12030,21800]],["6G",600,[2350,6800,13170,25000]]];
-const DEF={
+let DEF={
 pk:[...A.map(r=>["Internet Only",...r]),...B.map(r=>["Combo 1TV",...r]),
 ["Combo 2TV","6G",400,[2300,6650,12660,23160]],["Combo 2TV","6G",500,[2400,6900,13230,24200]],["Combo 2TV","6G",600,[2600,7500,14370,27400]],
 ["Combo 3TV","6G",500,[2650,7600,14430,26600]],["Combo 3TV","6G",600,[2850,8200,15570,29800]]],
 dev:[["Dual-Band Rental (incl. VAT)",[3390,2260,1695,1130]],["Dual-Band Deposit",[1000,1000,1000,1000]],["Dual-Band Drop-wire",[1130,1130,1130,1130]],
 ["Wi-Fi 6 Rental (incl. VAT)",[3390,2260,1695,1130]],["Wi-Fi 6 Deposit",[1000,1000,1000,1000]],["Wi-Fi 6 Drop-wire",[1130,1130,1130,1130]],
 ["STB Primary Rental (incl. VAT)",[3390,2260,1695,1130]],["STB Secondary Rental (incl. VAT)",[2260,2260,2260,2260]],["STB Deposit",[1000,1000,1000,1000]]],
-stb:{"Internet Only":0,"Combo 1TV":1,"Combo 2TV":2,"Combo 3TV":3}};
+stb:{"Internet Only":0,"Combo 1TV":1,"Combo 2TV":2,"Combo 3TV":3},
+ad:{"ATV":[[3390,2825,2825,2260],[3390,3390,3390,3390],1000],"Beacon 1.1":[[2825,2825,2260,1695],[3390,3390,3390,3390],1500],"Beacon 3.1":[[3955,3390,2825,2260],[3955,3390,3390,3390],1500]}};
 let S=JSON.parse(JSON.stringify(DEF));
 try{const x=localStorage.getItem("nsrc");if(x)S=JSON.parse(x)}catch(e){}
+if(!S.ad)S.ad=JSON.parse(JSON.stringify(DEF.ad));
 const save=()=>{try{localStorage.setItem("nsrc",JSON.stringify(S))}catch(e){}};
 const f=n=>Math.round(n).toLocaleString("en-US");
 const $=id=>document.getElementById(id);
 const dv=(o,i)=>{const k=o==="5G"?0:3,d=S.dev;return{rent:d[k][1][i],dep:d[k+1][1][i],drop:d[k+2][1][i]}};
-function calc(p,o,i){const v=dv(o,i),n=S.stb[p],d=S.dev;
+function calc(p,o,i,u){const v=dv(o,i),n=S.stb[p],d=S.dev;
  const r={ont:v.rent,sp:n>=1?d[6][1][i]:0,ss:Math.max(n-1,0)*d[7][1][i],drop:v.drop,dO:v.dep,dS:n*d[8][1][i]};
- r.otc=r.ont+r.sp+r.ss+r.drop+r.dO+r.dS;return r}
+ r.ad=0;if(u&&AD.q>0&&S.ad[AD.t]){const a=S.ad[AD.t];r.ad=a[0][i]+(AD.q-1)*a[1][i]+AD.q*a[2]}
+ r.otc=r.ont+r.sp+r.ss+r.drop+r.dO+r.dS+r.ad;return r}
 const pkg=(p,o,b,i)=>{const r=S.pk.find(x=>x[0]===p&&x[1]===o&&x[2]===+b);return r?r[3][i]:null};
 const opt=(a,sel)=>a.map(x=>`<option${x==sel?" selected":""}>${x}</option>`).join("");
 // nav
-const T=["🧮 Calculator","📊 Final Amount","📦 Package Rates","🔧 Device Rates"];
+const T=["🧮 Calculator","📊 Final Amount","📦 Package Rates","🔧 Device Rates","⚖ Compare","📒 Quote Log"];
 $("nav").innerHTML=T.map((t,i)=>`<button data-i="${i}">${t}</button>`).join("");
 function show(i){document.querySelectorAll(".tab").forEach((e,j)=>e.classList.toggle("on",i==j));document.querySelectorAll("nav button").forEach((e,j)=>e.classList.toggle("on",i==j))}
 $("nav").onclick=e=>{if(e.target.dataset.i)show(+e.target.dataset.i)};
@@ -135,28 +140,29 @@ function rCalc(){
  if(!bw.includes(+$("cb").value))$("cb").value=bw[0];
  const p=$("cp").value,o=$("co").value,b=$("cb").value,ok=pkg(p,o,b,0)!==null;
  $("cs").textContent=S.stb[p];$("cst").innerHTML=`<span class="ok ${ok?"y":"x"}">${ok?"OK":"Combination not available"}</span>`;
- const c=D.map((_,i)=>calc(p,o,i)),pk=D.map((_,i)=>ok?pkg(p,o,b,i):0);
+ const c=D.map((_,i)=>calc(p,o,i,1)),pk=D.map((_,i)=>ok?pkg(p,o,b,i):0);
  const row=(l,fn,cls="")=>`<tr class="${cls}"><td>${l}</td>${D.map((_,i)=>`<td class="n">${fn(i)}</td>`).join("")}</tr>`;
  const tot=i=>pk[i]+c[i].otc;
+ Q={ok,p,o,b,tot:D.map((_,i)=>ok?tot(i):0),pk,otc:c.map(x=>x.otc)};
  $("ct").innerHTML=`<tr>${["Component",...D].map(h=>`<th>${h}</th>`).join("")}</tr>`+
  row("Package Charge",i=>f(pk[i]))+row("Device Rental - ONT",i=>f(c[i].ont))+row("STB Primary Rental",i=>f(c[i].sp))+row("STB Secondary Rental",i=>f(c[i].ss))+
- row("Drop-wire",i=>f(c[i].drop))+row("Deposit - ONT",i=>f(c[i].dO))+row("Deposit - STB",i=>f(c[i].dS))+
+ row("Drop-wire",i=>f(c[i].drop))+row("Deposit - ONT",i=>f(c[i].dO))+row("Deposit - STB",i=>f(c[i].dS))+row("Add-on: "+(AD.q?AD.q+"x "+AD.t:"none"),i=>f(c[i].ad))+
  row("OTC Total",i=>f(c[i].otc),"otc")+row("TOTAL PAYABLE (New Sales)",i=>ok?f(tot(i)):"N/A","tot")+row("Per Month (approx)",i=>ok?f(tot(i)/M[i]):"N/A")+row("Months",i=>M[i],"dim");
  const L=["1 Month","3 Months","6 Months","12 Months"];
  $("chips").innerHTML=`<div class="gr"><span>Plan</span>${P.map(x=>chip("cp",x,PL[x][0],x===p)).join("")}</div><div class="gr"><span>ONT</span>${["5G","6G"].map(x=>chip("co",x,"#0f766e",x===o,!on.includes(x))).join("")}</div><div class="gr"><span>Mbps</span>${bw.map(x=>chip("cb",x,"#0f766e",x==b)).join("")}</div>`;
  const pm=D.map((_,i)=>tot(i)/M[i]),mn=Math.min(...pm);
  $("cards").innerHTML=ok?D.map((_,i)=>{const t=tot(i),w=Math.round(pk[i]/t*100);return `<div class="card${pm[i]===mn?" best":""}">${pm[i]===mn?"<i>Lowest / month</i>":""}<small>${L[i]}</small><b>Rs ${f(t)}</b><em>Rs ${f(pm[i])} / month</em><div class="stk"><s style="width:${w}%"></s><u style="width:${100-w}%"></u></div><small>Package ${f(pk[i])} &middot; OTC ${f(c[i].otc)}</small></div>`}).join(""):"";
  const nm=$("qn").value.trim(),dt=new Date().toLocaleDateString("en-CA"),bd=$("qb").checked,ne=$("ql").value==="ne",rn=i=>c[i].ont+c[i].sp+c[i].ss,dp=i=>c[i].dO+c[i].dS,NL=["१ महिना","३ महिना","६ महिना","१२ महिना"];
- const en=`📶 *New Connection Quote* (${dt})\n${nm?`Dear ${nm},\n`:""}*${p}* | ${o} | ${b} Mbps\n\n`+L.map((l,i)=>`✅ *${l}: Rs ${f(tot(i))}* (≈ Rs ${f(tot(i)/M[i])}/month)`+(bd?`\n     Package ${f(pk[i])} + OTC ${f(c[i].otc)}`:"")).join("\n")+(bd?"\n\nOTC = Device Rental + Drop-wire + Deposit":"");
- const np=`📶 *नयाँ इन्टरनेट जडान - मूल्य विवरण* (${dt})\n${nm?`${nm} जी, नमस्कार!\n`:""}*${p}* | ${o} | ${b} Mbps\n\n`+NL.map((l,i)=>`✅ *${l}*\n`+(bd?`Package रु ${f(pk[i])} + Rental रु ${f(rn(i))} + Drop-wire रु ${f(c[i].drop)} + Deposit रु ${f(dp(i))}\n`:"")+`👉 *जम्मा रु ${f(tot(i))} लाग्छ* (लगभग रु ${f(tot(i)/M[i])}/महिना)`).join("\n\n")+(bd?"\n\n(Rental मा VAT समावेश छ)":"");
+ const en=`📶 *New Connection Quote* (${dt})\n${nm?`Dear ${nm},\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+L.map((l,i)=>`✅ *${l}: Rs ${f(tot(i))}* (≈ Rs ${f(tot(i)/M[i])}/month)`+(bd?`\n     Package ${f(pk[i])} + OTC ${f(c[i].otc)}`:"")).join("\n")+(bd?"\n\nOTC = Device Rental + Drop-wire + Deposit":"");
+ const np=`📶 *नयाँ इन्टरनेट जडान - मूल्य विवरण* (${dt})\n${nm?`${nm} जी, नमस्कार!\n`:""}*${p}* | ${o} | ${b} Mbps${AD.q?` + ${AD.q}x ${AD.t}`:""}\n\n`+NL.map((l,i)=>`✅ *${l}*\n`+(bd?`Package रु ${f(pk[i])} + Rental रु ${f(rn(i))} + Drop-wire रु ${f(c[i].drop)} + Deposit रु ${f(dp(i))}\n`:"")+`👉 *जम्मा रु ${f(tot(i))} लाग्छ* (लगभग रु ${f(tot(i)/M[i])}/महिना)`).join("\n\n")+(bd?"\n\n(Rental मा VAT समावेश छ)":"");
  $("cq").textContent=ok?(ne?np:en):"Combination not available";
 }
 $("chips").onclick=e=>{const d=e.target.dataset;if(d.id){$(d.id).value=d.v;rCalc()}};
 $("qb").onchange=$("ql").onchange=rCalc;$("qn").oninput=rCalc;const cp2=t=>{try{navigator.clipboard.writeText(t).catch(()=>{})}catch(x){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}};
-$("vb").onclick=()=>{cp2($("cq").textContent);$("vb").textContent="Copied - paste in Viber";setTimeout(()=>$("vb").textContent="Open Viber (copies quote)",2500);location.href="viber://chats"};
-$("sh").onclick=()=>{const t=$("cq").textContent;navigator.share?navigator.share({text:t}).catch(()=>{}):cp2(t)};
-$("wa").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent($("cq").textContent));
-$("cc").onclick=()=>{const t=$("cq").textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("cc").textContent="Copied"},()=>{const r=document.createRange();r.selectNodeContents($("cq"));getSelection().removeAllRanges();getSelection().addRange(r);$("cc").textContent="Selected - press Copy"});setTimeout(()=>$("cc").textContent="Copy quote",1800)};
+$("vb").onclick=()=>{logQ();cp2($("cq").textContent);$("vb").textContent="Copied - paste in Viber";setTimeout(()=>$("vb").textContent="Open Viber (copies quote)",2500);location.href="viber://chats"};
+$("sh").onclick=()=>{logQ();const t=$("cq").textContent;navigator.share?navigator.share({text:t}).catch(()=>{}):cp2(t)};
+$("wa").onclick=()=>{logQ();window.open("https://wa.me/?text="+encodeURIComponent($("cq").textContent))};
+$("cc").onclick=()=>{logQ();const t=$("cq").textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("cc").textContent="Copied"},()=>{const r=document.createRange();r.selectNodeContents($("cq"));getSelection().removeAllRanges();getSelection().addRange(r);$("cc").textContent="Selected - press Copy"});setTimeout(()=>$("cc").textContent="Copy quote",1800)};
 // final
 $("fp").innerHTML+=P.map(p=>`<option>${p}</option>`).join("");
 function rFinal(){
@@ -185,14 +191,44 @@ let lock=true;
 const edited=()=>JSON.stringify(S)!==JSON.stringify(DEF);
 function rLk(){$("lk").innerHTML=`<button class="btn g" id="lb">${lock?"🔒 Rates locked - click to edit":"🔓 Editing - click to lock"}</button>`+(edited()?`<span class="ok x">⚠ Custom rates active on this device</span><button class="btn g" id="rs2">Reset to original</button>`:"")+`<button class="btn g" id="ex">Export rates</button><button class="btn g" id="im">Import rates</button>`}
 const all=()=>{rRates();rCalc();rFinal();rLk()};
-const reset=()=>{S=JSON.parse(JSON.stringify(DEF));save();all()};
+const reset=()=>{S=JSON.parse(JSON.stringify(DEF));try{localStorage.removeItem("nsrc")}catch(e){}all()};
 $("rs").onclick=reset;
 $("lk").onclick=e=>{const id=e.target.id;
  if(id==="lb"){lock=!lock;rRates();rLk()}
  else if(id==="rs2")reset();
  else if(id==="ex"){const t=JSON.stringify(S);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>alert("Rates copied"),()=>prompt("Copy rates:",t))}
  else if(id==="im"){const t=prompt("Paste rates JSON");if(!t)return;try{const o=JSON.parse(t);if(!o.pk||!o.dev||!o.stb)throw 0;S=o;save();all()}catch(x){alert("Invalid rates JSON")}}};
-all();show(0);
+const dl=(b,n)=>{const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=n;a.click()};
+$("at").onchange=$("aq").onchange=()=>{AD.t=$("at").value;AD.q=AD.t?+$("aq").value:0;rCalc()};
+// compare
+const CM={a:["Internet Only","5G",100],b:["Internet Only","5G",200]};
+function rCmp(){const sel=k=>{const av=S.pk.filter(r=>r[0]===CM[k][0]),on=[...new Set(av.map(r=>r[1]))];if(!on.includes(CM[k][1]))CM[k][1]=on[0];const bw=av.filter(r=>r[1]===CM[k][1]).map(r=>r[2]);if(!bw.includes(+CM[k][2]))CM[k][2]=bw[0];
+ return `<div class="gr"><b>${k.toUpperCase()}</b><select data-c="${k}0">${opt(P,CM[k][0])}</select><select data-c="${k}1">${opt(on,CM[k][1])}</select><select data-c="${k}2">${opt(bw,CM[k][2])}</select></div>`};
+ const h=sel("a")+sel("b"),t=k=>D.map((_,i)=>pkg(CM[k][0],CM[k][1],CM[k][2],i)+calc(CM[k][0],CM[k][1],i).otc),a=t("a"),b=t("b"),r=(l,v,c="")=>`<tr class="${c}"><td>${l}</td>${v.map(x=>`<td class="n">${x}</td>`).join("")}</tr>`;
+ $("cmp").innerHTML=h+`<div class="wrap"><table><tr><th></th>${D.map(d=>`<th>${d}</th>`).join("")}</tr>${r("A",a.map(f))}${r("B",b.map(f))}${r("B - A",a.map((x,i)=>(b[i]-x>0?"+":"")+f(b[i]-x)),"otc")}</table></div>`}
+document.addEventListener("change",e=>{const c=e.target.dataset.c;if(c){CM[c[0]][+c[1]]=c[1]==="2"?+e.target.value:e.target.value;rCmp()}});
+// log
+const LG=()=>{try{return JSON.parse(localStorage.getItem("nsq")||"[]")}catch(e){return[]}};
+const LH=["Date","Staff","Customer","Plan","ONT","Mbps","Add-on","1M","3M","6M","12M"];
+function logQ(){if(!Q||!Q.ok)return;const l=LG();l.push([new Date().toLocaleString("en-CA"),$("sn").value,$("qn").value,Q.p,Q.o,Q.b,AD.q?AD.q+"x "+AD.t:"",...Q.tot]);try{localStorage.setItem("nsq",JSON.stringify(l))}catch(e){}rLog()}
+function rLog(){$("lg").innerHTML=`<tr>${LH.map(h=>`<th>${h}</th>`).join("")}</tr>`+LG().reverse().map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join("")}</tr>`).join("")}
+$("csv").onclick=()=>dl(new Blob([[LH,...LG()].map(r=>r.map(x=>`"${x}"`).join(",")).join("\n")],{type:"text/csv"}),"quote_log.csv");
+$("clr").onclick=()=>{if(confirm("Clear all logged quotes?")){try{localStorage.removeItem("nsq")}catch(e){}rLog()}};
+try{$("sn").value=localStorage.getItem("nssn")||""}catch(e){}$("sn").oninput=()=>{try{localStorage.setItem("nssn",$("sn").value)}catch(e){}};
+// quote image
+function mkImg(cb){const W=720,H=566,cv=document.createElement("canvas");cv.width=W;cv.height=H;const g=cv.getContext("2d"),gr=g.createLinearGradient(0,0,W,0);
+ g.fillStyle="#f8fafc";g.fillRect(0,0,W,H);gr.addColorStop(0,"#0f172a");gr.addColorStop(1,"#0f766e");g.fillStyle=gr;g.fillRect(0,0,W,130);
+ const nm=$("qn").value.trim();g.fillStyle="#fff";g.font="bold 34px Arial";g.fillText("New Connection Quote",30,52);g.font="bold 22px Arial";g.fillText(`${Q.p} | ${Q.o} | ${Q.b} Mbps`+(AD.q?` + ${AD.q}x ${AD.t}`:""),30,90);
+ g.font="16px Arial";g.fillStyle="#94a3b8";g.fillText(new Date().toLocaleDateString("en-CA")+(nm?"  |  "+nm:""),30,116);
+ ["1 Month","3 Months","6 Months","12 Months"].forEach((l,i)=>{const y=150+i*98;g.fillStyle="#fff";g.fillRect(20,y,W-40,88);g.fillStyle=["#2563eb","#9333ea","#ea580c","#dc2626"][i];g.fillRect(20,y,8,88);
+  g.fillStyle="#0f172a";g.font="bold 24px Arial";g.fillText(l,44,y+38);g.textAlign="right";g.font="bold 34px Arial";g.fillText("Rs "+f(Q.tot[i]),W-40,y+40);
+  g.font="15px Arial";g.fillStyle="#475569";g.fillText(`Package ${f(Q.pk[i])} + OTC ${f(Q.otc[i])}  (~Rs ${f(Q.tot[i]/M[i])}/month)`,W-40,y+70);g.textAlign="left"});
+ g.font="14px Arial";g.fillStyle="#64748b";g.fillText("OTC = Device Rental + Drop-wire + Deposit. Rental incl. VAT.",30,H-14);cv.toBlob(cb,"image/png")}
+$("img").onclick=()=>{if(!Q||!Q.ok)return;logQ();mkImg(b=>{const fl=new File([b],"quote.png",{type:"image/png"});if(navigator.canShare&&navigator.canShare({files:[fl]}))navigator.share({files:[fl]}).catch(()=>{});else dl(b,"quote.png")})};
+all();rCmp();rLog();show(0);
+// shared rates + PWA
+fetch("rates.json",{cache:"no-store"}).then(r=>r.ok?r.json():0).then(o=>{if(!o||!o.pk)return;DEF=o;let sv=0;try{sv=localStorage.getItem("nsrc")}catch(e){}if(!sv)S=JSON.parse(JSON.stringify(DEF));all();rCmp()}).catch(()=>{});
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
 </html>
