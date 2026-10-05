@@ -71,7 +71,7 @@ td input:disabled{color:#334155;background:#f1f5f9;cursor:not-allowed}
  <h3>💬 Customer Quote (copy for WhatsApp/Viber)</h3>
  <label class="note"><input type="checkbox" id="qb" checked> Include breakdown</label> &nbsp; <select id="ql"><option value="en">English</option><option value="ne">नेपाली</option></select> <input id="qn" placeholder="Customer name (optional)">
  <div class="quote" id="cq"></div>
- <button class="btn" id="cc">Copy quote</button> <button class="btn g" id="wa">Send on WhatsApp</button> <button class="btn g" id="vb">Send on Viber</button>
+ <button class="btn" id="cc">Copy quote</button> <button class="btn g" id="wa">Send on WhatsApp</button> <button class="btn g" id="vb">Open Viber (copies quote)</button> <button class="btn g" id="sh">Share...</button>
  <p class="note">Available: Internet Only / Combo 1TV = 5G (50-200) + 6G (200-600) | Combo 2TV = 6G 400/500/600 | Combo 3TV = 6G 500/600.<br>Rates edit karna parey: Package Rates / Device Rates tab ma matra edit garnu.</p>
 </section>
 <section class="tab" id="t1">
@@ -152,10 +152,9 @@ function rCalc(){
  $("cq").textContent=ok?(ne?np:en):"Combination not available";
 }
 $("chips").onclick=e=>{const d=e.target.dataset;if(d.id){$(d.id).value=d.v;rCalc()}};
-$("qb").onchange=$("ql").onchange=rCalc;$("qn").oninput=rCalc;$("vb").onclick=async()=>{const t=$("cq").textContent;
- try{if(navigator.share){await navigator.share({text:t});return}}catch(e){if(e.name==="AbortError")return}
- try{await navigator.clipboard.writeText(t)}catch(e){}
- $("vb").textContent="Copied - paste in Viber";setTimeout(()=>$("vb").textContent="Send on Viber",2500);location.href="viber://chats"};
+$("qb").onchange=$("ql").onchange=rCalc;$("qn").oninput=rCalc;const cp2=t=>{try{navigator.clipboard.writeText(t).catch(()=>{})}catch(x){const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();document.execCommand("copy");a.remove()}};
+$("vb").onclick=()=>{cp2($("cq").textContent);$("vb").textContent="Copied - paste in Viber";setTimeout(()=>$("vb").textContent="Open Viber (copies quote)",2500);location.href="viber://chats"};
+$("sh").onclick=()=>{const t=$("cq").textContent;navigator.share?navigator.share({text:t}).catch(()=>{}):cp2(t)};
 $("wa").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent($("cq").textContent));
 $("cc").onclick=()=>{const t=$("cq").textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>{$("cc").textContent="Copied"},()=>{const r=document.createRange();r.selectNodeContents($("cq"));getSelection().removeAllRanges();getSelection().addRange(r);$("cc").textContent="Selected - press Copy"});setTimeout(()=>$("cc").textContent="Copy quote",1800)};
 // final
