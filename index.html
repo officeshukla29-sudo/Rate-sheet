@@ -95,6 +95,58 @@ th{background:#334155}.card.best{background:#422006}.card.low{background:#1e293b
 .mq{background:linear-gradient(120deg,#fef3c7,#ccfbf1);color:#0f172a;border:0;line-height:1.5}.mq .btn{margin-top:8px}.mq a{color:#0f766e;font-size:12px;cursor:pointer;margin-left:8px}
 .mbox input#wn{width:100%;margin:10px 0 0}
 @media print{nav,.bar,.btn{display:none}.tab{display:block!important}}
+
+/* Refined interface layer: calmer controls, clearer hierarchy, and better touch targets. */
+:root{--surface:#fff;--focus:#f59e0b}
+body{font-family:Inter,"Segoe UI",Arial,sans-serif;line-height:1.45;background:radial-gradient(ellipse at top,#eaf7f5 0,#f8fafc 52%)}
+header{padding:22px clamp(16px,4vw,36px);box-shadow:0 4px 18px #0f172a22}
+header h1{font-size:clamp(21px,2.5vw,28px);letter-spacing:-.025em}
+header p{color:#dbeafe;font-size:13px;line-height:1.5}
+nav{position:sticky;top:0;z-index:20;gap:6px;padding:8px clamp(10px,3vw,28px) 0;border-bottom:1px solid var(--line);box-shadow:0 4px 12px #0f172a0d}
+nav button{background:transparent;border-radius:9px 9px 0 0;padding:11px 15px;color:var(--mut);transition:background .18s,color .18s}
+nav button:hover{background:#f1f5f9;color:var(--ink)}
+nav button.on{background:transparent;color:var(--teal);box-shadow:inset 0 -3px var(--teal)}
+main{padding:20px clamp(12px,3vw,30px);max-width:1280px}
+.panel{border-radius:16px;padding:clamp(12px,2vw,20px);box-shadow:0 4px 18px #0f172a0a}
+.hero{border-radius:14px;box-shadow:0 5px 16px #0f172a18}
+select,input{background:var(--surface);color:var(--ink);border-color:#cbd5e1;border-radius:8px;min-height:40px}
+.sel select{background:#fff;color:var(--ink)}
+select:focus-visible,input:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{border-radius:12px;box-shadow:0 2px 10px #0f172a08}
+tbody tr:nth-child(even){background:#f8fafc}
+tbody tr:hover{background:#f0fdfa}
+th{letter-spacing:.01em}
+td input{color:#0f766e;font-weight:600}
+.chip{border-radius:14px;transition:transform .16s,box-shadow .16s,background .16s}
+.chip:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 10px #0f172a14}
+.btn{border-radius:9px;box-shadow:0 2px 5px #0f172a14;transition:transform .16s,box-shadow .16s,filter .16s}
+.btn:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 5px 12px #0f172a20}
+.btn:active{transform:translateY(0)}
+.card{border-radius:14px;box-shadow:0 5px 16px #0f172a0d}
+.card:hover{box-shadow:0 9px 22px #0f172a16}
+.card.best{border-top-width:6px}
+.quote{border:1px solid #b7e4ce}
+.note{line-height:1.65}
+.toast{box-shadow:0 6px 20px #0f172a30}
+@media(max-width:640px){
+ header{padding:14px 16px}
+ nav{gap:3px}
+ nav button{padding:10px 12px}
+ main{padding:12px 10px}
+ .panel{padding:12px;border-radius:14px}
+ .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .sel{grid-template-columns:1fr;gap:6px}
+ .wrap{border-radius:10px}
+}
+@media(prefers-color-scheme:dark){
+ body{background:radial-gradient(ellipse at top,#123b3b 0,#0f172a 58%)}
+ :root{--surface:#1e293b;--focus:#fbbf24}
+ nav button:hover,tbody tr:nth-child(even){background:#263548}
+ tbody tr:hover{background:#134e4a}
+ .sel select{background:#1e293b;color:var(--ink)}
+ .quote{border-color:#166534}
+ td input{color:#5eead4}
+}
 </style>
 </head>
 <body>
