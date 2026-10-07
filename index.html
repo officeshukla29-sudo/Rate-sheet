@@ -94,62 +94,16 @@ th{background:#334155}.card.best{background:#422006}.card.low{background:#1e293b
 .quote{color:#0f172a}.mbox tr.sec td{background:#0c4a6e}.mbox tr.pm td{background:#134e4a;color:#5eead4}.card .sv{color:#4ade80}.otc td{color:#e2e8f0}}
 .mq{background:linear-gradient(120deg,#fef3c7,#ccfbf1);color:#0f172a;border:0;line-height:1.5}.mq .btn{margin-top:8px}.mq a{color:#0f766e;font-size:12px;cursor:pointer;margin-left:8px}
 .mbox input#wn{width:100%;margin:10px 0 0}
+#spl{position:fixed;inset:0;z-index:300;background:linear-gradient(160deg,#0f766e,#134e4a 60%,#0f172a);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;transition:opacity .5s}#spl.off{opacity:0;pointer-events:none}
+#spl svg{width:96px;height:96px;animation:pu 1.4s infinite}@keyframes pu{50%{transform:scale(1.12)}}#spl h1{margin:18px 0 4px;font-size:24px}#spl p{margin:0;opacity:.85;font-size:14px}
+#spl .pb{width:70%;max-width:260px;height:6px;border-radius:6px;background:#ffffff33;margin-top:26px;overflow:hidden}#spl .pb i{display:block;height:100%;width:0;background:#fbbf24;animation:ld 3.5s linear forwards}@keyframes ld{to{width:100%}}
+.sg-r{display:flex;align-items:center;justify-content:space-between;padding:6px 0}.sg-r .n{min-width:30px;text-align:center;font-weight:700;font-size:20px}.sg-r button.st{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:22px;color:#0f766e}
+.sgo{background:#ecfdf5;color:#0f172a;border-radius:12px;padding:12px;margin-top:10px}.sgo .big{font-size:30px;font-weight:800;color:#0f766e}.sgo .row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed #99f6e4;font-size:14px}.sgo .row.b{background:#fef3c7;font-weight:700}
+@media(max-width:600px){button,select,input{min-height:44px;font-size:16px}.panel{padding:12px}}
 @media print{nav,.bar,.btn{display:none}.tab{display:block!important}}
-
-/* Refined interface layer: calmer controls, clearer hierarchy, and better touch targets. */
-:root{--surface:#fff;--focus:#f59e0b}
-body{font-family:Inter,"Segoe UI",Arial,sans-serif;line-height:1.45;background:radial-gradient(ellipse at top,#eaf7f5 0,#f8fafc 52%)}
-header{padding:22px clamp(16px,4vw,36px);box-shadow:0 4px 18px #0f172a22}
-header h1{font-size:clamp(21px,2.5vw,28px);letter-spacing:-.025em}
-header p{color:#dbeafe;font-size:13px;line-height:1.5}
-nav{position:sticky;top:0;z-index:20;gap:6px;padding:8px clamp(10px,3vw,28px) 0;border-bottom:1px solid var(--line);box-shadow:0 4px 12px #0f172a0d}
-nav button{background:transparent;border-radius:9px 9px 0 0;padding:11px 15px;color:var(--mut);transition:background .18s,color .18s}
-nav button:hover{background:#f1f5f9;color:var(--ink)}
-nav button.on{background:transparent;color:var(--teal);box-shadow:inset 0 -3px var(--teal)}
-main{padding:20px clamp(12px,3vw,30px);max-width:1280px}
-.panel{border-radius:16px;padding:clamp(12px,2vw,20px);box-shadow:0 4px 18px #0f172a0a}
-.hero{border-radius:14px;box-shadow:0 5px 16px #0f172a18}
-select,input{background:var(--surface);color:var(--ink);border-color:#cbd5e1;border-radius:8px;min-height:40px}
-.sel select{background:#fff;color:var(--ink)}
-select:focus-visible,input:focus-visible,button:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
-.wrap{border-radius:12px;box-shadow:0 2px 10px #0f172a08}
-tbody tr:nth-child(even){background:#f8fafc}
-tbody tr:hover{background:#f0fdfa}
-th{letter-spacing:.01em}
-td input{color:#0f766e;font-weight:600}
-.chip{border-radius:14px;transition:transform .16s,box-shadow .16s,background .16s}
-.chip:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 10px #0f172a14}
-.btn{border-radius:9px;box-shadow:0 2px 5px #0f172a14;transition:transform .16s,box-shadow .16s,filter .16s}
-.btn:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 5px 12px #0f172a20}
-.btn:active{transform:translateY(0)}
-.card{border-radius:14px;box-shadow:0 5px 16px #0f172a0d}
-.card:hover{box-shadow:0 9px 22px #0f172a16}
-.card.best{border-top-width:6px}
-.quote{border:1px solid #b7e4ce}
-.note{line-height:1.65}
-.toast{box-shadow:0 6px 20px #0f172a30}
-@media(max-width:640px){
- header{padding:14px 16px}
- nav{gap:3px}
- nav button{padding:10px 12px}
- main{padding:12px 10px}
- .panel{padding:12px;border-radius:14px}
- .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
- .sel{grid-template-columns:1fr;gap:6px}
- .wrap{border-radius:10px}
-}
-@media(prefers-color-scheme:dark){
- body{background:radial-gradient(ellipse at top,#123b3b 0,#0f172a 58%)}
- :root{--surface:#1e293b;--focus:#fbbf24}
- nav button:hover,tbody tr:nth-child(even){background:#263548}
- tbody tr:hover{background:#134e4a}
- .sel select{background:#1e293b;color:var(--ink)}
- .quote{border-color:#166534}
- td input{color:#5eead4}
-}
 </style>
 </head>
-<body>
+<body><div id="spl"><svg viewBox="0 0 64 64" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M8 24a34 34 0 0148 0"/><path d="M16 33a22 22 0 0132 0"/><path d="M24 42a10 10 0 0116 0"/><circle cx="32" cy="51" r="3" fill="#fbbf24" stroke="none"/></svg><h1>Welcome to Rate Calculator</h1><p>Developed by Narayan Pokharel</p><div class="pb"><i></i></div></div>
 <header><h1>New Sales Rate Calculator</h1>
 <p>Final Amount = Renew Charge + OTC (Device Rental + Drop-wire + Deposit). Amount in Rs.</p></header>
 <nav id="nav"></nav>
@@ -370,12 +324,12 @@ if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(
  rCalc();})();
 
 // welcome + daily morning quote
-(function(){const QT=["Every great day starts with a small smile - your customer will feel it too. 😊", "A clear quote today builds trust for years.", "Small steps every morning create big results by the evening.", "Be the reason a customer says, 'That was easy.'", "Listen first, quote second - people buy from those who understand them.", "Your energy is your first product. Share it generously.", "One honest answer is worth more than ten perfect pitches.", "Today is a fresh page. Write something you're proud of.", "Fast internet connects homes; good service connects hearts.", "Don't count the calls - make every call count.", "Confidence is quiet. Know your rates, trust your words.", "A patient 'no' today can become a happy 'yes' tomorrow.", "Treat every customer like family - they will remember.", "Progress, not perfection. Do one thing better than yesterday.", "Great sales start with great manners.", "Smile, breathe, and begin. The day is yours. 🌞", "Solve the problem, and the sale takes care of itself.", "Discipline in the morning gives freedom in the evening.", "Be kind, be clear, be quick - that's the winning formula.", "Your effort today is tomorrow's success story."],K="nsname",DK="nsnote",now=new Date(),hr=now.getHours(),day=Math.floor(Date.now()/864e5),q=QT[day%QT.length],
+(function(){const QT=["के हो सोल्टी! आज कनेक्सन खोज्न जानु पर्दैन? अर्को दिउँसो बसेर पर्खिने हो? 😏", "धेरै बसियो, उठ! अब Hot Lead खोज्न जाऔँ 🔥", "बेलुका एउटा पनि कनेक्सन नलगाई निद्रा कसरी लाग्छ यार तिमीलाई? 😴", "Rate Calculator खोलेको छैनौ, तर ग्राहक कतै पर्खिरहेको छ 👀 खोल त!", "आज एउटा कनेक्सन = आजको खुसी। दुइटा भए पार्टी 🎉", "सपना हेरेर कनेक्सन लाग्दैन, ढोका ढक्ढक्याउनुपर्छ 🚪😄", "वाइफाइ त चलिरहेको छ, तिम्रो Lead चाहिँ कहाँ छ? 🤔", "चिया पिइसक्यौ? अब ग्राहकलाई फोन गर! ☕📞", "आज Target नछोए भोलि Boss ले हेर्छ है 😬", "एउटा Quote पठाऊ, एउटा मुस्कान पाऊ 😊", "५G को जमाना, तिमी चाहिँ अझै सुतिरहेको? ⚡", "घरघरमा इन्टरनेट पुर्‍याउने हिरो तिमी नै हो 🦸 उठ!", "फोन हातमा छ, ग्राहक मनमा छ — Call गर्न किन डराउनु? 📱", "आजको एउटा 'हुन्छ' ले महिनाको मुहार फेर्छ 😎"],K="nsname",DK="nsnote",now=new Date(),hr=now.getHours(),day=Math.floor(Date.now()/864e5),q=QT[day%QT.length],
  gr=hr<12?"Good morning":hr<17?"Good afternoon":"Good evening",ic=hr<12?"🌅":hr<17?"☀️":"🌙",NS="Notification" in window;
  let nm="";try{nm=localStorage.getItem(K)||""}catch(e){}
  const mq=document.createElement("div");mq.className="panel mq";$("lk").insertAdjacentElement("afterend",mq);
  const cachePrefs=()=>{try{caches.open("nsprefs").then(c=>c.put("/prefs.json",new Response(JSON.stringify({name:nm}))))}catch(e){}};
- const ps=async()=>{try{const r=await navigator.serviceWorker.ready;if(r.periodicSync)await r.periodicSync.register("morning-quote",{minInterval:864e5})}catch(e){}};
+ const ps=async()=>{try{const r=await navigator.serviceWorker.ready;if(r.periodicSync)await r.periodicSync.register("morning-quote",{minInterval:216e5})}catch(e){}};
  const show=async(t,b)=>{try{const r=await navigator.serviceWorker.getRegistration();if(r)await r.showNotification(t,{body:b,tag:"morning"});else new Notification(t,{body:b,tag:"morning"})}catch(e){}};
  function draw(){mq.innerHTML=`${ic} <b>${gr}, ${esc(nm)}!</b><a id="cn">✎ change name</a><div>${esc(q)}</div>`+(NS&&Notification.permission!=="granted"&&Notification.permission!=="denied"?`<button class="btn" id="bn">🔔 Enable morning notification</button>`:"")+(NS&&Notification.permission==="denied"?`<div class="note">Notifications blocked - browser settings bata allow garnus.</div>`:"");
   $("cn").onclick=ask;const b=$("bn");if(b)b.onclick=()=>Notification.requestPermission().then(p=>{if(p==="granted"){ps();cachePrefs();show("🔔 Morning notification on!","Hello "+nm+", you'll get a daily quote.")}draw()})}
@@ -383,9 +337,35 @@ if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(
   const go=()=>{const v=$("wn").value.trim();if(v.length<2){$("wn").focus();return}nm=v;try{localStorage.setItem(K,nm);localStorage.setItem("nssn",nm)}catch(e){}$("sn").value=nm;$("sn").dispatchEvent(new Event("input"));cachePrefs();w.classList.remove("on");draw();notify()};
   $("wb").onclick=go;$("wn").onkeydown=e=>{if(e.key==="Enter")go()}}
   $("wn").value=nm;w.classList.add("on");setTimeout(()=>$("wn").focus(),50)}
- function notify(){if(!nm||!NS||Notification.permission!=="granted"||hr<4||hr>=12)return;const t=now.toDateString();let d="";try{d=localStorage.getItem(DK)}catch(e){}if(d===t)return;try{localStorage.setItem(DK,t)}catch(e){}show(`🌅 Good morning, ${nm}!`,q)}
+ function notify(){if(!nm||!NS||Notification.permission!=="granted")return;const t=now.toDateString();let d="";try{d=localStorage.getItem(DK)}catch(e){}if(d===t)return;try{localStorage.setItem(DK,t)}catch(e){}show(`${ic} ${gr}, ${nm}!`,q)}
  if(!nm)ask();else{draw();cachePrefs();notify();if(NS&&Notification.permission==="granted")ps()}
 })();
+
+// splash + package suggestion
+(function(){setTimeout(()=>$("spl").classList.add("off"),3500);setTimeout(()=>$("spl").remove(),4100);
+ const PRE=[["👤 Single",2,1,0,0,0],["👨‍👩‍👧 Family",4,1,1,0,0],["🏠 Big family",6,2,2,0,0],["💼 Home office",2,2,1,1,0],["🏪 Shop/Cafe",5,1,1,0,2]],SG=Object.assign({m:3,l:1,t:1,c:0,w:0,g:0},(()=>{try{return JSON.parse(localStorage.getItem("nssg"))||{}}catch(e){return{}}})());let PK=0;const NL4=["१ महिना","३ महिना","६ महिना","१२ महिना"],tb=document.createElement("section");tb.className="tab";tb.id="tsg";tb.innerHTML=`<div class="hero" style="background:linear-gradient(120deg,#2563eb,#0f766e)"><h2>📡 Package Suggestion</h2><p>Preset chhannus, device milaunus - speed, price ra message auto ready.</p></div><div class="panel" id="sg"></div>`;
+ $("t0").insertAdjacentElement("afterend",tb);T.splice(1,0,"📡 Suggest");$("nav").innerHTML=T.map((t,i)=>`<button data-i="${i}">${t}</button>`).join("");show(0);const sec=$("sg");let plan="Internet Only";
+ const row=(k,ic,t)=>`<div class="sg-r"><span>${ic} ${t}</span><span><button class="st" data-k="${k}" data-d="-1">−</button><span class="n">${SG[k]}</span><button class="st" data-k="${k}" data-d="1">+</button></span></div>`;
+ function msg(o){const ne=$("ql").value==="ne",c=($("qn").value||"").trim(),sn=($("sn").value||"").trim(),L=ne?NL4:CL,d=`📱${SG.m} 💻${SG.l} 📺${SG.t}${SG.c?` 📹${SG.c}`:""}`;
+  const ln=o.r.map(r=>`${r.i===o.b?"🏆":"✨"} ${L[r.i]}: *${ne?"रु":"Rs"} ${f(r.t)}* (${ne?"रिन्यु ≈ रु":"renew ≈ Rs"} ${f(r.m)}${ne?"/महिना":"/month"})${r.i===o.b?(ne?" — सबैभन्दा बचत":" — BEST VALUE"):""}`).join("\n");
+  return ne?`📶 *इन्टरनेट प्याकेज सुझाव*\n${c?`नमस्कार ${c} जी! 👋`:"नमस्कार! 👋"}\nतपाईंको ${d} चल्ने भएकाले *${o.rec} Mbps* तपाईंलाई सबैभन्दा उपयुक्त छ — सबै डिभाइस एकैसाथ बिना अड्किई चल्छ ⚡${o.alt?`\n(भविष्यका लागि ${o.alt} Mbps पनि राम्रो विकल्प हो)`:""}\n\n💰 *${plan}* | ${o.ont} | ⚡${o.rec} Mbps\n${ln}\n\n👉 आजै बुक गर्नुहोस् – *YES* रिप्लाई गर्नुहोस् 📞${sn?"\n— "+sn:""}`
+  :`📶 *Internet Package Suggestion*\n${c?`Hi ${c}! 👋`:"Hello! 👋"}\nWith ${d} (mobile/laptop/TV) in use, *${o.rec} Mbps* is the best fit - every device runs smoothly together ⚡${o.alt?`\n(For future growth, ${o.alt} Mbps is also a great option)`:""}\n\n💰 *${plan}* | ${o.ont} | ⚡${o.rec} Mbps\n${ln}\n\n👉 Book today! Just reply *YES* 📞${sn?"\n— "+sn:""}`}
+ function draw(){try{localStorage.setItem("nssg",JSON.stringify(SG))}catch(e){}const n=SG.m+SG.l+SG.t+Math.ceil(SG.c/2),hv=SG.w||SG.g,base=n<=3?50:n<=5?80:n===6?100:n===7?150:n===8?200:n<=10?400:n<=12?500:600,tg=hv?Math.max(base,200):base,sp=[...new Set(S.pk.filter(r=>r[0]===plan&&(!hv||r[1]==="6G")).map(r=>+r[2]))].sort((a,b)=>a-b),fi=sp.findIndex(x=>x>=tg),ri=fi<0?sp.length-1:fi,pks=[-1,0,1].filter(d=>sp[ri+d]!==undefined),rec=(PK=pks.includes(PK)?PK:0,sp[ri+PK]),alt=sp[sp.indexOf(rec)+1],ons=[...new Set(S.pk.filter(r=>r[0]===plan&&+r[2]===rec).map(r=>r[1]))],ont=hv?"6G":(ons.includes("5G")?"5G":ons[0]);
+  const r=[1,2,3].map(i=>{const k=pkg(plan,ont,rec,i),t=k+calc(plan,ont,i).otc;return{i,t,m:k/M[i]}}).filter(x=>x.t>0),b=r.length?r.reduce((a,x)=>x.m<a.m?x:a).i:3,o={rec,alt,ont,r,b};
+  sec.innerHTML=`<input id="sgn" placeholder="👤 Customer name (optional)" value="${esc($("qn").value||"")}" style="width:100%;margin-bottom:8px"><div class="bar" style="margin-bottom:6px">${PRE.map((x,k)=>`<button class="chip" data-p="${k}" style="--c:#0f766e">${x[0]}</button>`).join("")}</div><div class="sub">Device (mobile+laptop+TV): 1-3 = 50 · 4-5 = 80 · 6 = 100 · 7 = 150 · 8 = 200 · 9+ = 400/500/600. WFH/online class ya 4K/Gaming = 200+ Mbps (6G).</div>${row("m","📱","Mobile")}${row("l","💻","Laptop")}${row("t","📺","Smart TV")}${row("c","📹","CCTV camera")}
+  <label class="sg-r"><span>💼 WFH / online class</span><input type="checkbox" data-c="w" ${SG.w?"checked":""}></label><label class="sg-r"><span>🎮 Gaming / 4K streaming</span><input type="checkbox" data-c="g" ${SG.g?"checked":""}></label><select id="sgp" style="width:100%">${opt(P,plan)}</select>
+  <div class="bar" style="margin-top:10px">${pks.map(d=>`<button class="chip${d===PK?" on":""}" data-t="${d}" style="--c:#2563eb">${d<0?"⬇ Budget":d>0?"⬆ Premium":"✅ Best fit"} ${sp[ri+d]}</button>`).join("")}</div><div class="sgo"><div>✅ Selected (${n} devices${hv?" + heavy use: 200+ / 6G":""})</div><div class="big">⚡ ${rec} Mbps</div><div style="height:8px;border-radius:8px;background:#99f6e455;margin:6px 0"><i style="display:block;height:100%;width:${Math.min(100,rec/6)}%;background:linear-gradient(90deg,#14b8a6,#2563eb);border-radius:8px"></i></div><div class="sub">${ont}${alt?` · Future-proof: ${alt} Mbps`:""}</div>${r.map(x=>`<div class="row${x.i===b?" b":""}"><span>${CL[x.i]}${x.i===b?" 🏆":""}</span><span>Rs ${f(x.t)} · renew Rs ${f(x.m)}/mo</span></div>`).join("")}${r.length?`<div class="sub" style="margin-top:6px">💸 Longest plan ≈ Rs ${f(r[r.length-1].m/30)}/day renew</div>`:""}</div>
+  <div class="bar" style="margin-top:10px"><button class="btn" id="sgc">📋 Copy message</button><button class="btn" id="sgw">💬 WhatsApp</button><button class="btn g" id="sgu">Use in Calculator</button><button class="btn" id="sgs">✉ SMS</button><button class="btn" id="sgh">📤 Share</button><button class="btn g" id="sgm">⚖ Compare</button><button class="btn g" id="sgx">↺ Reset</button></div>`;
+  $("sgc").onclick=e=>{const t=msg(o);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>e.target.textContent="Copied ✓").catch(()=>{})};
+  $("sgw").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent(msg(o)),"_blank");
+  $("sgu").onclick=()=>{$("cp").value=plan;$("co").value=ont;$("cb").value=rec;rCalc();show(0);$("cards").scrollIntoView({behavior:"smooth"})};
+  $("sgs").onclick=()=>{location.href="sms:?&body="+encodeURIComponent(msg(o))};$("sgh").onclick=()=>{if(navigator.share)navigator.share({text:msg(o)}).catch(()=>{})};
+  $("sgm").onclick=()=>{CM[0]=[plan,ont,rec];if(alt)CM[1]=[plan,ont,alt];rCmp();show(T.findIndex(t=>t.includes("Compare")))};$("sgx").onclick=()=>{Object.assign(SG,{m:3,l:1,t:1,c:0,w:0,g:0});PK=0;draw()};
+  $("sgn").oninput=e=>{$("qn").value=e.target.value;$("qn").dispatchEvent(new Event("input"))};$("sgp").onchange=e=>{plan=e.target.value;draw()}}
+ sec.addEventListener("click",e=>{const c=e.target.closest("[data-p],[data-t]");if(!c)return;if(c.dataset.p!==undefined){const x=PRE[+c.dataset.p];Object.assign(SG,{m:x[1],l:x[2],t:x[3],w:x[4],c:x[5]});PK=0}else PK=+c.dataset.t;draw()});
+ sec.addEventListener("click",e=>{const b=e.target.closest("button.st");if(!b)return;SG[b.dataset.k]=Math.max(0,Math.min(20,SG[b.dataset.k]+ +b.dataset.d));draw()});
+ sec.addEventListener("change",e=>{const c=e.target.dataset.c;if(c){SG[c]=e.target.checked?1:0;draw()}});
+ draw();})();
 </script>
 </body>
 </html>
