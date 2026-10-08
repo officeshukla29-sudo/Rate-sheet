@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0f766e"><title>New Sales Rate Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&display=swap" rel="stylesheet"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0f766e"><title>New Sales Rate Calculator</title>
 <style>
 :root{--ink:#0f172a;--mut:#475569;--line:#e2e8f0;--bg:#f8fafc;--teal:#0f766e;--tealL:#ccfbf1}
 *{box-sizing:border-box}
@@ -94,18 +94,57 @@ th{background:#334155}.card.best{background:#422006}.card.low{background:#1e293b
 .quote{color:#0f172a}.mbox tr.sec td{background:#0c4a6e}.mbox tr.pm td{background:#134e4a;color:#5eead4}.card .sv{color:#4ade80}.otc td{color:#e2e8f0}}
 .mq{background:linear-gradient(120deg,#fef3c7,#ccfbf1);color:#0f172a;border:0;line-height:1.5}.mq .btn{margin-top:8px}.mq a{color:#0f766e;font-size:12px;cursor:pointer;margin-left:8px}
 .mbox input#wn{width:100%;margin:10px 0 0}
-#spl{position:fixed;inset:0;z-index:300;background:linear-gradient(160deg,#0f766e,#134e4a 60%,#0f172a);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;transition:opacity .5s}#spl.off{opacity:0;pointer-events:none}
-#spl svg{width:96px;height:96px;animation:pu 1.4s infinite}@keyframes pu{50%{transform:scale(1.12)}}#spl h1{margin:18px 0 4px;font-size:24px}#spl p{margin:0;opacity:.85;font-size:14px}
-#spl .pb{width:70%;max-width:260px;height:6px;border-radius:6px;background:#ffffff33;margin-top:26px;overflow:hidden}#spl .pb i{display:block;height:100%;width:0;background:#fbbf24;animation:ld 3.5s linear forwards}@keyframes ld{to{width:100%}}
+#spl{position:fixed;inset:0;z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;color:#fff;overflow:hidden;background:linear-gradient(135deg,#042f2e,#0f766e,#1d4ed8,#0f172a);background-size:300% 300%;animation:bg 6s ease infinite;transition:opacity .5s,transform .5s}
+#spl.off{opacity:0;transform:scale(1.08);pointer-events:none}@keyframes bg{50%{background-position:100% 50%}}
+#spl .glow{position:absolute;width:320px;height:320px;border-radius:50%;background:radial-gradient(#fbbf2455,transparent 70%);animation:fl 3s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-30px) scale(1.2)}}
+#spl .lg{position:relative;width:120px;height:120px;display:flex;align-items:center;justify-content:center;animation:pop .8s cubic-bezier(.2,1.6,.4,1) both}@keyframes pop{from{transform:scale(0) rotate(-180deg);opacity:0}}
+#spl .lg svg{width:84px;height:84px;position:relative;filter:drop-shadow(0 0 12px #fbbf24aa)}#spl .lg path,#spl .lg circle{opacity:0;animation:up .5s forwards}
+#spl .a1{animation-delay:.6s!important}#spl .a2{animation-delay:.9s!important}#spl .a3{animation-delay:1.2s!important}#spl circle{animation-delay:.4s!important}
+#spl .rg{position:absolute;inset:0;border:2px solid #fbbf24;border-radius:50%;opacity:0;animation:rp 2s ease-out infinite}#spl .r2{animation-delay:.6s}#spl .r3{animation-delay:1.2s}@keyframes rp{from{transform:scale(.5);opacity:.8}to{transform:scale(2.2);opacity:0}}
+@keyframes up{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+#spl h1{font-size:26px;margin:24px 0 6px;line-height:1.25}#spl h1 span,#spl h1 b{display:inline-block;opacity:0;animation:up .6s forwards}#spl h1 span{animation-delay:.9s}#spl h1 b{animation-delay:1.2s;background:linear-gradient(90deg,#fde68a,#fbbf24,#fff);-webkit-background-clip:text;background-clip:text;color:transparent}
+#spl .tag{font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:0;animation:up .6s 1.5s forwards}
+#spl .pb{width:70%;max-width:260px;height:6px;border-radius:6px;background:#ffffff33;margin-top:28px;overflow:hidden}#spl .pb i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fbbf24,#fff);animation:ld 3s linear forwards}@keyframes ld{to{width:100%}}
+#spl .pc{font-size:12px;margin-top:6px;opacity:.8}#spl .dv{position:absolute;bottom:calc(28px + env(safe-area-inset-bottom,0px));margin:0;font-size:13px;opacity:0;animation:up .6s 1.8s forwards}#spl .dv b{color:#fbbf24}
+/* mobile fit: no sideways scroll / no zoom-out */
+html{-webkit-text-size-adjust:100%}html,body{max-width:100%;overflow-x:hidden}main,.panel,.card,.sgo,.hero,header{min-width:0;max-width:100%}.card,.sgo,.quote,pre,td,.sub,.note{overflow-wrap:anywhere}
+.cards{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}.cards>*{min-width:0}.sgo .row{gap:8px;flex-wrap:wrap}.quote,pre{white-space:pre-wrap}
+@media(max-width:640px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.card b{font-size:18px}.big{font-size:26px}}
 .sg-r{display:flex;align-items:center;justify-content:space-between;padding:6px 0}.sg-r .n{min-width:30px;text-align:center;font-weight:700;font-size:20px}.sg-r button.st{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#fff;font-size:22px;color:#0f766e}
 .sgo{background:#ecfdf5;color:#0f172a;border-radius:12px;padding:12px;margin-top:10px}.sgo .big{font-size:30px;font-weight:800;color:#0f766e}.sgo .row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed #99f6e4;font-size:14px}.sgo .row.b{background:#fef3c7;font-weight:700}
 @media(max-width:600px){button,select,input{min-height:44px;font-size:16px}.panel{padding:12px}}
+.card b,.sgo .big,.sgo .tt{font-family:"Fredoka","Baloo 2","Trebuchet MS",system-ui,sans-serif;letter-spacing:.5px}
+.sgo .row.rt{align-items:center;padding:10px 6px;border-radius:10px}.sgo .dn{font-weight:700;font-size:15px}.sgo .tr{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15}.sgo .tr small{font-size:12px;color:#475569}
+.sgo .tt{font-weight:700;font-size:30px;background:linear-gradient(90deg,#0f766e,#2563eb);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sgo .row.b{background:linear-gradient(90deg,#fef3c7,#fde68a);box-shadow:0 2px 8px #f59e0b44}.sgo .row.b .tt{font-size:36px;background:linear-gradient(90deg,#b45309,#ea580c);-webkit-background-clip:text;background-clip:text;color:transparent}
+.card b{font-size:28px;font-weight:700}@media(max-width:640px){.card b{font-size:22px}.sgo .tt{font-size:26px}.sgo .row.b .tt{font-size:30px}}
+button,.chip,select,input,a{touch-action:manipulation}main{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}header{padding-top:calc(12px + env(safe-area-inset-top,0px))}
+#up{position:fixed;right:14px;bottom:calc(18px + env(safe-area-inset-bottom,0px));width:44px;height:44px;border-radius:50%;border:0;background:#0f766e;color:#fff;font-size:20px;box-shadow:0 3px 10px #0005;opacity:0;pointer-events:none;transition:opacity .2s;z-index:50}#up.on{opacity:1;pointer-events:auto}
+@media(prefers-reduced-motion:reduce){#spl *,#spl{animation-duration:.01ms!important}}
+header{position:relative;overflow:hidden;background:linear-gradient(120deg,#0f172a,#0f766e 55%,#2563eb,#0f766e);background-size:250% 250%;animation:hbg 10s ease infinite;padding:18px 20px 16px}@keyframes hbg{50%{background-position:100% 50%}}
+header:before,header:after{content:"";position:absolute;border-radius:50%;pointer-events:none}header:before{width:180px;height:180px;right:-40px;top:-70px;background:radial-gradient(#fbbf2466,transparent 70%);animation:hfl 6s ease-in-out infinite}header:after{width:140px;height:140px;left:30%;bottom:-80px;background:radial-gradient(#ffffff26,transparent 70%)}@keyframes hfl{50%{transform:translateY(16px) scale(1.15)}}
+.hb{display:flex;align-items:center;gap:12px;position:relative;z-index:1}.hl{flex:none;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#fbbf24,#f97316);display:grid;place-items:center;box-shadow:0 4px 14px #0006,inset 0 0 0 2px #ffffff55;animation:hsw 4s ease-in-out infinite}.hl svg{width:30px;height:30px}@keyframes hsw{50%{transform:rotate(-6deg) scale(1.07)}}
+header h1{font-family:"Fredoka","Trebuchet MS",system-ui,sans-serif;font-size:22px;line-height:1.15;letter-spacing:.3px}header h1 span{background:linear-gradient(90deg,#fde68a,#fbbf24,#fff);-webkit-background-clip:text;background-clip:text;color:transparent}header p{color:#cbd5e1!important;font-size:12px}
+.hc{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px;position:relative;z-index:1}.hc span{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;background:#ffffff1f;border:1px solid #ffffff33}.hc .lv:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#4ade80;margin-right:6px;animation:hbl 1.4s infinite}@keyframes hbl{50%{opacity:.25}}
+nav{background:transparent;border:0;padding:12px 14px 6px;gap:8px}nav button{border-radius:999px;background:#fff;border:1px solid var(--line);box-shadow:0 1px 3px #0001;color:#334155;transition:transform .15s,box-shadow .15s}nav button:hover{transform:translateY(-1px);box-shadow:0 4px 10px #0002}
+nav button.on{background:linear-gradient(120deg,#0f766e,#2563eb);color:#fff;border-color:transparent;box-shadow:0 6px 14px #0f766e66;transform:translateY(-2px)}
+@media(min-width:641px){nav{flex-wrap:wrap}}@media(max-width:640px){nav{background:#f1f5f9ee;backdrop-filter:blur(8px)}header h1{font-size:18px}.hl{width:42px;height:42px}header{padding:14px 14px 12px}}
+.tab.on{animation:tin .35s ease}@keyframes tin{from{opacity:0;transform:translateY(8px)}}
+@media(prefers-color-scheme:dark){nav{background:#0f172aee}nav button:not(.on){background:#1e293b;color:#cbd5e1;border-color:#334155}}
+#ftm{position:fixed;left:12px;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:30px;background:linear-gradient(120deg,#0f172acc,#0f766ecc);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);color:#fff;box-shadow:0 6px 18px #0006,inset 0 0 0 1px #ffffff33;font-family:"Fredoka","Trebuchet MS",system-ui,sans-serif;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;animation:ftf 4s ease-in-out infinite}@keyframes ftf{50%{transform:translateY(-4px)}}
+#ftm .ti{font-size:18px}#ftm .tt2{font-size:20px;font-weight:700;letter-spacing:.5px}#ftm .tt2 small{font-size:12px;color:#fbbf24;font-weight:600}#ftm i{font-style:normal;animation:hbl 1s infinite}#ftm .ap{font-size:11px;font-weight:700;background:#fbbf24;color:#0f172a;padding:2px 6px;border-radius:8px}
+.qp{height:8px;border-radius:8px;background:#e2e8f0;overflow:hidden}.qp i{display:block;height:100%;background:linear-gradient(90deg,#9333ea,#2563eb);transition:width .3s}
+.qo{display:block;width:100%;text-align:left;padding:13px 14px;margin:8px 0;border:2px solid var(--line);border-radius:12px;background:#fff;color:#0f172a;font-size:16px;font-weight:600;cursor:pointer;transition:transform .15s}.qo:active{transform:scale(.98)}
+.qo.ok{background:#22c55e;border-color:#16a34a;color:#fff;animation:qpop .35s}.qo.no{background:#ef4444;border-color:#dc2626;color:#fff;animation:qsk .35s}.qo.dim{opacity:.55}.qo[disabled]{cursor:default}@keyframes qpop{50%{transform:scale(1.04)}}@keyframes qsk{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+@media(prefers-color-scheme:dark){.qo:not(.ok):not(.no){background:#1e293b;color:#e2e8f0;border-color:#334155}.qp{background:#334155}}
+@media print{#ftm{display:none}}
 @media print{nav,.bar,.btn{display:none}.tab{display:block!important}}
 </style>
 </head>
-<body><div id="spl"><svg viewBox="0 0 64 64" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path d="M8 24a34 34 0 0148 0"/><path d="M16 33a22 22 0 0132 0"/><path d="M24 42a10 10 0 0116 0"/><circle cx="32" cy="51" r="3" fill="#fbbf24" stroke="none"/></svg><h1>Welcome to Rate Calculator</h1><p>Developed by Narayan Pokharel</p><div class="pb"><i></i></div></div>
-<header><h1>New Sales Rate Calculator</h1>
-<p>Final Amount = Renew Charge + OTC (Device Rental + Drop-wire + Deposit). Amount in Rs.</p></header>
+<body><div id="spl"><div class="glow"></div><div class="lg"><span class="rg"></span><span class="rg r2"></span><span class="rg r3"></span><svg viewBox="0 0 64 64" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"><path class="a3" d="M8 24a34 34 0 0148 0"/><path class="a2" d="M16 33a22 22 0 0132 0"/><path class="a1" d="M24 42a10 10 0 0116 0"/><circle cx="32" cy="51" r="3.5" fill="#fbbf24" stroke="none"/></svg></div><h1><span>Welcome to</span> <b>Rate Calculator</b></h1><div class="tag">Fast • Smart • Reliable</div><div class="pb"><i></i></div><div class="pc">0%</div><p class="dv">Developed by <b>Narayan Pokharel</b></p></div>
+<script>(function(){var e=document.getElementById("spl");try{if(sessionStorage.getItem("nsplash")){e.remove();return}sessionStorage.setItem("nsplash","1")}catch(x){}var s=Date.now(),p=e.querySelector(".pc"),t=setInterval(function(){var v=Math.min(100,Math.round((Date.now()-s)/30));p.textContent=v+"%";if(v>=100){clearInterval(t);e.classList.add("off");setTimeout(function(){e.remove()},600)}},60)})();</script>
+<header><div class="hb"><div class="hl"><svg viewBox="0 0 64 64" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"><path d="M8 24a34 34 0 0148 0"/><path d="M16 33a22 22 0 0132 0"/><path d="M24 42a10 10 0 0116 0"/><circle cx="32" cy="52" r="3.5" fill="#fff" stroke="none"/></svg></div><div><h1>New Sales <span>Rate Calculator</span></h1>
+<p>Final Amount = Renew Charge + OTC (Device Rental + Drop-wire + Deposit). Amount in Rs.</p></div></div><div class="hc"><span class="lv">Live rates</span><span>⚡ Fast quotes</span><span>📡 Smart suggest</span><span id="hd"></span></div></header>
 <nav id="nav"></nav>
 <main>
 <div id="lk" hidden></div>
@@ -332,9 +371,9 @@ if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(
  const ps=async()=>{try{const r=await navigator.serviceWorker.ready;if(r.periodicSync)await r.periodicSync.register("morning-quote",{minInterval:216e5})}catch(e){}};
  const show=async(t,b)=>{try{const r=await navigator.serviceWorker.getRegistration();if(r)await r.showNotification(t,{body:b,tag:"morning"});else new Notification(t,{body:b,tag:"morning"})}catch(e){}};
  function draw(){mq.innerHTML=`${ic} <b>${gr}, ${esc(nm)}!</b><a id="cn">✎ change name</a><div>${esc(q)}</div>`+(NS&&Notification.permission!=="granted"&&Notification.permission!=="denied"?`<button class="btn" id="bn">🔔 Enable morning notification</button>`:"")+(NS&&Notification.permission==="denied"?`<div class="note">Notifications blocked - browser settings bata allow garnus.</div>`:"");
-  $("cn").onclick=ask;const b=$("bn");if(b)b.onclick=()=>Notification.requestPermission().then(p=>{if(p==="granted"){ps();cachePrefs();show("🔔 Morning notification on!","Hello "+nm+", you'll get a daily quote.")}draw()})}
+  $("cn").onclick=ask;const b=$("bn");if(b)b.onclick=()=>(window.OSX?window.OSX.Notifications.requestPermission().then(()=>Notification.permission):Notification.requestPermission()).then(p=>{if(p==="granted"){ps();cachePrefs();show("🔔 Morning notification on!","Hello "+nm+", you'll get a daily quote.")}draw()})}
  function ask(){let w=$("wl");if(!w){w=document.createElement("div");w.id="wl";w.className="mdl";w.innerHTML=`<div class="mbox"><h3>👋 Welcome!</h3><div class="sub">Tapai ko full name lekhnus</div><input id="wn" placeholder="Your full name" autocomplete="name"><button id="wb">Start</button></div>`;document.body.appendChild(w);
-  const go=()=>{const v=$("wn").value.trim();if(v.length<2){$("wn").focus();return}nm=v;try{localStorage.setItem(K,nm);localStorage.setItem("nssn",nm)}catch(e){}$("sn").value=nm;$("sn").dispatchEvent(new Event("input"));cachePrefs();w.classList.remove("on");draw();notify()};
+  const go=()=>{const v=$("wn").value.trim();if(v.length<2){$("wn").focus();return}nm=v;try{localStorage.setItem(K,nm);localStorage.setItem("nssn",nm)}catch(e){}$("sn").value=nm;$("sn").dispatchEvent(new Event("input"));if(window.OSX)window.OSX.User.addTag("name",nm);cachePrefs();w.classList.remove("on");draw();notify()};
   $("wb").onclick=go;$("wn").onkeydown=e=>{if(e.key==="Enter")go()}}
   $("wn").value=nm;w.classList.add("on");setTimeout(()=>$("wn").focus(),50)}
  function notify(){if(!nm||!NS||Notification.permission!=="granted")return;const t=now.toDateString();let d="";try{d=localStorage.getItem(DK)}catch(e){}if(d===t)return;try{localStorage.setItem(DK,t)}catch(e){}show(`${ic} ${gr}, ${nm}!`,q)}
@@ -342,30 +381,106 @@ if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(
 })();
 
 // splash + package suggestion
-(function(){setTimeout(()=>$("spl").classList.add("off"),3500);setTimeout(()=>$("spl").remove(),4100);
+(function(){
  const PRE=[["👤 Single",2,1,0,0,0],["👨‍👩‍👧 Family",4,1,1,0,0],["🏠 Big family",6,2,2,0,0],["💼 Home office",2,2,1,1,0],["🏪 Shop/Cafe",5,1,1,0,2]],SG=Object.assign({m:3,l:1,t:1,c:0,w:0,g:0},(()=>{try{return JSON.parse(localStorage.getItem("nssg"))||{}}catch(e){return{}}})());let PK=0;const NL4=["१ महिना","३ महिना","६ महिना","१२ महिना"],tb=document.createElement("section");tb.className="tab";tb.id="tsg";tb.innerHTML=`<div class="hero" style="background:linear-gradient(120deg,#2563eb,#0f766e)"><h2>📡 Package Suggestion</h2><p>Preset chhannus, device milaunus - speed, price ra message auto ready.</p></div><div class="panel" id="sg"></div>`;
  $("t0").insertAdjacentElement("afterend",tb);T.splice(1,0,"📡 Suggest");$("nav").innerHTML=T.map((t,i)=>`<button data-i="${i}">${t}</button>`).join("");show(0);const sec=$("sg");let plan="Internet Only";
  const row=(k,ic,t)=>`<div class="sg-r"><span>${ic} ${t}</span><span><button class="st" data-k="${k}" data-d="-1">−</button><span class="n">${SG[k]}</span><button class="st" data-k="${k}" data-d="1">+</button></span></div>`;
  function msg(o){const ne=$("ql").value==="ne",c=($("qn").value||"").trim(),sn=($("sn").value||"").trim(),L=ne?NL4:CL,d=`📱${SG.m} 💻${SG.l} 📺${SG.t}${SG.c?` 📹${SG.c}`:""}`;
-  const ln=o.r.map(r=>`${r.i===o.b?"🏆":"✨"} ${L[r.i]}: *${ne?"रु":"Rs"} ${f(r.t)}* (${ne?"रिन्यु ≈ रु":"renew ≈ Rs"} ${f(r.m)}${ne?"/महिना":"/month"})${r.i===o.b?(ne?" — सबैभन्दा बचत":" — BEST VALUE"):""}`).join("\n");
+  const ln=o.r.map(r=>`${r.i===o.b?"🏆":"✨"} ${L[r.i]}: ${ne?"रिन्यु रु":"Renew Rs"} ${f(r.k)} + OTC ${f(r.ot)} = *${ne?"रु":"Rs"} ${f(r.t)}*${r.i===o.b?(ne?" — सबैभन्दा बचत":" — BEST VALUE"):""}`).join("\n");
   return ne?`📶 *इन्टरनेट प्याकेज सुझाव*\n${c?`नमस्कार ${c} जी! 👋`:"नमस्कार! 👋"}\nतपाईंको ${d} चल्ने भएकाले *${o.rec} Mbps* तपाईंलाई सबैभन्दा उपयुक्त छ — सबै डिभाइस एकैसाथ बिना अड्किई चल्छ ⚡${o.alt?`\n(भविष्यका लागि ${o.alt} Mbps पनि राम्रो विकल्प हो)`:""}\n\n💰 *${plan}* | ${o.ont} | ⚡${o.rec} Mbps\n${ln}\n\n👉 आजै बुक गर्नुहोस् – *YES* रिप्लाई गर्नुहोस् 📞${sn?"\n— "+sn:""}`
   :`📶 *Internet Package Suggestion*\n${c?`Hi ${c}! 👋`:"Hello! 👋"}\nWith ${d} (mobile/laptop/TV) in use, *${o.rec} Mbps* is the best fit - every device runs smoothly together ⚡${o.alt?`\n(For future growth, ${o.alt} Mbps is also a great option)`:""}\n\n💰 *${plan}* | ${o.ont} | ⚡${o.rec} Mbps\n${ln}\n\n👉 Book today! Just reply *YES* 📞${sn?"\n— "+sn:""}`}
  function draw(){try{localStorage.setItem("nssg",JSON.stringify(SG))}catch(e){}const n=SG.m+SG.l+SG.t+Math.ceil(SG.c/2),hv=SG.w||SG.g,base=n<=3?50:n<=5?80:n===6?100:n===7?150:n===8?200:n<=10?400:n<=12?500:600,tg=hv?Math.max(base,200):base,sp=[...new Set(S.pk.filter(r=>r[0]===plan&&(!hv||r[1]==="6G")).map(r=>+r[2]))].sort((a,b)=>a-b),fi=sp.findIndex(x=>x>=tg),ri=fi<0?sp.length-1:fi,pks=[-1,0,1].filter(d=>sp[ri+d]!==undefined),rec=(PK=pks.includes(PK)?PK:0,sp[ri+PK]),alt=sp[sp.indexOf(rec)+1],ons=[...new Set(S.pk.filter(r=>r[0]===plan&&+r[2]===rec).map(r=>r[1]))],ont=hv?"6G":(ons.includes("5G")?"5G":ons[0]);
-  const r=[1,2,3].map(i=>{const k=pkg(plan,ont,rec,i),t=k+calc(plan,ont,i).otc;return{i,t,m:k/M[i]}}).filter(x=>x.t>0),b=r.length?r.reduce((a,x)=>x.m<a.m?x:a).i:3,o={rec,alt,ont,r,b};
-  sec.innerHTML=`<input id="sgn" placeholder="👤 Customer name (optional)" value="${esc($("qn").value||"")}" style="width:100%;margin-bottom:8px"><div class="bar" style="margin-bottom:6px">${PRE.map((x,k)=>`<button class="chip" data-p="${k}" style="--c:#0f766e">${x[0]}</button>`).join("")}</div><div class="sub">Device (mobile+laptop+TV): 1-3 = 50 · 4-5 = 80 · 6 = 100 · 7 = 150 · 8 = 200 · 9+ = 400/500/600. WFH/online class ya 4K/Gaming = 200+ Mbps (6G).</div>${row("m","📱","Mobile")}${row("l","💻","Laptop")}${row("t","📺","Smart TV")}${row("c","📹","CCTV camera")}
+  const r=[1,2,3].map(i=>{const k=pkg(plan,ont,rec,i),ot=calc(plan,ont,i).otc,t=k+ot;return{i,t,m:k/M[i],k,ot}}).filter(x=>x.t>0),b=r.length?r.reduce((a,x)=>x.m<a.m?x:a).i:3,o={rec,alt,ont,r,b};
+  sec.innerHTML=`<input id="sgn" placeholder="👤 Customer name (optional)" value="${esc($("qn").value||"")}" style="width:100%;margin-bottom:8px"><input id="sgt" type="tel" inputmode="numeric" placeholder="📞 Customer WhatsApp no. (98XXXXXXXX)" value="${esc(SG.ph||"")}" style="width:100%;margin-bottom:8px"><div class="bar" style="margin-bottom:6px">${PRE.map((x,k)=>`<button class="chip" data-p="${k}" style="--c:#0f766e">${x[0]}</button>`).join("")}</div><div class="sub">Device (mobile+laptop+TV): 1-3 = 50 · 4-5 = 80 · 6 = 100 · 7 = 150 · 8 = 200 · 9+ = 400/500/600. WFH/online class ya 4K/Gaming = 200+ Mbps (6G).</div>${row("m","📱","Mobile")}${row("l","💻","Laptop")}${row("t","📺","Smart TV")}${row("c","📹","CCTV camera")}
   <label class="sg-r"><span>💼 WFH / online class</span><input type="checkbox" data-c="w" ${SG.w?"checked":""}></label><label class="sg-r"><span>🎮 Gaming / 4K streaming</span><input type="checkbox" data-c="g" ${SG.g?"checked":""}></label><select id="sgp" style="width:100%">${opt(P,plan)}</select>
-  <div class="bar" style="margin-top:10px">${pks.map(d=>`<button class="chip${d===PK?" on":""}" data-t="${d}" style="--c:#2563eb">${d<0?"⬇ Budget":d>0?"⬆ Premium":"✅ Best fit"} ${sp[ri+d]}</button>`).join("")}</div><div class="sgo"><div>✅ Selected (${n} devices${hv?" + heavy use: 200+ / 6G":""})</div><div class="big">⚡ ${rec} Mbps</div><div style="height:8px;border-radius:8px;background:#99f6e455;margin:6px 0"><i style="display:block;height:100%;width:${Math.min(100,rec/6)}%;background:linear-gradient(90deg,#14b8a6,#2563eb);border-radius:8px"></i></div><div class="sub">${ont}${alt?` · Future-proof: ${alt} Mbps`:""}</div>${r.map(x=>`<div class="row${x.i===b?" b":""}"><span>${CL[x.i]}${x.i===b?" 🏆":""}</span><span>Rs ${f(x.t)} · renew Rs ${f(x.m)}/mo</span></div>`).join("")}${r.length?`<div class="sub" style="margin-top:6px">💸 Longest plan ≈ Rs ${f(r[r.length-1].m/30)}/day renew</div>`:""}</div>
+  <div class="bar" style="margin-top:10px">${pks.map(d=>`<button class="chip${d===PK?" on":""}" data-t="${d}" style="--c:#2563eb">${d<0?"⬇ Budget":d>0?"⬆ Premium":"✅ Best fit"} ${sp[ri+d]}</button>`).join("")}</div><div class="sgo"><div>✅ Selected (${n} devices${hv?" + heavy use: 200+ / 6G":""})</div><div class="big">⚡ ${rec} Mbps</div><div style="height:8px;border-radius:8px;background:#99f6e455;margin:6px 0"><i style="display:block;height:100%;width:${Math.min(100,rec/6)}%;background:linear-gradient(90deg,#14b8a6,#2563eb);border-radius:8px"></i></div><div class="sub">${ont}${alt?` · Future-proof: ${alt} Mbps`:""}</div>${r.map(x=>`<div class="row rt${x.i===b?" b":""}"><span class="dn">${CL[x.i]}${x.i===b?" 🏆":""}</span><span class="tr"><span class="tt">Rs ${f(x.t)}</span><small>Renew ${f(x.k)} + OTC ${f(x.ot)}</small></span></div>`).join("")}</div>
   <div class="bar" style="margin-top:10px"><button class="btn" id="sgc">📋 Copy message</button><button class="btn" id="sgw">💬 WhatsApp</button><button class="btn g" id="sgu">Use in Calculator</button><button class="btn" id="sgs">✉ SMS</button><button class="btn" id="sgh">📤 Share</button><button class="btn g" id="sgm">⚖ Compare</button><button class="btn g" id="sgx">↺ Reset</button></div>`;
-  $("sgc").onclick=e=>{const t=msg(o);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>e.target.textContent="Copied ✓").catch(()=>{})};
-  $("sgw").onclick=()=>window.open("https://wa.me/?text="+encodeURIComponent(msg(o)),"_blank");
+  $("sgc").onclick=e=>{const t=msg(o);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>e.target.textContent="Copied ✓").catch(()=>{const a=document.createElement("textarea");a.value=t;document.body.appendChild(a);a.select();try{document.execCommand("copy");e.target.textContent="Copied ✓"}catch(x){}a.remove()})};
+  const nn=(SG.ph||"").replace(/\D/g,"").replace(/^0+/,""),num=nn.length===10?"977"+nn:nn;$("sgw").onclick=()=>window.open("https://wa.me/"+num+"?text="+encodeURIComponent(msg(o)),"_blank");$("sgt").oninput=e=>{SG.ph=e.target.value.replace(/\D/g,"");try{localStorage.setItem("nssg",JSON.stringify(SG))}catch(x){}};
   $("sgu").onclick=()=>{$("cp").value=plan;$("co").value=ont;$("cb").value=rec;rCalc();show(0);$("cards").scrollIntoView({behavior:"smooth"})};
-  $("sgs").onclick=()=>{location.href="sms:?&body="+encodeURIComponent(msg(o))};$("sgh").onclick=()=>{if(navigator.share)navigator.share({text:msg(o)}).catch(()=>{})};
+  $("sgs").onclick=()=>{location.href="sms:"+(nn.length===10?nn:"")+"?&body="+encodeURIComponent(msg(o))};$("sgh").onclick=()=>{if(navigator.share)navigator.share({text:msg(o)}).catch(()=>{})};
   $("sgm").onclick=()=>{CM[0]=[plan,ont,rec];if(alt)CM[1]=[plan,ont,alt];rCmp();show(T.findIndex(t=>t.includes("Compare")))};$("sgx").onclick=()=>{Object.assign(SG,{m:3,l:1,t:1,c:0,w:0,g:0});PK=0;draw()};
   $("sgn").oninput=e=>{$("qn").value=e.target.value;$("qn").dispatchEvent(new Event("input"))};$("sgp").onchange=e=>{plan=e.target.value;draw()}}
  sec.addEventListener("click",e=>{const c=e.target.closest("[data-p],[data-t]");if(!c)return;if(c.dataset.p!==undefined){const x=PRE[+c.dataset.p];Object.assign(SG,{m:x[1],l:x[2],t:x[3],w:x[4],c:x[5]});PK=0}else PK=+c.dataset.t;draw()});
  sec.addEventListener("click",e=>{const b=e.target.closest("button.st");if(!b)return;SG[b.dataset.k]=Math.max(0,Math.min(20,SG[b.dataset.k]+ +b.dataset.d));draw()});
  sec.addEventListener("change",e=>{const c=e.target.dataset.c;if(c){SG[c]=e.target.checked?1:0;draw()}});
  draw();})();
+
+// OneSignal server push (works when app is closed). Paste your App ID below.
+const OS_APP_ID="a10352cb-9e8d-4988-ba7d-53917ef3e4ea";
+if(!/^PASTE/.test(OS_APP_ID)){window.OneSignalDeferred=window.OneSignalDeferred||[];const sc=document.createElement("script");sc.src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js";sc.defer=true;document.head.appendChild(sc);
+ OneSignalDeferred.push(async OS=>{await OS.init({appId:OS_APP_ID,serviceWorkerPath:"sw.js"});window.OSX=OS;let n="";try{n=localStorage.getItem("nsname")||""}catch(e){}if(n)OS.User.addTag("name",n)})}
+
+// final polish: status row, install/update, offline, back-to-top, haptics
+(function(){const row=document.createElement("div");row.id="st";row.className="bar";row.style.margin="0 0 10px";document.querySelector(".mq").insertAdjacentElement("afterend",row);let dp=null,up=false;
+ const ch=(t,c,id)=>`<${id?"button":"span"} class="chip on" ${id?`id="${id}"`:""} style="--c:${c};${id?"":"cursor:default;"}min-height:0;padding:6px 12px">${t}</${id?"button":"span"}>`;
+ const stats=()=>{const t=new Date().toLocaleString("en-CA").slice(0,10),l=LG(),n=l.filter(r=>String(r[0]).startsWith(t)).length;
+  row.innerHTML=ch(`🎯 Aaja: ${n} quote`,"#0f766e")+ch(`📒 Total: ${l.length}`,"#2563eb")+(navigator.onLine?"":ch("📴 Offline","#dc2626"))+(dp?ch("📲 Install app","#f59e0b","ins"):"")+(up?ch("🔄 Update ready - tap","#9333ea","upd"):"");
+  const a=$("ins");if(a)a.onclick=async()=>{dp.prompt();await dp.userChoice;dp=null;stats()};const u=$("upd");if(u)u.onclick=()=>location.reload()};
+ addEventListener("beforeinstallprompt",e=>{e.preventDefault();dp=e;stats()});addEventListener("appinstalled",()=>{dp=null;stats()});addEventListener("online",stats);addEventListener("offline",stats);
+ const _l=logQ;logQ=function(){_l();stats()};stats();
+ if(navigator.serviceWorker)navigator.serviceWorker.getRegistration().then(r=>{if(r)r.addEventListener("updatefound",()=>{const w=r.installing;if(w)w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller){up=true;stats()}})})});
+ const b=document.createElement("button");b.id="up";b.textContent="↑";b.setAttribute("aria-label","Back to top");b.onclick=()=>scrollTo({top:0,behavior:"smooth"});document.body.appendChild(b);addEventListener("scroll",()=>b.classList.toggle("on",scrollY>400),{passive:true});
+ $("nav").addEventListener("click",()=>scrollTo({top:0}));
+ document.addEventListener("click",e=>{if(navigator.vibrate&&e.target.closest("button,.chip"))navigator.vibrate(8)});
+ document.addEventListener("focusin",e=>{if(e.target.matches("input[type=number],input[type=tel]"))setTimeout(()=>e.target.select&&e.target.select(),0)});
+})();
+
+$("hd").textContent="📅 "+new Date().toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"});
+$("nav").addEventListener("click",e=>{const b=e.target.closest("button");if(b)b.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"})});
+
+// floating clock (drag to move, tap = 12/24h)
+(function(){const c=document.createElement("div");c.id="ftm";c.title="Tap: 12/24h - Drag: move";document.body.appendChild(c);let h24=false;try{h24=localStorage.getItem("nsh24")==="1"}catch(e){}
+ const t=()=>{const d=new Date(),h=d.getHours(),ic=h<5?"🌙":h<12?"🌅":h<17?"☀️":h<20?"🌇":"🌙",m=String(d.getMinutes()).padStart(2,"0"),s=String(d.getSeconds()).padStart(2,"0"),hh=h24?String(h).padStart(2,"0"):String(h%12||12);c.innerHTML=`<span class="ti">${ic}</span><span class="tt2">${hh}<i>:</i>${m}<small>:${s}</small></span>${h24?"":`<small class="ap">${h<12?"AM":"PM"}</small>`}`};
+ t();setInterval(t,1000);c.onclick=()=>{if(c._mv)return;h24=!h24;try{localStorage.setItem("nsh24",h24?"1":"0")}catch(e){}t()};
+ let sx,sy,ox,oy,dr=0;c.addEventListener("pointerdown",e=>{dr=1;c._mv=0;sx=e.clientX;sy=e.clientY;const r=c.getBoundingClientRect();ox=r.left;oy=r.top;c.setPointerCapture(e.pointerId)});
+ c.addEventListener("pointermove",e=>{if(!dr)return;const dx=e.clientX-sx,dy=e.clientY-sy;if(Math.abs(dx)+Math.abs(dy)>6)c._mv=1;if(c._mv){c.style.left=Math.max(0,Math.min(innerWidth-c.offsetWidth,ox+dx))+"px";c.style.top=Math.max(0,Math.min(innerHeight-c.offsetHeight,oy+dy))+"px";c.style.bottom="auto"}});
+ c.addEventListener("pointerup",()=>{dr=0;setTimeout(()=>{c._mv=0},60)});})();
+
+// Rate Quiz tab
+(function(){
+ const R=n=>Math.floor(Math.random()*n),pk=a=>a[R(a.length)],sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=R(i+1);[a[i],a[j]]=[a[j],a[i]]}return a},rs=()=>S.pk,rp=v=>"Rs "+f(v);
+ const nums=(c,pool,must)=>{const o=[c];(must||[]).concat(sh([...new Set(pool)])).forEach(x=>{if(o.length<4&&x>0&&!o.includes(x))o.push(x)});let k=1;const st=Math.max(10,Math.round(c*.06/10)*10);while(o.length<4&&k<60){const x=c+(R(2)?1:-1)*st*k;if(x>0&&!o.includes(x))o.push(x);k++}return sh(o)};
+ const mk=(q,c,pool,fm,ex,must)=>{const o=nums(c,pool,must);return{q,a:o.map(fm),c:o.indexOf(c),ex}};
+ const st=(q,a,c,ex)=>{const o=sh(a.map((t,i)=>[t,i===c]));return{q,a:o.map(x=>x[0]),c:o.findIndex(x=>x[1]),ex}};
+ const nm=r=>`${r[0]} · ${r[1]} · ${r[2]} Mbps`,K=calc,tt=(r,i)=>r[3][i]+K(r[0],r[1],i).otc,II=()=>pk([1,2,3]),IO=()=>rs().filter(x=>x[0]==="Internet Only");
+ const bn=()=>Object.keys(S.ad).filter(k=>/Beacon/.test(k)),ad=(n,q,i)=>{const a=S.ad[n];return a[0][i]+(q-1)*a[1][i]+q*a[2]},bd=r=>{const c=K(r[0],r[1],r.i);return`Renew ${f(r[3][r.i])} + Rental ${f(c.ont)} + Drop-wire ${f(c.drop)} + Deposit ${f(c.dO)}`};
+ const NF=()=>{const r=pk(rs()),i=II();return mk(`🆕 New connection · ${nm(r)}: ${CL[i]} ko Final Amount kati?`,tt(r,i),rs().map(x=>tt(x,i)),rp,`Renew ${f(r[3][i])} + OTC ${f(K(r[0],r[1],i).otc)}`,[r[3][i]])};
+ const NF50=()=>{const r=pk(rs().filter(x=>x[2]===50)),i=II();return mk(`🆕 New sales · ${nm(r)} bechda ${["","3 Months","6 Months","12 Months (Yearly)"][i]} ko Final Amount kati?`,tt(r,i),rs().filter(x=>x[2]===50).map(x=>tt(x,i)).concat([0,1,2,3].map(j=>tt(r,j))),rp,`Renew ${f(r[3][i])} + OTC ${f(K(r[0],r[1],i).otc)}`,[r[3][i]])};
+ const BD=()=>{const r=pk(IO()),i=II(),c=K(r[0],r[1],i),P=[["Device Rental",c.ont],["Drop-wire",c.drop],["ONT Deposit",c.dO],["OTC jamma (Rental+Drop-wire+Deposit)",c.otc],["Renew charge",r[3][i]]],p=pk(P);return mk(`🆕 ${nm(r)} · ${CL[i]}: Final Amount ko breakdown ma ${p[0]} kati?`,p[1],P.map(x=>x[1]).concat([0,1,2,3].map(j=>p[0]==="Device Rental"?K(r[0],r[1],j).ont:p[0]==="Renew charge"?r[3][j]:0)),rp,`Renew ${f(r[3][i])} + Rental ${f(c.ont)} + Drop-wire ${f(c.drop)} + Deposit ${f(c.dO)} = ${f(tt(r,i))}`)};
+ const RN=()=>{const r=pk(rs()),i=II();return mk(`🔄 Renew · ${nm(r)}: ${CL[i]} renew garda package charge kati?`,r[3][i],rs().filter(x=>x[0]===r[0]&&x[1]===r[1]).map(x=>x[3][i]),rp,`Renew = package charge ${f(r[3][i])}. (New connection ko Final Amount ${f(tt(r,i))} hunchha)`,[tt(r,i)])};
+ const B1=()=>{const r=pk(rs()),i=II(),n=pk(bn()),a=S.ad[n],c=ad(n,1,i);return mk(`🆕 ${nm(r)} + 1 ${n} (${CL[i]}): Beacon ko add-on charge (Rental + Deposit) kati?`,c,bn().map(x=>ad(x,1,II())),rp,`Rental ${f(a[0][i])} + Deposit ${f(a[2])} = ${f(c)}`,[a[0][i]])};
+ const B2=()=>{const r=pk(rs()),i=II(),n=pk(bn()),c=tt(r,i)+ad(n,1,i);return mk(`🆕 ${nm(r)} + 1 ${n}, ${CL[i]}: Final Amount (Renew + OTC + Beacon) kati?`,c,[0,1,2,3].map(j=>tt(r,j)+ad(n,1,j)),rp,`${f(tt(r,i))} + Beacon ${f(ad(n,1,i))} = ${f(c)}`,[tt(r,i)])};
+ const B3=()=>{const i=II(),b=bn(),x=S.ad["Beacon 3.1"],y=S.ad["Beacon 1.1"];if(!x||!y||!b.length)return null;const c=x[0][i]-y[0][i];if(c<=0)return null;return mk(`Beacon 3.1 ra Beacon 1.1: ${CL[i]} ma Rental ma farak kati?`,c,[1,2,3].map(j=>x[0][j]-y[0][j]),rp,`3.1 Rental ${f(x[0][i])} − 1.1 Rental ${f(y[0][i])} = ${f(c)}`)};
+ const B4=()=>{const x=S.ad["Beacon 3.1"],y=S.ad["Beacon 1.1"];if(!x||!y)return null;const d=x[2]-y[2],a=[`Farak chhaina - duitai ma Rs ${f(y[2])}`,"3.1 ma Rs 500 badhi","1.1 ma Rs 500 badhi","Beacon ma deposit lagdaina"];return d===0?st("Beacon 3.1 ra Beacon 1.1: Deposit ma ke farak chha?",a,0,`Deposit duitai Rs ${f(y[2])}; farak matra Rental ma`):null};
+ const B5=()=>{const r=pk(rs()),i=II(),n=pk(bn()),c=ad(n,2,i);return mk(`🆕 ${nm(r)} + 2 ${n} (${CL[i]}): Beacon ko jamma add-on charge kati?`,c,[ad(n,1,i)*2,ad(n,1,i),ad(n,3,i)],rp,`1st ${f(S.ad[n][0][i])} + 2nd ${f(S.ad[n][1][i])} + Deposit 2×${f(S.ad[n][2])} = ${f(c)}`,[ad(n,1,i)*2])};
+ const OT=()=>{const r=pk(rs()),o=[0,1,2,3].map(j=>K(r[0],r[1],j).otc),mn=Math.min(...o);if(o.filter(x=>x===mn).length>1)return null;return{q:`🆕 ${nm(r)}: kun duration ma OTC sabbhanda kam?`,a:CL.slice(),c:o.indexOf(mn),ex:`OTC ${f(mn)} - Rental ghatdai jaancha`}};
+ const SP=()=>{const s5=[...new Set(rs().filter(x=>x[1]==="5G").map(x=>x[2]))],s6=[...new Set(rs().filter(x=>x[1]==="6G").map(x=>x[2]))].filter(x=>!s5.includes(x));return s6.length&&s5.length>2?mk("📡 Kun speed matra 6G ONT ma available chha?",pk(s6),s5,v=>v+" Mbps","200 bhanda mathi ko speed 6G ma matra"):null};
+ const DV=()=>{const n=2+R(13),b=n<=3?50:n<=5?80:n===6?100:n===7?150:n===8?200:n<=10?400:n<=12?500:600;return mk(`📡 Suggest: customer ko ${n} device (mobile+laptop+TV) chha - kun speed?`,b,[50,80,100,150,200,400,500,600],v=>v+" Mbps","1-3:50 · 4-5:80 · 6:100 · 7:150 · 8:200 · 9-10:400 · 11-12:500 · 13+:600")};
+ const WF=()=>st("📡 WFH / online class / 4K gaming customer ko lagi kam se kam kun package?",["50 Mbps · 5G","100 Mbps · 5G","200 Mbps · 6G","80 Mbps · 6G"],2,"Heavy use = 200+ Mbps ra 6G");
+ const S1=()=>st("🆕 New connection ko Final Amount के हो?",["Renew Charge + OTC","Renew Charge मात्र","OTC मात्र","Rental × 12"],0,"Final Amount = Renew Charge + OTC"),S2=()=>st("🆕 OTC मा के-के पर्छ?",["Device Rental + Drop-wire + Deposit","Renew Charge + VAT","Deposit मात्र","TV channel charge"],0,"OTC = एकपटक लाग्ने शुल्क"),S3=()=>st("🆕 Device Rental मा VAT?",["समावेश छ","समावेश छैन","Rental नै हुँदैन","१२ महिनामा मात्र"],0,"Rental मा VAT समावेश छ");
+ const F=[()=>st("😄 Customer ले 'महँगो भयो' भन्यो - सबैभन्दा राम्रो जवाफ?",["तुरुन्तै discount दिन्छु भन्ने","Breakdown बुझाएर लामो plan को value देखाउने","फोन राखिदिने","चुपचाप बस्ने"],1,"Value बुझाउँदा बिक्री सजिलो हुन्छ 😎"),
+  ()=>st("😄 Hot lead चिन्ने सबैभन्दा राम्रो संकेत?",["Price र installation date सोध्छ","फोन उठाउँदैन","'पछि भन्छु' भन्छ","Number block गर्छ"],0,"Date सोध्नु = किन्ने मुडमा 🔥"),
+  ()=>st("😄 ग्राहकले तीन पटक 'सोचेर भन्छु' भन्यो। अब?",["सम्मानपूर्वक Quote पठाएर follow-up गर्ने","फोन गरेर रिसाउने","Number मेटाइदिने","सपनामा Quote पठाउने"],0,"Follow-up नै बिक्रीको गोप्य मन्त्र 🕵️"),
+  ()=>st("😄 बिहानै Target सम्झेर निद्रा खुल्यो - पहिलो काम?",["Rate Quiz खेलेर दिमाग तताउने","फेरि सुत्ने","Boss लाई Good Morning पठाउने","चिया मात्र पिउने"],0,"Rate याद भए ग्राहकसँग confident भइन्छ 💪")];
+ const MUST=()=>[NF50,NF,BD,BD,RN,RN,B1,B2,pk([B3,B4,B5])],ANY=[NF,NF50,BD,RN,B1,B2,B3,B4,B5,OT,SP,DV,WF,S1,S2,S3];
+ const tq=document.createElement("section");tq.className="tab";tq.id="tqz";tq.innerHTML=`<div class="hero" style="background:linear-gradient(120deg,#9333ea,#2563eb)"><h2>🎯 Rate Quiz</h2><p>🆕 New connection ra 🔄 Renew ko rate yaad garnus - sahi uttar hara, galat rato. Har choti naya 10-15 question!</p></div><div class="panel" id="qz"></div>`;
+ $("tsg").insertAdjacentElement("afterend",tq);T.splice(2,0,"🎯 Rate Quiz");$("nav").innerHTML=T.map((t,i)=>`<button data-i="${i}">${t}</button>`).join("");show(0);
+ const sec=$("qz");let QS;
+ const round=()=>{const N=10+R(6),seen=new Set(),L=[],add=g=>{let q=null;try{q=g()}catch(e){}if(q&&q.c>=0&&!seen.has(q.q)){seen.add(q.q);L.push(q);return 1}};
+  MUST().forEach(g=>{for(let t=0;t<25&&!add(g);t++);});for(let t=0;L.length<N-1&&t<500;t++)add(pk(ANY));
+  const l2=sh(L);l2.splice(Math.floor(N/2),0,pk(F)());QS={L:l2,i:0,sc:0,st:0,bs:0,done:null};draw()};
+ function draw(){const N=QS.L.length;if(QS.i>=N){const p=Math.round(QS.sc/N*100);let b=0;try{b=+localStorage.getItem("nsqzb")||0;if(p>b){b=p;localStorage.setItem("nsqzb",p)}}catch(e){}
+   const m=p>=90?"🏆 Rate Guru! Customer le jati sodhe pani jawaf tayaar!":p>=70?"🔥 Ekdam ramro! Thorai matra baaki":p>=40?"👍 Thik chha - Package Rates herera feri try garnus":"😅 Aajai rate haru ek choti padhnus, ani feri khelnus!";
+   sec.innerHTML=`<div style="text-align:center"><div style="font-size:48px">${p>=70?"🎉":"💪"}</div><div class="big" style="font-size:56px;color:#9333ea">${QS.sc}/${N}</div><div style="font-weight:700;margin:6px 0">${m}</div><div class="sub">🔥 Best streak: ${QS.bs} · 🏅 Best score: ${b}%</div><button class="btn" id="qa" style="width:100%;margin-top:12px">🔄 New Round - naya questions</button></div>`;return}
+  const q=QS.L[QS.i],an=QS.done!==null;
+  sec.innerHTML=`<div class="bar" style="justify-content:space-between"><b>Q ${QS.i+1}/${N}</b><span>⭐ ${QS.sc} · 🔥 ${QS.st}</span><button class="chip" id="qr" style="--c:#9333ea;min-height:0;padding:6px 12px">🔄 New</button></div><div class="qp"><i style="width:${Math.round(QS.i/N*100)}%"></i></div><h3 style="margin:14px 0 4px;font-size:18px;line-height:1.35">${esc(q.q)}</h3>`+
+   q.a.map((t,k)=>`<button class="qo${an?(k===q.c?" ok":k===QS.done?" no":" dim"):""}" data-k="${k}"${an?" disabled":""}>${"ABCD"[k]}. ${esc(t)}</button>`).join("")+
+   (an?`<div class="sgo" style="margin-top:8px">${QS.done===q.c?"✅ Sahi!":"❌ Galat - sahi uttar: <b>"+esc(q.a[q.c])+"</b>"}<div class="sub">${esc(q.ex||"")}</div></div><button class="btn" id="qx" style="width:100%;margin-top:10px">${QS.i+1<N?"Next ➡":"Result 🏁"}</button>`:"")}
+ sec.addEventListener("click",e=>{const o=e.target.closest(".qo");if(o&&QS.done===null){const k=+o.dataset.k,q=QS.L[QS.i];QS.done=k;if(k===q.c){QS.sc++;QS.st++;QS.bs=Math.max(QS.bs,QS.st)}else QS.st=0;draw();return}
+  if(e.target.closest("#qx")){QS.i++;QS.done=null;draw();return}if(e.target.closest("#qr,#qa"))round()});
+ round();
+})();
 </script>
 </body>
 </html>
